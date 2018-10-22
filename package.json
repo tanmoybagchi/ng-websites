@@ -1,0 +1,51 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "config": {
+    "app": "app"
+  },
+  "scripts": {
+    "build-lib": "%npm_package_config_ng% build core && %npm_package_config_ng% build gapi && %npm_package_config_ng% build material-helpers",
+    "build": "node_modules\\.bin\\ng build --prod --progress=false --base-href=/%npm_package_config_app% %npm_package_config_app%",
+    "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot true --progress false --base-href /",
+    "build-DailySpendLimit": "npm run build --repo:app=DailySpendLimit",
+    "serve-dsl": "npm run serve --repo:app=DailySpendLimit"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^7.0.0",
+    "@angular/cdk": "^7.0.0",
+    "@angular/common": "~7.0.0",
+    "@angular/compiler": "~7.0.0",
+    "@angular/core": "~7.0.0",
+    "@angular/flex-layout": "github:angular/flex-layout-builds",
+    "@angular/forms": "~7.0.0",
+    "@angular/http": "~7.0.0",
+    "@angular/material": "^7.0.0",
+    "@angular/platform-browser": "~7.0.0",
+    "@angular/platform-browser-dynamic": "~7.0.0",
+    "@angular/router": "~7.0.0",
+    "core-js": "^2.5.4",
+    "hammerjs": "^2.0.8",
+    "jsrsasign": "^8.0.12",
+    "material-design-icons": "^3.0.1",
+    "roboto-fontface": "^0.10.0",
+    "rxjs": "~6.3.3",
+    "typeface-great-vibes": "0.0.54",
+    "zone.js": "~0.8.26"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-ng-packagr": "~0.10.0",
+    "@angular/cli": "~7.0.1",
+    "@angular/compiler-cli": "~7.0.0",
+    "@angular/language-service": "~7.0.0",
+    "@types/node": "~8.9.4",
+    "ng-packagr": "^4.2.0",
+    "ts-node": "~7.0.0",
+    "tsickle": ">=0.29.0",
+    "tslib": "^1.9.0",
+    "tslint": "~5.11.0",
+    "typescript": "~3.1.1"
+  }
+}

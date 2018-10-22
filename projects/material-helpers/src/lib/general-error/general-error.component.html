@@ -1,0 +1,11 @@
+<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general">
+  <mat-toolbar-row *ngIf="errors.general?.forbidden">
+    <span>You are not authorized.</span>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="errors.general?.notFound">
+    <span>Not found.</span>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngFor="let item of errors.general?.default">
+    <span>{{item}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>

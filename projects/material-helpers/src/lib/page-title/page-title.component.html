@@ -1,0 +1,4 @@
+<mat-toolbar>
+  <div fxFlex="grow">{{name}}</div>
+  <button color="accent" mat-raised-button *ngIf="canAddNew" (click)="onAddNew()">Add new</button>
+</mat-toolbar>

@@ -1,0 +1,9 @@
+<mat-form-field style="width: 100%">
+  <mat-select [placeholder]="label" [(value)]="model" [disabled]="disabled" [required]="required" [errorStateMatcher]="errorStateMatcher"
+    (selectionChange)="onChange()">
+    <mat-option>None</mat-option>
+    <mat-option *ngFor="let item of items" [value]="item.key">{{item.value}}</mat-option>
+  </mat-select>
+  <mat-hint>{{hint}}</mat-hint>
+  <mat-error>{{errMsg}}</mat-error>
+</mat-form-field>

@@ -1,0 +1,10 @@
+<mat-form-field appearance="standard" style="height: 6em; width: 9em">
+  <mat-label>{{label}}</mat-label>
+  <input matInput [matDatepicker]="picker" [attr.maxlength]="_maxlength" [attr.style]="_style" [placeholder]="placeholder"
+    [disabled]="disabled" [required]="required" [(ngModel)]="_model" [errorStateMatcher]="errorStateMatcher"
+    (dateInput)="onChange()">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  <mat-hint>{{hint}}</mat-hint>
+  <mat-error>{{errMsg}}</mat-error>
+</mat-form-field>

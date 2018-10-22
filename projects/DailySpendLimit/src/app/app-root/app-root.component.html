@@ -1,0 +1,31 @@
+<throbber></throbber>
+
+<section fxLayout="column" style="min-height: 100vh;">
+  <mat-toolbar color="primary" *ngIf="!homepage">
+    <span fxFlex="grow">
+      Daily Spend Limit
+    </span>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </button>
+      <button mat-menu-item routerLink="recipes">
+        <mat-icon>kitchen</mat-icon>
+        <span>Recipes</span>
+      </button>
+      <button mat-menu-item routerLink="setup">
+        <mat-icon>settings</mat-icon>
+        <span>Setup</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <section fxLayout="column" fxFlex="grow">
+    <router-outlet></router-outlet>
+  </section>
+</section>

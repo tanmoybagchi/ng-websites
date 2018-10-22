@@ -1,0 +1,7 @@
+<mat-form-field appearance="standard" style="width: 100%">
+  <mat-label>{{label}}</mat-label>
+  <input type="text" matInput [attr.name]="inputName" [attr.maxlength]="_maxlength" [attr.style]="_style" [placeholder]="placeholder"
+    [disabled]="disabled" [required]="required" [(ngModel)]="_model" [errorStateMatcher]="errorStateMatcher" (input)="onChange()">
+  <mat-hint>{{hint}}</mat-hint>
+  <mat-error>{{errMsg}}</mat-error>
+</mat-form-field>
