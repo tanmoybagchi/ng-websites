@@ -10,6 +10,7 @@ export * from './lib/input-integer/input-integer.component';
 export * from './lib/input-search/input-search.component';
 export * from './lib/input-select/input-select.component';
 export * from './lib/input-text/input-text.component';
+export * from './lib/input-usd/input-usd.component';
 export * from './lib/page-title/page-title.component';
 export * from './lib/server-error/server-error.component';
 export * from './lib/throbber/throbber-events';

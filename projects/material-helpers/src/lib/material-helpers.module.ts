@@ -10,6 +10,7 @@ import { InputIntegerComponent } from './input-integer/input-integer.component';
 import { InputSearchComponent } from './input-search/input-search.component';
 import { InputSelectComponent } from './input-select/input-select.component';
 import { InputTextComponent } from './input-text/input-text.component';
+import { InputUSDComponent } from './input-usd/input-usd.component';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { ThrobberComponent } from './throbber/throbber.component';
@@ -36,6 +37,7 @@ import { ThrobberComponent } from './throbber/throbber.component';
     InputSearchComponent,
     InputSelectComponent,
     InputTextComponent,
+    InputUSDComponent,
     PageTitleComponent,
     ServerErrorComponent,
     ThrobberComponent,
@@ -50,6 +52,7 @@ import { ThrobberComponent } from './throbber/throbber.component';
     InputSearchComponent,
     InputSelectComponent,
     InputTextComponent,
+    InputUSDComponent,
     PageTitleComponent,
     ServerErrorComponent,
     ThrobberComponent,
