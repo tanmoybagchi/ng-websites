@@ -1,5 +1,6 @@
 <mat-form-field appearance="standard" style="width: 100%">
   <mat-label>{{label}}</mat-label>
+  <span matPrefix>$&nbsp;</span>
   <input maxlength="11" matInput [attr.name]="inputName" [attr.style]="_style" [placeholder]="placeholder" [disabled]="disabled"
     [required]="required" [(ngModel)]="_model" [errorStateMatcher]="errorStateMatcher" (input)="onChange()">
   <mat-hint>{{hint}}</mat-hint>

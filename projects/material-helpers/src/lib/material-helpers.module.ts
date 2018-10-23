@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatListModule, MatProgressSpinnerModule, MatSelectModule, MatToolbarModule } from '@angular/material';
@@ -43,6 +43,9 @@ import { ThrobberComponent } from './throbber/throbber.component';
     ThrobberComponent,
   ],
   entryComponents: [],
+  providers: [
+    DecimalPipe
+  ],
   exports: [
     BytesPipe,
     GeneralErrorComponent,
