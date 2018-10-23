@@ -20,8 +20,7 @@ export class InputUSDComponent {
   @Input()
   set model(value: number) {
     // tslint:disable-next-line:no-unused-expression
-    // value !== null && value !== undefined && !isNaN(value) && (this._model = this.pipe.transform(value, '1.2-2'));
-    value !== null && value !== undefined && !isNaN(value) && (this._model = value.toString());
+    value !== null && value !== undefined && !isNaN(value) && (this._model = this.pipe.transform(value, '1.2-2'));
   }
 
   _style: SafeStyle;
@@ -36,7 +35,6 @@ export class InputUSDComponent {
 
   inputName: string;
   errorStateMatcher: ErrorStateMatcher;
-  private readonly INTEGER_REGEXP = /^[\+\-]?\d+(,\d{3})*$/;
   private readonly USD_REGEXP = /^[\+\-]?\$?\d+(,\d{3})*(\.[0-9]{2})?$/;
 
   constructor(
@@ -56,12 +54,11 @@ export class InputUSDComponent {
       return;
     }
 
-    if (!this.INTEGER_REGEXP.test(this._model)) {
+    if (!this.USD_REGEXP.test(this._model)) {
       this.modelChange.emit(NaN);
       return;
     }
 
-    // this.modelChange.emit(Number(this._model.replace(/[\$\,]+/g, '')));
-    this.modelChange.emit(Number(this._model.replace(/[\,]+/g, '')));
+    this.modelChange.emit(Number(this._model.replace(/[\$\,]+/g, '')));
   }
 }
