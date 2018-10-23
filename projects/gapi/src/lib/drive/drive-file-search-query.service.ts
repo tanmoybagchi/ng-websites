@@ -1,43 +1,71 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DomainHelper, LocalStorageService } from 'core';
-import { Observable, of } from 'rxjs';
+import { DomainHelper, LocalStorageService, Result } from 'core';
+import { Observable, of, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class DriveFileSearchQuery {
-  private data: { name: string, result: DriveFileSearchQuery.Result[] }[] = [];
-  private observable: Observable<any>;
+  private data: { name: string, parents: string, result: DriveFileSearchQuery.Result[] }[] = [];
   private initializing = false;
+  private observable: Observable<DriveFileSearchQuery.Result[]>;
+  private readonly storageKey = 'drive_items';
 
   constructor(
     private http: HttpClient,
     private storage: LocalStorageService,
   ) {
+    this.data = this.storage.get(this.storageKey) || [];
   }
 
-  execute(name = '', parents: string[] = [], mimeType = '') {
-    if (String.hasData(name)) {
-      const item = this.data.find(x => x.name === name);
-      if (item) {
-        return of(item.result);
-      }
+  execute(name: string, parents: string, mimeType = '') {
+    if (String.isNullOrWhitespace(name)) {
+      return throwError(Result.CreateErrorResult('Required', 'name'));
     }
 
+    const item = this.data.find(x => x.name === name);
+    if (item) {
+      return of(item.result);
+    }
+
+    this.executeInternal(name, parents, mimeType);
+
+    return this.observable.pipe(
+      map(() => {
+        const item = this.data.find(x => x.name === name && x.parents === parents);
+        return item ? item.result : [];
+      })
+    );
+  }
+
+  private executeInternal(name: string, parents: string, mimeType = '') {
+    if (this.initializing) {
+      return;
+    }
+
+    this.initializing = true;
+    this.data = null;
+
+    this.observable = this.searchDrive(name, parents, mimeType).pipe(
+      map((x: { files: any[] }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))),
+      tap(result => {
+        this.data.push({ name, parents, result });
+
+        // when the cached data is available we don't need the 'Observable' reference anymore
+        this.observable = null;
+
+        this.initializing = false;
+
+        this.storage.set(this.storageKey, this.data);
+      }),
+    );
+  }
+
+  private searchDrive(name: string, parents: string, mimeType = '') {
     const searchParams: string[] = [];
-
-    if (String.hasData(name)) {
-      searchParams.push(`name='${name}'`);
-    }
-
-    if (String.hasData(mimeType)) {
-      searchParams.push(`mimeType=${mimeType}`);
-    }
-
-    if (parents.length > 0) {
-      searchParams.push(`'${parents.join(',')}' in parents`);
-    }
-
+    searchParams.push(`name='${name}'`);
+    String.hasData(mimeType) && searchParams.push('mimeType = \'application/vnd.google-apps.folder\'');
+    String.hasData(parents) && searchParams.push(`'${parents}' in parents`);
     searchParams.push(`trashed=false`);
 
     const queryParams = {
@@ -49,13 +77,10 @@ export class DriveFileSearchQuery {
     const url = 'https://www.googleapis.com/drive/v3/files';
 
     const options = {
-      params: httpParams
+      params: httpParams,
     };
 
-    return this.http.get(url, options).pipe(
-      map((x: { files: any[] }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))),
-      tap(result => this.data.push({ name, result }))
-    );
+    return this.http.get(url, options);
   }
 }
 

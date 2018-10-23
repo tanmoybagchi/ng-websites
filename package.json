@@ -6,10 +6,16 @@
   },
   "scripts": {
     "build-lib": "node_modules\\.bin\\ng build core && node_modules\\.bin\\ng build gapi && node_modules\\.bin\\ng build material-helpers",
-    "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot=true --progress=false --base-href=/",
-    "serve-dsl": "npm run serve --repo:app=DailySpendLimit",
     "build": "node_modules\\.bin\\ng build %npm_package_config_app% --prod --progress=false --base-href=/%npm_package_config_app%",
-    "build-dsl": "npm run build --repo:app=DailySpendLimit"
+    "ngc": "node_modules\\.bin\\ng g component --project=%npm_package_config_app%",
+    "ngm": "node_modules\\.bin\\ng g module --project=%npm_package_config_app%",
+    "ngs": "node_modules\\.bin\\ng g service --project=%npm_package_config_app%",
+    "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot=true --progress=false --base-href=/",
+    "build-dsl": "npm run build --repo:app=DailySpendLimit",
+    "ngc-dsl": "npm run ngm --repo:app=DailySpendLimit",
+    "ngm-dsl": "npm run ngm --repo:app=DailySpendLimit",
+    "ngs-dsl": "npm run ngs --repo:app=DailySpendLimit",
+    "serve-dsl": "npm run serve --repo:app=DailySpendLimit"
   },
   "private": true,
   "dependencies": {

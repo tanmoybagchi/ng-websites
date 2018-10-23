@@ -7,7 +7,7 @@ export class SheetsSearchQuery {
     private driveFilesQuery: DriveFileSearchQuery
   ) { }
 
-  execute(name = '') {
-    return this.driveFilesQuery.execute(name, [], 'application/vnd.google-apps.spreadsheet');
+  execute(name: string) {
+    return this.driveFilesQuery.execute(name, null, 'application/vnd.google-apps.spreadsheet');
   }
 }

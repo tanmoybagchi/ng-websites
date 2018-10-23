@@ -1,4 +1,4 @@
-<page-title name="Setup" [canAddNew]="false"></page-title>
+<page-title name="Daily Limit" [canAddNew]="false"></page-title>
 
 <general-error [errors]="errors"></general-error>
 
@@ -7,14 +7,12 @@
     <mat-card-content>
       <h3>How much do you want to spend daily?</h3>
 
-      <!-- <input-integer label="Daily Spending Limit" [required]="true" [model]="model.dailyLimit" (modelChange)="model.dailyLimit=$event"
-        [errMsg]="errors?.dailyLimit"></input-integer> -->
       <input-usd label="Daily Spending Limit" [required]="true" [model]="model.dailyLimit" (modelChange)="model.dailyLimit=$event"
         [errMsg]="errors?.dailyLimit"></input-usd>
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-raised-button color="primary">Save</button>
+      <button mat-raised-button color="primary">Next</button>
     </mat-card-actions>
   </mat-card>
 </form>
