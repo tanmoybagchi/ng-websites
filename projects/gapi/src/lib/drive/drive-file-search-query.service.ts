@@ -18,55 +18,33 @@ export class DriveFileSearchQuery {
     this.data = this.storage.get(this.storageKey) || [];
   }
 
-  execute(name: string, parents: string, mimeType = '', cacheResults = false) {
+  execute(name: string, parents = '', mimeType = DriveFileSearchQuery.DriveMimeTypes.File, cacheResults = false) {
     if (String.isNullOrWhitespace(name)) {
       return throwError(Result.CreateErrorResult('Required', 'name'));
     }
 
     if (cacheResults) {
-      const item = this.data.find(x => x.name === name);
+      const item = this.data.find(x => x.name === name && x.parents === parents);
       if (item) {
         return of(item.result);
       }
     }
 
-    this.executeInternal(name, parents, mimeType, cacheResults);
-
-    return this.observable.pipe(
-      map(() => {
-        const item = this.data.find(x => x.name === name && x.parents === parents);
-        return item ? item.result : [];
-      })
-    );
-  }
-
-  private executeInternal(name: string, parents: string, mimeType: string, cacheResults: boolean) {
-    if (this.initializing) {
-      return;
-    }
-
-    this.initializing = true;
-    this.data = null;
-
-    this.observable = this.searchDrive(name, parents, mimeType).pipe(
+    return this.searchDrive(name, parents, mimeType).pipe(
       map((x: { files: any[] }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))),
       tap(result => {
-        this.data.push({ name, parents, result });
-
-        // when the cached data is available we don't need the 'Observable' reference anymore
-        this.observable = null;
-
-        this.initializing = false;
-
-        cacheResults && this.storage.set(this.storageKey, this.data);
+        if (cacheResults) {
+          this.data.push({ name, parents, result });
+          this.storage.set(this.storageKey, this.data);
+        }
       }),
     );
   }
 
-  private searchDrive(name: string, parents: string, mimeType = '') {
+  private searchDrive(name: string, parents: string, mimeType: string) {
     const searchParams: string[] = [];
     searchParams.push(`name='${name}'`);
-    String.hasData(mimeType) && searchParams.push('mimeType = \'application/vnd.google-apps.folder\'');
+    String.hasData(mimeType) && searchParams.push(`mimeType = '${mimeType}'`);
     String.hasData(parents) && searchParams.push(`'${parents}' in parents`);
     searchParams.push(`trashed=false`);
 
@@ -87,6 +65,25 @@ export class DriveFileSearchQuery {
 }
 
 export namespace DriveFileSearchQuery {
+  export enum DriveMimeTypes {
+    Audio = 'application/vnd.google-apps.audio',
+    Doc = 'application/vnd.google-apps.document',
+    Drawing = 'application/vnd.google-apps.drawing',
+    File = 'application/vnd.google-apps.file',
+    Folder = 'application/vnd.google-apps.folder',
+    Form = 'application/vnd.google-apps.form',
+    FusionTable = 'application/vnd.google-apps.fusiontable',
+    Map = 'application/vnd.google-apps.map',
+    Photo = 'application/vnd.google-apps.photo',
+    Script = 'application/vnd.google-apps.script',
+    Site = 'application/vnd.google-apps.site',
+    Slide = 'application/vnd.google-apps.presentation',
+    Spreadsheet = 'application/vnd.google-apps.spreadsheet',
+    ThirdParty = 'application/vnd.google-apps.drive-sdk',
+    Unknown = 'application/vnd.google-apps.unknown',
+    Video = 'application/vnd.google-apps.video',
+  }
+
   export class Result {
     id = '';
     name = '';

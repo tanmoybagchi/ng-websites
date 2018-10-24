@@ -15,10 +15,15 @@ export class DailyLimitQuery {
   ) { }
 
   execute() {
-    return this.driveFileSearchQuery.execute(environment.database).pipe(
+    return this.driveFileSearchQuery.execute(environment.rootFolder, null, DriveFileSearchQuery.DriveMimeTypes.Folder, true).pipe(
       switchMap(result => result.length === 0 ?
         throwError(Result.CreateErrorResult('DatabaseNotFound')) :
-        this.driveFileQuery.execute(result[0].id))
+        this.driveFileSearchQuery.execute(environment.database, result[0].id, DriveFileSearchQuery.DriveMimeTypes.File, true).pipe(
+          switchMap(result => result.length === 0 ?
+            throwError(Result.CreateErrorResult('DatabaseNotFound')) :
+            this.driveFileQuery.execute(result[0].id))
+        )
+      )
     );
   }
 }
