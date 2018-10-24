@@ -18,17 +18,19 @@ export class DriveFileSearchQuery {
     this.data = this.storage.get(this.storageKey) || [];
   }
 
-  execute(name: string, parents: string, mimeType = '') {
+  execute(name: string, parents: string, mimeType = '', cacheResults = false) {
     if (String.isNullOrWhitespace(name)) {
       return throwError(Result.CreateErrorResult('Required', 'name'));
     }
 
-    const item = this.data.find(x => x.name === name);
-    if (item) {
-      return of(item.result);
+    if (cacheResults) {
+      const item = this.data.find(x => x.name === name);
+      if (item) {
+        return of(item.result);
+      }
     }
 
-    this.executeInternal(name, parents, mimeType);
+    this.executeInternal(name, parents, mimeType, cacheResults);
 
     return this.observable.pipe(
       map(() => {
@@ -38,7 +40,7 @@ export class DriveFileSearchQuery {
     );
   }
 
-  private executeInternal(name: string, parents: string, mimeType = '') {
+  private executeInternal(name: string, parents: string, mimeType: string, cacheResults: boolean) {
     if (this.initializing) {
       return;
     }
@@ -56,7 +58,7 @@ export class DriveFileSearchQuery {
 
         this.initializing = false;
 
-        this.storage.set(this.storageKey, this.data);
+        cacheResults && this.storage.set(this.storageKey, this.data);
       }),
     );
   }

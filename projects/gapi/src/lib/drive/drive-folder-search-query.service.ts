@@ -8,6 +8,6 @@ export class DriveFolderSearchQuery {
   ) {  }
 
   execute(name: string, parentId: string = null) {
-    return this.driveFileSearchQuery.execute(name, parentId, 'mimeType = \'application/vnd.google-apps.folder\'');
+    return this.driveFileSearchQuery.execute(name, parentId, 'mimeType = \'application/vnd.google-apps.folder\'', true);
   }
 }
