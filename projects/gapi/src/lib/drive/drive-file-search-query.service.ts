@@ -33,7 +33,7 @@ export class DriveFileSearchQuery {
     return this.searchDrive(name, parents, mimeType).pipe(
       map((x: { files: any[] }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))),
       tap(result => {
-        if (cacheResults) {
+        if (cacheResults && result.length > 0) {
           this.data.push({ name, parents, result });
           this.storage.set(this.storageKey, this.data);
         }

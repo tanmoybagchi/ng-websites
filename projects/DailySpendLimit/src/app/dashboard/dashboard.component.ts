@@ -4,10 +4,10 @@ import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { DailyLimitQuery } from './daily-limit-query.service';
+import { ConfigQuery } from '../domain/config-query.service';
+import { Config } from '../domain/models';
 
 @Component({
-  selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -16,20 +16,20 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private eventManagerService: EventManagerService,
-    private dailyLimitQuery: DailyLimitQuery,
+    private configQuery: ConfigQuery,
     private router: Router,
   ) { }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.dailyLimitQuery.execute().pipe(
+    this.configQuery.execute().pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onDailyLimitQuery(_));
   }
 
-  private onDailyLimitQuery(queryResult: any) {
+  private onDailyLimitQuery(queryResult: Config) {
   }
 
   private onError(result: Result) {
