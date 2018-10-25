@@ -4,11 +4,11 @@ import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { Config } from '../../domain/config';
+import { ConfigCommand } from '../../domain/config-command.service';
 import { ConfigQuery } from '../../domain/config-query.service';
-import { Config } from '../../domain/models';
 
 @Component({
-  selector: 'app-daily-limit',
   templateUrl: './daily-limit.component.html',
   styleUrls: ['./daily-limit.component.scss']
 })
@@ -19,6 +19,7 @@ export class DailyLimitComponent implements OnInit {
   constructor(
     private eventManagerService: EventManagerService,
     private configQuery: ConfigQuery,
+    private configCommand: ConfigCommand,
     private router: Router,
   ) {
     this.model = new Config();
@@ -30,20 +31,32 @@ export class DailyLimitComponent implements OnInit {
     this.configQuery.execute().pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onDailyLimitQuery(_));
+    ).subscribe(_ => this.onConfigQuery(_));
   }
 
-  private onDailyLimitQuery(queryResult: Config) {
+  private onConfigQuery(queryResult: Config) {
     this.model = queryResult;
   }
 
   onSubmit() {
+    this.eventManagerService.raise(ShowThrobberEvent);
+
+    this.configCommand.execute(this.model).pipe(
+      catchError(err => this.onError(err)),
+      finalize(() => this.eventManagerService.raise(HideThrobberEvent))
+    ).subscribe(_ => this.onConfigCommand());
+  }
+
+  private onConfigCommand() {
+    this.router.navigate(['setup/co-owner']);
   }
 
   private onError(result: Result) {
-    if (result.errors.general && !result.errors.general.databaseNotFound) {
-      this.errors = result.errors;
+    if (result.errors.general && result.errors.general.databaseNotFound) {
+      return EMPTY;
     }
+
+    this.errors = result.errors;
 
     return EMPTY;
   }

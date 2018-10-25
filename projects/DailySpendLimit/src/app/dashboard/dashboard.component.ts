@@ -5,7 +5,7 @@ import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { ConfigQuery } from '../domain/config-query.service';
-import { Config } from '../domain/models';
+import { Config } from '../domain/config';
 
 @Component({
   templateUrl: './dashboard.component.html',

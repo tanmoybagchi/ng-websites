@@ -9,8 +9,8 @@ import { DailyLimitComponent } from './setup/daily-limit/daily-limit.component';
 export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'error', component: ServerErrorComponent },
-  { path: 'setup/co-owner', component: CoOwnerComponent },
   { path: 'setup', component: DailyLimitComponent },
+  { path: 'setup/co-owner', component: CoOwnerComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: '', component: HomepageComponent, pathMatch: 'full' },
 ];

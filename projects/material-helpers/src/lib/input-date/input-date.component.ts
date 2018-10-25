@@ -6,8 +6,7 @@ import { UniqueIdService } from 'core';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'input-date',
-  templateUrl: './input-date.component.html',
-  styleUrls: ['./input-date.component.scss']
+  templateUrl: './input-date.component.html'
 })
 export class InputDateComponent {
   @Input() disabled = false;
