@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'page-title',
   templateUrl: './page-title.component.html'
 })

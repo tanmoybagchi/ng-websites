@@ -1,0 +1,20 @@
+<page-title name="Setup" [canAddNew]="false"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<form name="form" role="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Permissions</mat-card-title>
+      <mat-card-subtitle>Who all do you want to share this with?</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <input-email label="Share with" hint="must be an email address" [required]="true" [model]="model" (modelChange)="model=$event"></input-email>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Next</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

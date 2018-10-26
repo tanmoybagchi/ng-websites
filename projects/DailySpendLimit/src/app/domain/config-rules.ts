@@ -8,8 +8,12 @@ export class ConfigRules {
   private readonly rulesEngine: RulesEngine;
 
   constructor() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const rules = RuleBuilder.for<Config>()
       .property(x => x.dailyLimit).required('Need something').minCurrency(0.01, 'Really?')
+      .property(x => x.effectiveFrom).required('Need something').minDate(today, 'Must be today or in the future')
       .build();
 
     this.rulesEngine = RulesEngine.create(rules);

@@ -6,6 +6,7 @@ export * from './lib/bytes.pipe';
 export * from './lib/general-error/general-error.component';
 export * from './lib/google-sign-in/google-sign-in.component';
 export * from './lib/input-date/input-date.component';
+export * from './lib/input-email/input-email.component';
 export * from './lib/input-integer/input-integer.component';
 export * from './lib/input-search/input-search.component';
 export * from './lib/input-select/input-select.component';

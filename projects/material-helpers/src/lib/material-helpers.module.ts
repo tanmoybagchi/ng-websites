@@ -6,6 +6,7 @@ import { BytesPipe } from './bytes.pipe';
 import { GeneralErrorComponent } from './general-error/general-error.component';
 import { GoogleSignInComponent } from './google-sign-in/google-sign-in.component';
 import { InputDateComponent } from './input-date/input-date.component';
+import { InputEmailComponent } from './input-email/input-email.component';
 import { InputIntegerComponent } from './input-integer/input-integer.component';
 import { InputSearchComponent } from './input-search/input-search.component';
 import { InputSelectComponent } from './input-select/input-select.component';
@@ -33,6 +34,7 @@ import { ThrobberComponent } from './throbber/throbber.component';
     GeneralErrorComponent,
     GoogleSignInComponent,
     InputDateComponent,
+    InputEmailComponent,
     InputIntegerComponent,
     InputSearchComponent,
     InputSelectComponent,
@@ -51,6 +53,7 @@ import { ThrobberComponent } from './throbber/throbber.component';
     GeneralErrorComponent,
     GoogleSignInComponent,
     InputDateComponent,
+    InputEmailComponent,
     InputIntegerComponent,
     InputSearchComponent,
     InputSelectComponent,

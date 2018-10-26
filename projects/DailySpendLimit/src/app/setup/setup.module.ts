@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { CoOwnerComponent } from './co-owner/co-owner.component';
-import { DailyLimitComponent } from './daily-limit/daily-limit.component';
+import { PermissionsComponent } from './permissions.component';
+import { DailyLimitComponent } from './daily-limit.component';
 
 @NgModule({
   imports: [
@@ -9,7 +9,7 @@ import { DailyLimitComponent } from './daily-limit/daily-limit.component';
   ],
   declarations: [
     DailyLimitComponent,
-    CoOwnerComponent,
+    PermissionsComponent,
   ]
 })
 export class SetupModule { }

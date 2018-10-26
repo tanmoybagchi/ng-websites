@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DriveFileSearchQuery, DriveFileQuery, DriveMimeTypes } from 'gapi';
-import { environment } from '../../environments/environment';
-import { switchMap, map } from 'rxjs/operators';
+import { DomainHelper, Result, SessionStorageService } from 'core';
+import { DriveFileQuery, DriveFileSearchQuery } from 'gapi';
 import { throwError } from 'rxjs';
-import { Result, DomainHelper } from 'core';
+import { map, switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import { Config } from './config';
 
 @Injectable({
@@ -11,23 +11,24 @@ import { Config } from './config';
 })
 export class ConfigQuery {
   constructor(
+    private driveFileQuery: DriveFileQuery,
     private driveFileSearchQuery: DriveFileSearchQuery,
-    private driveFileQuery: DriveFileQuery
+    private sessionStorageService: SessionStorageService,
   ) { }
 
   execute() {
-    return this.driveFileSearchQuery.execute(environment.rootFolder, null, DriveMimeTypes.Folder, true).pipe(
-      switchMap(result => result.length === 0 ?
-        throwError(Result.CreateErrorResult('DatabaseNotFound')) :
-        this.driveFileSearchQuery.execute(environment.database, result[0].id, DriveMimeTypes.File, true).pipe(
-          switchMap(result => result.length === 0 ?
-            throwError(Result.CreateErrorResult('DatabaseNotFound')) :
-            this.driveFileQuery.execute(result[0].id).pipe(
-              map(_ => DomainHelper.adapt(Config, _))
-            )
-          )
-        )
-      )
+    return this.driveFileSearchQuery.execute(environment.database).pipe(
+      switchMap(result => {
+        if (result.length === 0) {
+          return throwError(Result.CreateErrorResult('DatabaseNotFound'));
+        }
+
+        this.sessionStorageService.set('optionsId', result[0].id);
+
+        return this.driveFileQuery.execute(result[0].id).pipe(
+          map(_ => DomainHelper.adapt(Config, _))
+        );
+      })
     );
   }
 }

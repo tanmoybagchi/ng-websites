@@ -5,7 +5,6 @@ import { filter } from 'rxjs/operators';
 import { HideThrobberEvent, ShowThrobberEvent } from './throbber-events';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'throbber',
   templateUrl: './throbber.component.html',
   styleUrls: ['./throbber.component.scss']
@@ -50,7 +49,6 @@ export class ThrobberComponent {
   waitEnd() {
     this.requestCount--;
 
-    // tslint:disable-next-line:no-unused-expression
     this.requestCount === 0 && (this.show = false);
 
     this.waitingOnServer = false;

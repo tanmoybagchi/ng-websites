@@ -4,7 +4,6 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'input-search',
   templateUrl: './input-search.component.html'
 })
@@ -22,7 +21,6 @@ export class InputSearchComponent {
   _maxlength = 256;
   @Input()
   set maxlength(value: number) {
-    // tslint:disable-next-line:no-unused-expression
     !isNaN(value) && value > 0 && (this._maxlength = value);
   }
 

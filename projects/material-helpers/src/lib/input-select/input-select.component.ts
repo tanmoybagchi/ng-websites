@@ -3,7 +3,6 @@ import { ErrorStateMatcher } from '@angular/material';
 import { UniqueIdService } from 'core';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'input-select',
   templateUrl: './input-select.component.html'
 })

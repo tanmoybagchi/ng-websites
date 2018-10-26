@@ -4,10 +4,10 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
-  selector: 'input-text',
-  templateUrl: './input-text.component.html'
+  selector: 'input-email',
+  templateUrl: './input-email.component.html'
 })
-export class InputTextComponent {
+export class InputEmailComponent {
   @Input() disabled = false;
   @Input() errMsg: string;
   @Input() hint = '';
@@ -38,6 +38,7 @@ export class InputTextComponent {
 
   inputName: string;
   errorStateMatcher: ErrorStateMatcher;
+  private readonly EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -51,6 +52,11 @@ export class InputTextComponent {
 
   onChange() {
     if (String.isNullOrWhitespace(this._model)) {
+      this.modelChange.emit(null);
+      return;
+    }
+
+    if (!this.EMAIL_REGEXP.test(this._model)) {
       this.modelChange.emit(null);
       return;
     }

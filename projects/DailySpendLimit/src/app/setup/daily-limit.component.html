@@ -1,0 +1,24 @@
+<page-title name="Setup" [canAddNew]="false"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<form name="form" role="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Daily Limit</mat-card-title>
+      <mat-card-subtitle>How much do you want to spend daily?</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <input-usd label="Daily Limit" hint="must be greater than zero" [required]="true" [model]="model.dailyLimit"
+        (modelChange)="model.dailyLimit=$event" [errMsg]="errors?.dailyLimit"></input-usd>
+
+      <input-date label="Start From" placeholder="mm/dd/yyyy" hint="must be today or in future" [required]="true"
+        [model]="model.effectiveFrom" (modelChange)="model.effectiveFrom=$event" [errMsg]="errors?.effectiveFrom"></input-date>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Next</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

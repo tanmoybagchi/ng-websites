@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomainHelper, LocalStorageService, Result } from 'core';
-import { Observable, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DriveMimeTypes } from './drive-mime-types';
 
@@ -17,7 +17,7 @@ export class DriveFileSearchQuery {
     this.data = this.storage.get(this.storageKey) || [];
   }
 
-  execute(name: string, parents = '', mimeType = DriveMimeTypes.File, cacheResults = false) {
+  execute(name: string, parents?: string, mimeType?: DriveMimeTypes, cacheResults?: boolean) {
     if (String.isNullOrWhitespace(name)) {
       return throwError(Result.CreateErrorResult('Required', 'name'));
     }

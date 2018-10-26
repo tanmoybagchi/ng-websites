@@ -4,13 +4,12 @@ import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { Config } from '../../domain/config';
-import { ConfigCommand } from '../../domain/config-command.service';
-import { ConfigQuery } from '../../domain/config-query.service';
+import { Config } from '../domain/config';
+import { ConfigCommand } from '../domain/config-command.service';
+import { ConfigQuery } from '../domain/config-query.service';
 
 @Component({
-  templateUrl: './daily-limit.component.html',
-  styleUrls: ['./daily-limit.component.scss']
+  templateUrl: './daily-limit.component.html'
 })
 export class DailyLimitComponent implements OnInit {
   errors: any;
@@ -48,11 +47,11 @@ export class DailyLimitComponent implements OnInit {
   }
 
   private onConfigCommand() {
-    this.router.navigate(['setup/co-owner']);
+    this.router.navigate(['setup/permissions']);
   }
 
   private onError(result: Result) {
-    if (result.errors.general && result.errors.general.databaseNotFound) {
+    if (result.errors.general && (result.errors.general.notFound || result.errors.general.databaseNotFound)) {
       return EMPTY;
     }
 

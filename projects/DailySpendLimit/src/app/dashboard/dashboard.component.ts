@@ -29,11 +29,16 @@ export class DashboardComponent implements OnInit {
     ).subscribe(_ => this.onDailyLimitQuery(_));
   }
 
-  private onDailyLimitQuery(queryResult: Config) {
+  private onDailyLimitQuery(config: Config) {
+    if (config.effectiveFrom == null || String.isNullOrWhitespace(config.spreadsheetId)) {
+      this.router.navigate(['setup']);
+      return;
+    }
   }
 
   private onError(result: Result) {
-    if (result.errors.general && result.errors.general.databaseNotFound) {
+    console.log(result);
+    if (result.errors.general && (result.errors.general.notFound || result.errors.general.databaseNotFound)) {
       this.router.navigate(['setup']);
     } else {
       this.errors = result.errors;
