@@ -15,18 +15,14 @@ export class ConfigCommand {
   ) { }
 
   execute(model: Config) {
-    return this.configRules.check(model).pipe(
-      switchMap(_ => {
-        const id = <string>this.storage.get('optionsId');
+    const id = <string>this.storage.get('optionsId');
 
-        if (String.hasData(id)) {
-          return this.driveSaveCommand.execute(model, id);
-        }
+    if (String.hasData(id)) {
+      return this.driveSaveCommand.execute(model, id);
+    }
 
-        return this.driveSaveCommand.execute(model, null, environment.database).pipe(
-          tap(result => this.storage.set('optionsId', result.id))
-        );
-      })
+    return this.driveSaveCommand.execute(model, undefined, environment.config).pipe(
+      tap(result => this.storage.set('optionsId', result.id))
     );
   }
 }

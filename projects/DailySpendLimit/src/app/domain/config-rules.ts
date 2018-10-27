@@ -13,7 +13,7 @@ export class ConfigRules {
 
     const rules = RuleBuilder.for<Config>()
       .property(x => x.dailyLimit).required('Need something').minCurrency(0.01, 'Really?')
-      .property(x => x.effectiveFrom).required('Need something').minDate(today, 'Must be today or in the future')
+      .property(x => x.effectiveFrom).required('Need something')
       .build();
 
     this.rulesEngine = RulesEngine.create(rules);

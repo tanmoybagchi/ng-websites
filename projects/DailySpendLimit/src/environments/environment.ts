@@ -7,7 +7,8 @@ export const environment = {
   endPoint: 'https://accounts.google.com/o/oauth2/v2/auth',
   client_id: '476036799041-9ub5f7f9kgem33aetosjm1mdcqfh9vfa.apps.googleusercontent.com',
   scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive',
-  database: 'dailyspendlimit.json',
+  config: 'dailyspendlimit.json',
+  database: 'dailyspendlimit',
 };
 
 /*
@@ -16,4 +17,4 @@ export const environment = {
  * import the following file, but please comment it out in production mode
  * because it will have performance impact when throw error
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import 'zone.js/dist/zone-error';  // Included with Angular CLI.

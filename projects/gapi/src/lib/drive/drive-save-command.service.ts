@@ -4,38 +4,27 @@ import { DomainHelper, Result } from 'core';
 import { throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DriveMimeTypes } from './drive-mime-types';
+import { DriveCreateCommand } from './drive-create-command.service';
 
 @Injectable({ providedIn: 'root' })
 export class DriveSaveCommand {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private createCommand: DriveCreateCommand
   ) { }
 
-  execute(fileContent: any, fileId?: string, fileName?: string, mimeType?: DriveMimeTypes.File) {
+  execute(fileContent: any, fileId?: string, fileName?: string, mimeType?: DriveMimeTypes) {
     if (fileContent === undefined || fileContent === null) {
       return throwError(Result.CreateErrorResult('Required', 'fileContent'));
-    }
-
-    if (String.isNullOrWhitespace(fileId) && String.isNullOrWhitespace(fileName)) {
-      return throwError(Result.CreateErrorResult('Must specify fileId or fileName'));
     }
 
     if (String.hasData(fileId)) {
       return this.upload(fileContent, fileId);
     }
 
-    return this.create(fileName, mimeType).pipe(
-      switchMap((_: any) => this.upload(fileContent, _.id))
+    return this.createCommand.execute(fileName, mimeType).pipe(
+      switchMap(_ => this.upload(fileContent, _.id))
     );
-  }
-
-  private create(fileName: string, mimeType?: DriveMimeTypes) {
-    let body = { name: fileName};
-    if (mimeType) {
-      (body as any).mimeType = mimeType
-    }
-
-    return this.http.post('https://www.googleapis.com/drive/v3/files', body);
   }
 
   private upload(fileContent: any, fileId: string) {

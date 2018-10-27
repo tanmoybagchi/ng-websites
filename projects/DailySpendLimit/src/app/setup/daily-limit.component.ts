@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { EMPTY, of } from 'rxjs';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { Config } from '../domain/config';
 import { ConfigCommand } from '../domain/config-command.service';
 import { ConfigQuery } from '../domain/config-query.service';
+import { ConfigRules } from '../domain/config-rules';
+import { DriveCreateCommand, DriveMimeTypes } from 'gapi';
+import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './daily-limit.component.html'
@@ -19,6 +22,8 @@ export class DailyLimitComponent implements OnInit {
     private eventManagerService: EventManagerService,
     private configQuery: ConfigQuery,
     private configCommand: ConfigCommand,
+    private configRules: ConfigRules,
+    private driveCreateCommand: DriveCreateCommand,
     private router: Router,
   ) {
     this.model = new Config();
@@ -27,11 +32,11 @@ export class DailyLimitComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.configQuery.execute().pipe(
+/*     this.configQuery.execute().pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onConfigQuery(_));
-  }
+ */  }
 
   private onConfigQuery(queryResult: Config) {
     this.model = queryResult;
@@ -40,7 +45,17 @@ export class DailyLimitComponent implements OnInit {
   onSubmit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.configCommand.execute(this.model).pipe(
+    this.configRules.check(this.model).pipe(
+      switchMap(_ => {
+        if (String.hasData(this.model.spreadsheetId)) {
+          return of({});
+        }
+
+        return this.driveCreateCommand.execute(environment.database, DriveMimeTypes.Spreadsheet).pipe(
+          tap(result => this.model.spreadsheetId = result.id),
+        );
+      }),
+      switchMap(_ => this.configCommand.execute(this.model)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onConfigCommand());

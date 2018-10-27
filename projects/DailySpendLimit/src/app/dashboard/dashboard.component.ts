@@ -29,11 +29,12 @@ export class DashboardComponent implements OnInit {
     ).subscribe(_ => this.onDailyLimitQuery(_));
   }
 
-  private onDailyLimitQuery(config: Config) {
-    if (config.effectiveFrom == null || String.isNullOrWhitespace(config.spreadsheetId)) {
+  private onDailyLimitQuery(config: any) {
+    console.log(config);
+    /* if (config.effectiveFrom == null || String.isNullOrWhitespace(config.spreadsheetId)) {
       this.router.navigate(['setup']);
       return;
-    }
+    } */
   }
 
   private onError(result: Result) {
