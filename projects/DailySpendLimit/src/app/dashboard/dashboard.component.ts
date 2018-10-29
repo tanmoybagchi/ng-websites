@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
+import { DriveFileSearchQuery, DriveMimeTypes } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { ConfigQuery } from '../domain/config-query.service';
-import { Config } from '../domain/config';
+import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -16,25 +16,24 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private eventManagerService: EventManagerService,
-    private configQuery: ConfigQuery,
+    private driveFileSearchQuery: DriveFileSearchQuery,
     private router: Router,
   ) { }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.configQuery.execute().pipe(
+    this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onDailyLimitQuery(_));
+    ).subscribe(_ => this.onDriveFileSearchQuery(_));
   }
 
-  private onDailyLimitQuery(config: any) {
-    console.log(config);
-    /* if (config.effectiveFrom == null || String.isNullOrWhitespace(config.spreadsheetId)) {
+  private onDriveFileSearchQuery(result: DriveFileSearchQuery.Result[]) {
+    if (result.length === 0) {
       this.router.navigate(['setup']);
       return;
-    } */
+    }
   }
 
   private onError(result: Result) {

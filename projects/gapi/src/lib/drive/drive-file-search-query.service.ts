@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DomainHelper, LocalStorageService, Result } from 'core';
+import { DomainHelper, SessionStorageService, Result } from 'core';
 import { of, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DriveMimeTypes } from './drive-mime-types';
@@ -12,7 +12,7 @@ export class DriveFileSearchQuery {
 
   constructor(
     private http: HttpClient,
-    private storage: LocalStorageService,
+    private storage: SessionStorageService,
   ) {
     this.data = this.storage.get(this.storageKey) || [];
   }

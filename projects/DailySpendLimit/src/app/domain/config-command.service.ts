@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { SessionStorageService } from 'core';
-import { DriveSaveCommand } from 'gapi';
-import { switchMap, tap } from 'rxjs/operators';
+import { DriveSaveCommand, DriveFileSearchQuery } from 'gapi';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Config } from './config';
-import { ConfigRules } from './config-rules';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigCommand {
   constructor(
-    private configRules: ConfigRules,
+    private driveFileSearchQuery: DriveFileSearchQuery,
     private driveSaveCommand: DriveSaveCommand,
     private storage: SessionStorageService,
   ) { }
