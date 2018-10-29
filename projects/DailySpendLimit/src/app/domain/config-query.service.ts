@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetReadQuery } from 'gapi';
+import { DriveFileSearchQuery, DriveMimeTypes, SheetReadQuery } from 'gapi';
 import { of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -15,20 +15,24 @@ export class ConfigQuery {
   ) { }
 
   execute() {
+    // tslint:disable-next-line:max-line-length
     // return this.sheetQuery.execute('https://docs.google.com/spreadsheets/d/1wktik_OTkJvN7jMqNXTVrTi0uB2T12DG4vj3nUefmZY', 'select sum(B)', 'Expenses');
 
     return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
-      switchMap(result => {
-        if (result.length === 0) { return of(new Config()); }
+      switchMap(searchResult => {
+        if (searchResult.length === 0) { return of(new Config()); }
 
-        return this.sheetReadQuery.execute(result[0].id, 'Config', 'sheets(data(rowData(values/effectiveValue)))').pipe(
-          map((result: GoogleSpreadsheet) => {
-            const model = new Config();
+        // tslint:disable-next-line:max-line-length
+        return this.sheetReadQuery.execute(searchResult[0].id, 'Config', 'spreadsheetUrl,sheets(properties/sheetId,data(rowData(values/effectiveValue)))').pipe(
+          map(spreadsheet => {
+            const config = new Config();
 
-            model.dailyLimit = result.sheets[0].data[0].rowData[1].values[0].effectiveValue.numberValue;
-            model.effectiveFrom = new Date(result.sheets[0].data[0].rowData[1].values[1].effectiveValue.stringValue);
+            config.spreadsheetUrl = spreadsheet.spreadsheetUrl;
+            config.sheetId = spreadsheet.sheets[0].properties.sheetId;
+            config.dailyLimit = spreadsheet.sheets[0].data[0].rowData[0].values[1].effectiveValue.numberValue;
+            config.effectiveFrom = new Date(spreadsheet.sheets[0].data[0].rowData[1].values[1].effectiveValue.stringValue);
 
-            return model;
+            return config;
           })
         );
       })

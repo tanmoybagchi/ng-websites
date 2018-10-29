@@ -21,7 +21,9 @@ export class SheetQuery {
     }
 
     let params = new HttpParams().append('tq', query);
+    // tslint:disable-next-line:no-unused-expression
     String.hasData(sheetName) && (params = params.append('sheet', sheetName));
+    // tslint:disable-next-line:no-unused-expression
     String.hasData(range) && (params = params.append('range', range));
     params = params.append('tqx', 'out:json');
 

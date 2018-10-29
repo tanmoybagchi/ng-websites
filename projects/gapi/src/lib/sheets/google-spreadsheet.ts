@@ -8,6 +8,14 @@ export class GoogleSpreadsheet {
   sheets: GoogleSpreadsheet.Sheet[];
   /** The url of the spreadsheet. This field is read-only. */
   spreadsheetUrl: string;
+
+  static Create(title: string) {
+    const sheet = new GoogleSpreadsheet();
+
+    sheet.properties = GoogleSpreadsheet.SpreadsheetProperties.Create(title);
+
+    return sheet;
+  }
 }
 
 export namespace GoogleSpreadsheet {
@@ -27,6 +35,14 @@ export namespace GoogleSpreadsheet {
     /** The time zone of the spreadsheet, in CLDR format such as **America/New_York**.
      * If the time zone isn't recognized, this may be a custom time zone such as **GMT-07:00**. */
     timeZone = '';
+
+    static Create(title: string) {
+      const properties = new SpreadsheetProperties();
+
+      properties.title = title;
+
+      return properties;
+    }
   }
 
   /** A sheet in a spreadsheet. */
@@ -40,12 +56,21 @@ export namespace GoogleSpreadsheet {
      * will have startRow 14 (zero-based row 15), and startColumn 3 (zero-based column D).
      */
     data: GridData[];
+
+    static Create(title: string, inp: GridData[]) {
+      const sheet = new Sheet();
+
+      sheet.properties = SheetProperties.Create(title);
+      sheet.data = inp;
+
+      return sheet;
+    }
   }
 
   /** Properties of a sheet. */
   export class SheetProperties {
     /** The ID of the sheet. Must be non-negative. This field cannot be changed once set. */
-    sheetId = 0;
+    sheetId: number;
     /** The name of the sheet. */
     title: string;
     /** The index of the sheet within the spreadsheet.
@@ -54,7 +79,7 @@ export namespace GoogleSpreadsheet {
      * For example; if there were 3 sheets (S1; S2; S3) in order to move S1 ahead of S2 the index would have to be set to 2.
      * A sheet index update request is ignored if the requested index is identical to the sheets current index
      * or if the requested new index is equal to the current sheet index + 1. */
-    index = 0;
+    index: number;
     /** The type of sheet. Defaults to GRID. This field cannot be changed once set. */
     sheetType = SheetType.GRID;
     /** Additional properties of the sheet if this sheet is a grid.
@@ -64,6 +89,14 @@ export namespace GoogleSpreadsheet {
     hidden = false;
     /** True if the sheet is an RTL sheet instead of an LTR sheet. */
     rightToLeft = false;
+
+    static Create(title: string) {
+      const sheetProperties = new SheetProperties();
+
+      sheetProperties.title = title;
+
+      return sheetProperties;
+    }
   }
 
   /** The kind of sheet. */
@@ -101,12 +134,24 @@ export namespace GoogleSpreadsheet {
     /** The first column this GridData refers to; zero-based. */
     startColumn = 0;
     rowData: RowData[];
+
+    static Create(inp: RowData[]) {
+      const grid = new GridData();
+      grid.rowData = inp;
+      return grid;
+    }
   }
 
   /** Data about each cell in a row. */
   export class RowData {
     /** The values in the row, one per column. */
     values: CellData[];
+
+    static Create(inp: CellData[]) {
+      const row = new RowData();
+      row.values = inp;
+      return row;
+    }
   }
 
   /** Data about a specific cell. */
@@ -120,6 +165,13 @@ export namespace GoogleSpreadsheet {
     formattedValue = '';
     /** Any note on the cell. */
     note = '';
+
+    static Create(inp: any) {
+      const cell = new CellData();
+
+      cell.userEnteredValue = ExtendedValue.Create(inp);
+      return cell;
+    }
   }
 
   /** The kinds of value that a cell in a spreadsheet can have. Union field value can be only one of the following. */
@@ -142,6 +194,30 @@ export namespace GoogleSpreadsheet {
     formulaValue: string;
     /** Represents an error. This field is read-only. */
     errorValue: ErrorValue;
+
+    static Create(inp: any) {
+      const ev = new ExtendedValue();
+
+      switch (typeof inp) {
+        case 'string':
+          ev.stringValue = inp;
+          break;
+
+        case 'boolean':
+          ev.boolValue = inp;
+          break;
+
+        case 'number':
+          ev.numberValue = inp;
+          break;
+
+        case 'object':
+          ev.stringValue = inp instanceof Date ? inp.toISOString() : JSON.stringify(inp);
+          break;
+      }
+
+      return ev;
+    }
   }
 
   /** An error in a cell. */
@@ -174,5 +250,51 @@ export namespace GoogleSpreadsheet {
     N_A,
     /** Corresponds to the Loading... state. */
     LOADING
+  }
+
+  /** A single kind of update to apply to a spreadsheet.
+   * Union field kind can be only one of the following: */
+  export class BatchUpdateRequest {
+    appendCells: AppendCellsRequest;
+    updateCells: UpdateCellsRequest;
+  }
+
+  export class AppendCellsRequest {
+    /** The sheet ID to append the data to. */
+    sheetId: number;
+    /** The data to append. */
+    rows: RowData[];
+    /** The fields of CellData that should be updated.
+     * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
+     * A single "*" can be used as short-hand for listing every field. */
+    fields: string;
+  }
+
+  /** Updates all cells in a range with new data. */
+  export class UpdateCellsRequest {
+    rows: RowData[];
+    /** The fields of CellData that should be updated. At least one field must be specified.
+     * The root is the CellData; 'row.values.' should not be specified.
+     * A single "*" can be used as short-hand for listing every field. */
+    fields: string;
+    /** The range to write data to.
+     * If the data in rows does not cover the entire requested range, the fields matching those set in fields will be cleared. */
+    range: GridRange;
+  }
+
+  /** A range on a sheet. All indexes are zero-based.
+   * Indexes are half open, e.g the start index is inclusive and the end index is exclusive -- [startIndex, endIndex).
+   * Missing indexes indicate the range is unbounded on that side.*/
+  export class GridRange {
+    /** The sheet this range is on. */
+    sheetId: number;
+    /** The start row (inclusive) of the range, or not set if unbounded. */
+    startRowIndex: number;
+    /** The end row (exclusive) of the range, or not set if unbounded. */
+    endRowIndex: number;
+    /** The start column (inclusive) of the range, or not set if unbounded. */
+    startColumnIndex: number;
+    /** The end column (exclusive) of the range, or not set if unbounded. */
+    endColumnIndex: number;
   }
 }
