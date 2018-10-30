@@ -17,11 +17,11 @@ export class SetupPermissionsComponent implements OnInit {
   fileId: string;
 
   constructor(
+    private driveFileSearchQuery: DriveFileSearchQuery,
+    private drivePermissionsCreateCommand: DrivePermissionsCreateCommand,
+    private drivePermissionsReadQuery: DrivePermissionsReadQuery,
     private eventManagerService: EventManagerService,
     private router: Router,
-    private drivePermissionsReadQuery: DrivePermissionsReadQuery,
-    private drivePermissionsCreateCommand: DrivePermissionsCreateCommand,
-    private driveFileSearchQuery: DriveFileSearchQuery,
   ) { }
 
   ngOnInit() {
