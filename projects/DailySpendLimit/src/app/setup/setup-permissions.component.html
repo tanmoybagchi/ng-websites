@@ -6,11 +6,19 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Permissions</mat-card-title>
-      <mat-card-subtitle>Who all do you want to share this with?</mat-card-subtitle>
+      <mat-card-subtitle>Who do you want to share this with?</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <input-email label="Share with" hint="must be an email address" [required]="true" [model]="model" (modelChange)="model=$event"></input-email>
+      <mat-list>
+        <h3 mat-subheader>Currently shared with</h3>
+        <mat-list-item *ngFor="let item of model.permissions">
+          <p matLine> {{item.emailAddress}} </p>
+          <p matLine> {{item.role}} </p>
+        </mat-list-item>
+      </mat-list>
+
+      <input-email label="Share with" hint="must be an email address" [required]="true" [model]="email" (modelChange)="email=$event"></input-email>
     </mat-card-content>
 
     <mat-card-actions>

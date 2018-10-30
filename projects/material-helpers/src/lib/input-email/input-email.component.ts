@@ -4,6 +4,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'input-email',
   templateUrl: './input-email.component.html'
 })
@@ -18,12 +19,14 @@ export class InputEmailComponent {
   _model = '';
   @Input()
   set model(value: string) {
+    // tslint:disable-next-line:no-unused-expression
     value !== null && value !== undefined && (this._model = value);
   }
 
   _maxlength = 256;
   @Input()
   set maxlength(value: number) {
+    // tslint:disable-next-line:no-unused-expression
     !isNaN(value) && value > 0 && (this._maxlength = value);
   }
 
@@ -38,6 +41,7 @@ export class InputEmailComponent {
 
   inputName: string;
   errorStateMatcher: ErrorStateMatcher;
+  // tslint:disable-next-line:max-line-length
   private readonly EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(
