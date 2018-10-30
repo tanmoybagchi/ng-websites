@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
-import { DriveFileSearchQuery, DrivePermissionsReadQuery } from 'gapi';
+import { DriveFileSearchQuery, DrivePermissionsCreateCommand, DrivePermissionsReadQuery } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
-import { DrivePermissionsCreateCommand } from 'gapi';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
