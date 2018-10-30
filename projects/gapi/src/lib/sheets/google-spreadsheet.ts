@@ -212,7 +212,11 @@ export namespace GoogleSpreadsheet {
           break;
 
         case 'object':
-          ev.stringValue = inp instanceof Date ? inp.toISOString() : JSON.stringify(inp);
+          if (inp instanceof Date) {
+            ev.formulaValue = `=Date(${inp.getFullYear()}, ${inp.getMonth() + 1}, ${inp.getDate()})`;
+          } else {
+            ev.stringValue = JSON.stringify(inp);
+          }
           break;
       }
 

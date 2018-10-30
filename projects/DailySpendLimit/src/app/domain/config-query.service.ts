@@ -23,14 +23,14 @@ export class ConfigQuery {
         if (searchResult.length === 0) { return of(new Config()); }
 
         // tslint:disable-next-line:max-line-length
-        return this.sheetReadQuery.execute(searchResult[0].id, 'Config', 'spreadsheetUrl,sheets(properties/sheetId,data(rowData(values/effectiveValue)))').pipe(
+        return this.sheetReadQuery.execute(searchResult[0].id, 'Config', 'spreadsheetUrl,sheets(properties/sheetId,data(rowData(values/effectiveValue,values/formattedValue)))').pipe(
           map(spreadsheet => {
             const config = new Config();
 
             config.spreadsheetUrl = spreadsheet.spreadsheetUrl;
             config.sheetId = spreadsheet.sheets[0].properties.sheetId;
             config.dailyLimit = spreadsheet.sheets[0].data[0].rowData[0].values[1].effectiveValue.numberValue;
-            config.effectiveFrom = new Date(spreadsheet.sheets[0].data[0].rowData[1].values[1].effectiveValue.stringValue);
+            config.effectiveFrom = new Date(spreadsheet.sheets[0].data[0].rowData[1].values[1].formattedValue);
 
             return config;
           })
