@@ -13,7 +13,7 @@ export class ConfigCommand {
   ) { }
 
   execute(model: Config) {
-    return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet).pipe(
+    return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
       switchMap(searchResult => searchResult.length === 1 ?
         this.updateSpreadsheet(searchResult[0].id, model) :
         this.createSpreadsheet(model))
