@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Result } from '../result';
 import { AuthTokenService } from './auth-token.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class Http401403Interceptor implements HttpInterceptor {
   constructor(
     private authTokenService: AuthTokenService,
@@ -44,14 +44,12 @@ export class Http401403Interceptor implements HttpInterceptor {
           return throwError(err);
         }
 
-        if (err.status === 401) {
-          this.router.navigate(['sign-in'], { replaceUrl: true });
-          return EMPTY;
-        }
-
-        if (err.status === 403) {
+        if (err.status === 403 && err.headers.has('Authorization')) {
           return throwError(Result.CreateErrorResult('forbidden'));
         }
+
+        this.router.navigate(['sign-in'], { replaceUrl: true });
+        return EMPTY;
       })
     );
   }

@@ -257,6 +257,20 @@ export namespace GoogleSpreadsheet {
   export class BatchUpdateRequest {
     appendCells: AppendCellsRequest;
     updateCells: UpdateCellsRequest;
+
+    static Create(request: AppendCellsRequest | UpdateCellsRequest) {
+      const result = new BatchUpdateRequest();
+
+      if (request instanceof AppendCellsRequest) {
+        result.appendCells = request;
+      }
+
+      if (request instanceof UpdateCellsRequest) {
+        result.updateCells = request;
+      }
+
+      return result;
+    }
   }
 
   export class AppendCellsRequest {
@@ -268,6 +282,16 @@ export namespace GoogleSpreadsheet {
      * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
      * A single "*" can be used as short-hand for listing every field. */
     fields: string;
+
+    static Create(sheetId: number, rows: RowData[]) {
+      const result = new AppendCellsRequest();
+
+      result.sheetId = sheetId;
+      result.rows = rows;
+      result.fields = '*';
+
+      return result;
+    }
   }
 
   /** Updates all cells in a range with new data. */
@@ -280,6 +304,15 @@ export namespace GoogleSpreadsheet {
     /** The range to write data to.
      * If the data in rows does not cover the entire requested range, the fields matching those set in fields will be cleared. */
     range: GridRange;
+
+    static Create(rows: RowData[]) {
+      const result = new UpdateCellsRequest();
+
+      result.rows = rows;
+      result.fields = '*';
+
+      return result;
+    }
   }
 
   /** A range on a sheet. All indexes are zero-based.
@@ -296,5 +329,13 @@ export namespace GoogleSpreadsheet {
     startColumnIndex: number;
     /** The end column (exclusive) of the range, or not set if unbounded. */
     endColumnIndex: number;
+
+    static Create(sheetId: number) {
+      const result = new GridRange();
+
+      result.sheetId = sheetId;
+
+      return result;
+    }
   }
 }

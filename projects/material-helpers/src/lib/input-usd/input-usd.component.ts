@@ -5,6 +5,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'input-usd',
   templateUrl: './input-usd.component.html'
 })

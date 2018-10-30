@@ -41,7 +41,6 @@ export class DailyLimitComponent implements OnInit {
   }
 
   private ConfigQuery(queryResult: Config) {
-    console.log(queryResult);
     this.model = queryResult;
   }
 

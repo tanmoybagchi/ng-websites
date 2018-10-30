@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { DriveFileSearchQuery, DriveSaveCommand, SheetCreateCommand, GoogleSpreadsheet, DriveMimeTypes } from 'gapi';
+import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetCreateCommand } from 'gapi';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Config } from './config';
-import { SheetBatchUpdateCommand } from 'projects/gapi/src/lib/sheets/sheet-batchUpdate-command.service';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigCommand {
   constructor(
     private driveFileSearchQuery: DriveFileSearchQuery,
-    private driveSaveCommand: DriveSaveCommand,
     private sheetCreateCommand: SheetCreateCommand,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
   ) { }
@@ -23,12 +21,23 @@ export class ConfigCommand {
   }
 
   private updateSpreadsheet(spreadsheetId: string, model: Config) {
-    const spreadsheet = GoogleSpreadsheet.Create(environment.database);
-    spreadsheet.sheets = [
-      this.CreateConfigSheet(model),
-      this.CreateExpensesSheet()
-    ];
-    return this.sheetBatchUpdateCommand.execute(spreadsheetId, []);
+    const dailyLimitRow = GoogleSpreadsheet.RowData.Create([
+      GoogleSpreadsheet.CellData.Create(model.dailyLimit)
+    ]);
+
+    const effectiveFromRow = GoogleSpreadsheet.RowData.Create([
+      GoogleSpreadsheet.CellData.Create(model.effectiveFrom)
+    ]);
+
+    const request = GoogleSpreadsheet.UpdateCellsRequest.Create([dailyLimitRow, effectiveFromRow]);
+
+    request.range = GoogleSpreadsheet.GridRange.Create(model.sheetId);
+    request.range.startRowIndex = 0;
+    request.range.startColumnIndex = 1;
+
+    const bur = GoogleSpreadsheet.BatchUpdateRequest.Create(request);
+
+    return this.sheetBatchUpdateCommand.execute(spreadsheetId, [bur]);
   }
 
   private createSpreadsheet(model: Config) {
