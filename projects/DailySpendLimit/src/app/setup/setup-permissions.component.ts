@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
 import { DriveFileSearchQuery, DrivePermissionsReadQuery } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
-import { DrivePermissionsCreateCommand } from 'projects/gapi/src/public_api';
+import { DrivePermissionsCreateCommand } from 'gapi';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
