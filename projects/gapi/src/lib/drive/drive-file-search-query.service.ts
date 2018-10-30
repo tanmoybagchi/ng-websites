@@ -43,7 +43,9 @@ export class DriveFileSearchQuery {
   private searchDrive(name: string, parents: string, mimeType: string) {
     const searchParams: string[] = [];
     searchParams.push(`name='${name}'`);
+    // tslint:disable-next-line:no-unused-expression
     String.hasData(mimeType) && searchParams.push(`mimeType = '${mimeType}'`);
+    // tslint:disable-next-line:no-unused-expression
     String.hasData(parents) && searchParams.push(`'${parents}' in parents`);
     searchParams.push(`trashed=false`);
 
@@ -58,6 +60,7 @@ export class DriveFileSearchQuery {
 }
 
 export namespace DriveFileSearchQuery {
+  // tslint:disable-next-line:no-shadowed-variable
   export class Result {
     id = '';
     name = '';

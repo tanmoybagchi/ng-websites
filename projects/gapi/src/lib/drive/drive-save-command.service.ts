@@ -41,6 +41,7 @@ export class DriveSaveCommand {
 }
 
 export namespace DriveSaveCommand {
+  // tslint:disable-next-line:no-shadowed-variable
   export class Result {
     id = '';
     name = '';

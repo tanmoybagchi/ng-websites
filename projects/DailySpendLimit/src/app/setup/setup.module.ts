@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { PermissionsComponent } from './permissions.component';
-import { DailyLimitComponent } from './daily-limit.component';
+import { SetupPermissionsComponent } from './setup-permissions.component';
+import { SetupDailyLimitComponent } from './setup-daily-limit.component';
 
 @NgModule({
   imports: [
     SharedModule
   ],
   declarations: [
-    DailyLimitComponent,
-    PermissionsComponent,
+    SetupDailyLimitComponent,
+    SetupPermissionsComponent,
   ]
 })
 export class SetupModule { }

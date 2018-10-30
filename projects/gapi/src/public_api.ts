@@ -6,7 +6,7 @@ export * from './lib/auth/google-access-token';
 export * from './lib/auth/token-verify-command.service';
 export * from './lib/drive/drive-create-command.service';
 export * from './lib/drive/drive-file-properties-query.service';
-export * from './lib/drive/drive-file-query.service';
+export * from './lib/drive/drive-file-read-query.service';
 export * from './lib/drive/drive-file-search-query.service';
 export * from './lib/drive/drive-mime-types';
 export * from './lib/drive/drive-save-command.service';

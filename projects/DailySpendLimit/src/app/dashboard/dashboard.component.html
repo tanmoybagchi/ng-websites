@@ -1,3 +1,17 @@
-<p>
-  dashboard works!
-</p>
+<page-title name="Dashboard" [canAddNew]="false"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<form name="form" role="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-content>
+      <h2 [ngStyle]="{'color': currentLimit<0?'red':'inherit'}">You can spend ${{currentLimit}} today.</h2>
+
+      <input-usd label="Current expense" [model]="expenses" (modelChange)="expenses=$event" [errMsg]="errors?.expenses"></input-usd>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Save</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

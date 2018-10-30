@@ -4,6 +4,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'input-date',
   templateUrl: './input-date.component.html'
 })
@@ -18,12 +19,14 @@ export class InputDateComponent {
   _model: Date = null;
   @Input()
   set model(value: Date) {
+    // tslint:disable-next-line:no-unused-expression
     value !== null && value !== undefined && (this._model = value);
   }
 
   _maxlength = 10;
   @Input()
   set maxlength(value: number) {
+    // tslint:disable-next-line:no-unused-expression
     !isNaN(value) && value > 0 && (this._maxlength = value);
   }
 

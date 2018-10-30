@@ -20,8 +20,13 @@ export class InputUSDComponent {
   _model = '';
   @Input()
   set model(value: number) {
-    // tslint:disable-next-line:no-unused-expression
-    value !== null && value !== undefined && !isNaN(value) && (this._model = this.pipe.transform(value, '1.2-2'));
+    if (value === undefined || value === null) {
+      this._model = '';
+    } else if (Number.isNaN(value)) {
+      this._model = value.toString();
+    } else {
+      this._model = this.pipe.transform(value, '1.2-2');
+    }
   }
 
   _style: SafeStyle;

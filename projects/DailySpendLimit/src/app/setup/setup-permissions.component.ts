@@ -6,9 +6,9 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 @Component({
-  templateUrl: './permissions.component.html'
+  templateUrl: './setup-permissions.component.html'
 })
-export class PermissionsComponent implements OnInit {
+export class SetupPermissionsComponent implements OnInit {
   errors: any;
   model = '';
 

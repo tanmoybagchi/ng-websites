@@ -1,20 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
-import { DriveCreateCommand, DriveMimeTypes, DriveFileSearchQuery, SheetReadQuery } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
-import { EMPTY, of } from 'rxjs';
-import { catchError, finalize, switchMap, tap, filter } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { Config } from '../domain/config';
 import { ConfigCommand } from '../domain/config-command.service';
-import { ConfigRules } from '../domain/config-rules';
 import { ConfigQuery } from '../domain/config-query.service';
+import { ConfigRules } from '../domain/config-rules';
 
 @Component({
-  templateUrl: './daily-limit.component.html'
+  templateUrl: './setup-daily-limit.component.html'
 })
-export class DailyLimitComponent implements OnInit {
+export class SetupDailyLimitComponent implements OnInit {
   errors: any;
   model: Config;
 
@@ -23,9 +21,6 @@ export class DailyLimitComponent implements OnInit {
     private configCommand: ConfigCommand,
     private configQuery: ConfigQuery,
     private configRules: ConfigRules,
-    private driveFileSearchQuery: DriveFileSearchQuery,
-    private driveCreateCommand: DriveCreateCommand,
-    private sheetReadQuery: SheetReadQuery,
     private router: Router,
   ) {
     this.model = new Config();
@@ -59,10 +54,6 @@ export class DailyLimitComponent implements OnInit {
   }
 
   private onError(result: Result) {
-    if (result.errors.general && (result.errors.general.notFound || result.errors.general.databaseNotFound)) {
-      return EMPTY;
-    }
-
     this.errors = result.errors;
 
     return EMPTY;

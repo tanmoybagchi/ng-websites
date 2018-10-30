@@ -16,9 +16,9 @@ export class DriveCreateCommand {
       return throwError(Result.CreateErrorResult('Required', 'filename'));
     }
 
-    let body = { name: fileName };
+    const body = { name: fileName };
     if (mimeType) {
-      (body as any).mimeType = mimeType
+      (body as any).mimeType = mimeType;
     }
 
     const httpParams = new HttpParams()
@@ -31,6 +31,7 @@ export class DriveCreateCommand {
 }
 
 export namespace DriveCreateCommand {
+  // tslint:disable-next-line:no-shadowed-variable
   export class Result {
     id = '';
     name = '';
