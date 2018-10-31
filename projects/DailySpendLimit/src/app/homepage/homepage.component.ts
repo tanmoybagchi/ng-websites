@@ -20,7 +20,7 @@ export class HomepageComponent implements OnInit {
     if (this.isAuthenticated()) {
       this.router.navigate(['dashboard']);
     } else {
-      this.router.navigate(['sign-in'], { replaceUrl: true });
+      this.router.navigate(['sign-in']);
     }
   }
 

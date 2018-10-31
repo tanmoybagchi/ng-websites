@@ -48,7 +48,7 @@ export class Http401403Interceptor implements HttpInterceptor {
           return throwError(Result.CreateErrorResult('forbidden'));
         }
 
-        this.router.navigate(['sign-in'], { replaceUrl: true });
+        this.router.navigate(['sign-in']);
         return EMPTY;
       })
     );
