@@ -4,6 +4,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { UniqueIdService } from 'core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'input-integer',
   templateUrl: './input-integer.component.html'
 })
@@ -18,12 +19,14 @@ export class InputIntegerComponent {
   _maxlength = 15;
   @Input()
   set maxlength(value: number) {
+    // tslint:disable-next-line:no-unused-expression
     !isNaN(value) && value > 0 && (this._maxlength = value);
   }
 
-  _model = '';
+  _model: string | number = '';
   @Input()
   set model(value: number) {
+    // tslint:disable-next-line:no-unused-expression
     value !== null && value !== undefined && !isNaN(value) && (this._model = value.toString());
   }
 
@@ -51,16 +54,22 @@ export class InputIntegerComponent {
   }
 
   onChange() {
-    if (String.isNullOrWhitespace(this._model)) {
-      this.modelChange.emit(null);
-      return;
+    if (typeof this._model === 'string') {
+      if (String.isNullOrWhitespace(this._model)) {
+        this.modelChange.emit(null);
+        return;
+      }
+
+      if (!this.INTEGER_REGEXP.test(this._model)) {
+        this.modelChange.emit(NaN);
+        return;
+      }
+
+      this.modelChange.emit(Number(this._model.replace(/[\,]+/g, '')));
     }
 
-    if (!this.INTEGER_REGEXP.test(this._model)) {
-      this.modelChange.emit(NaN);
-      return;
+    if (typeof this._model === 'number') {
+      this.modelChange.emit(this._model);
     }
-
-    this.modelChange.emit(Number(this._model.replace(/[\,]+/g, '')));
   }
 }
