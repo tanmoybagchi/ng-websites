@@ -46,15 +46,15 @@ export class GoogleSignInComponent implements OnInit {
   private sendToGoogle() {
     const client_id = `client_id=${this.client_id}`;
     this.redirect_uri = `${window.location.origin}/${this.sign_in_ret_url}`;
-    const redirect_uri_param = `redirect_uri=${encodeURI(`${window.location.origin}/${this.sign_in_ret_url}`)}`;
+    const redirect_uri_param = `redirect_uri=${encodeURI(`${window.location.href.replace('sign-in', this.sign_in_ret_url)}`)}`;
     const response_type = 'response_type=token';
     const include_granted_scopes = 'include_granted_scopes=true';
     const scope = `scope=${encodeURI(this.scope)}`;
 
-    this.eventManagerService.raise(ShowThrobberEvent);
-
     // tslint:disable-next-line:max-line-length
     this.childWindow = window.open(`${this.endPoint}?${client_id}&${redirect_uri_param}&${response_type}&${scope}&${include_granted_scopes}`, '_blank');
+
+    this.eventManagerService.raise(ShowThrobberEvent);
     this.interval = window.setInterval(() => {
       try {
         this.onSignin();

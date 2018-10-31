@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { HideThrobberEvent, ShowThrobberEvent } from './throbber-events';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'throbber',
   templateUrl: './throbber.component.html',
   styleUrls: ['./throbber.component.scss']
