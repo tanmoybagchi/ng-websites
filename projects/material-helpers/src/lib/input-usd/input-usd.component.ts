@@ -17,7 +17,7 @@ export class InputUSDComponent {
   @Input() placeholder = '';
   @Input() required = false;
 
-  _model = '';
+  _model: string | number = '';
   @Input()
   set model(value: number) {
     if (value === undefined || value === null) {
@@ -55,16 +55,22 @@ export class InputUSDComponent {
   }
 
   onChange() {
-    if (String.isNullOrWhitespace(this._model)) {
-      this.modelChange.emit(null);
-      return;
+    if (typeof this._model === 'string') {
+      if (String.isNullOrWhitespace(this._model)) {
+        this.modelChange.emit(null);
+        return;
+      }
+
+      if (!this.USD_REGEXP.test(this._model)) {
+        this.modelChange.emit(NaN);
+        return;
+      }
+
+      this.modelChange.emit(Number(this._model.replace(/[\$\,]+/g, '')));
     }
 
-    if (!this.USD_REGEXP.test(this._model)) {
-      this.modelChange.emit(NaN);
-      return;
+    if (typeof this._model === 'number') {
+      this.modelChange.emit(this._model);
     }
-
-    this.modelChange.emit(Number(this._model.replace(/[\$\,]+/g, '')));
   }
 }
