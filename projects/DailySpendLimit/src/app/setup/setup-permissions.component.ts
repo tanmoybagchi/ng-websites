@@ -41,6 +41,7 @@ export class SetupPermissionsComponent implements OnInit {
 
   onSubmit() {
     if (String.isNullOrWhitespace(this.email)) {
+      this.router.navigate(['dashboard']);
       return;
     }
 

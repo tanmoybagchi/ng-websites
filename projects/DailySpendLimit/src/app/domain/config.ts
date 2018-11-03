@@ -1,7 +1,9 @@
 export class Config {
-  dailyLimit = 0;
+  dailyLimit = 100;
   @Reflect.metadata('design:type', Date)
   effectiveFrom: Date = null;
+  spreadsheetUrl: string;
+  sheetId: number;
   expenses = 0;
 
   currentLimit() {

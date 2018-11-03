@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DriveFileSearchQuery, DriveMimeTypes, SheetReadQuery } from 'gapi';
+import { DriveFileSearchQuery, DriveMimeTypes, SheetReadQuery, SheetQuery } from 'gapi';
 import { of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -12,9 +12,10 @@ export class ConfigQuery {
   constructor(
     private driveFileSearchQuery: DriveFileSearchQuery,
     private sheetReadQuery: SheetReadQuery,
+    private sheetQuery: SheetQuery,
   ) { }
 
-  execute() {
+  execute(spreadsheetUrl: string) {
     // tslint:disable-next-line:max-line-length
     // return this.sheetQuery.execute('https://docs.google.com/spreadsheets/d/1wktik_OTkJvN7jMqNXTVrTi0uB2T12DG4vj3nUefmZY', 'select sum(B)', 'Expenses');
 
