@@ -1,3 +1,12 @@
-<page-title name="Sign in" [canAddNew]="false"></page-title>
+<mat-list *ngIf="errors?.general?.default">
+  <mat-list-item *ngFor="let item of errors.general.default">{{item}}</mat-list-item>
+</mat-list>
 
-<general-error [errors]="errors"></general-error>
+<div style="flex: 1 1 auto; display:flex; justify-content: center">
+  <div style="align-self: center">
+    <mat-spinner style="display: inline-block; vertical-align: middle;" strokeWidth="3" diameter="42"></mat-spinner>
+    <div style="display: inline-block; vertical-align: middle; font-size: 42px">
+      Signing in
+    </div>
+  </div>
+</div>
