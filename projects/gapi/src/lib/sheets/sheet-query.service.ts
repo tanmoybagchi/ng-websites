@@ -27,7 +27,7 @@ export class SheetQuery {
     String.hasData(range) && (params = params.append('range', range));
     params = params.append('tqx', 'out:json');
 
-    return this.httpClient.get<GoogleSpreadsheet>(`${spreadsheetUrl}/gviz/tq`, { params: params }).pipe(
+    return this.httpClient.get(`${spreadsheetUrl}/gviz/tq`, { params: params }).pipe(
       catchError((httpError: HttpErrorResponse) => {
         const text_response = <string>httpError.error.text;
         const brace_start = text_response.indexOf('{');

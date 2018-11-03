@@ -15,9 +15,6 @@ export class ConfigQuery {
   ) { }
 
   execute() {
-    // tslint:disable-next-line:max-line-length
-    // return this.sheetQuery.execute('https://docs.google.com/spreadsheets/d/1wktik_OTkJvN7jMqNXTVrTi0uB2T12DG4vj3nUefmZY', 'select sum(B)', 'Expenses');
-
     return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
       switchMap(searchResult => {
         if (searchResult.length === 0) { return of(new Config()); }
@@ -27,7 +24,7 @@ export class ConfigQuery {
           map(spreadsheet => {
             const config = new Config();
 
-            config.spreadsheetUrl = spreadsheet.spreadsheetUrl;
+            config.spreadsheetUrl = spreadsheet.spreadsheetUrl.replace('/edit', '');
             config.sheetId = spreadsheet.sheets[0].properties.sheetId;
             config.dailyLimit = spreadsheet.sheets[0].data[0].rowData[0].values[1].effectiveValue.numberValue;
             config.effectiveFrom = new Date(spreadsheet.sheets[0].data[0].rowData[1].values[1].formattedValue);

@@ -7,6 +7,7 @@ import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { Config } from '../domain/config';
 import { ConfigQuery } from '../domain/config-query.service';
 import { ConfigCommand } from '../domain/config-command.service';
+import { ExpenseQuery } from '../domain/expense-query.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -19,9 +20,10 @@ export class DashboardComponent implements OnInit {
   private model: Config;
 
   constructor(
-    private eventManagerService: EventManagerService,
-    private configQuery: ConfigQuery,
     private configCommand: ConfigCommand,
+    private configQuery: ConfigQuery,
+    private eventManagerService: EventManagerService,
+    private expenseQuery: ExpenseQuery,
     private router: Router,
   ) { }
 
@@ -34,14 +36,21 @@ export class DashboardComponent implements OnInit {
     ).subscribe(_ => this.onConfigQuery(_));
   }
 
-  private onConfigQuery(queryResult: Config) {
-    if (queryResult.dailyLimit === 0 || queryResult.effectiveFrom === null) {
+  private onConfigQuery(configQueryResult: Config) {
+    if (configQueryResult.dailyLimit === 0 || configQueryResult.effectiveFrom === null) {
       this.router.navigate(['setup']);
       return;
     }
 
-    this.model = queryResult;
-    this.currentLimit = queryResult.currentLimit();
+    this.model = configQueryResult;
+
+    this.expenseQuery.execute(this.model.spreadsheetUrl)
+      .subscribe(expenseQueryResult => {
+        this.model.expenses = expenseQueryResult[0]['sum Amt'];
+        this.currentLimit = this.model.currentLimit();
+        console.log(this.model);
+      });
+
     this.expenses = null;
   }
 
