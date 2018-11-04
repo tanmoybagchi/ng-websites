@@ -3,12 +3,11 @@ import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize, switchMap } from 'rxjs/operators';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { Config } from '../domain/config';
-import { ConfigCommand } from '../domain/config-command.service';
 import { ConfigQuery } from '../domain/config-query.service';
-import { MonthlyExpenseQuery } from '../domain/monthly-expense-query.service';
 import { ExpenseCommand } from '../domain/expense-command.service';
+import { MonthlyExpenseQuery } from '../domain/monthly-expense-query.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -21,7 +20,6 @@ export class DashboardComponent implements OnInit {
   private model: Config;
 
   constructor(
-    private configCommand: ConfigCommand,
     private configQuery: ConfigQuery,
     private eventManagerService: EventManagerService,
     private monthlyExpenseQuery: MonthlyExpenseQuery,
@@ -33,28 +31,38 @@ export class DashboardComponent implements OnInit {
     this.eventManagerService.raise(ShowThrobberEvent);
 
     this.configQuery.execute().pipe(
+      switchMap(_ => this.onConfigQuery(_)),
       catchError(_ => this.onError(_)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onConfigQuery(_));
+    ).subscribe();
   }
 
   private onConfigQuery(configQueryResult: Config) {
-    if (configQueryResult.dailyLimit === 0 || configQueryResult.effectiveFrom === null) {
-      this.router.navigate(['setup']);
-      return;
+    if (this.notSetup(configQueryResult)) {
+      return this.goToSetup();
     }
 
     this.model = configQueryResult;
+    this.model.expenses = 0;
+    this.currentLimit = this.model.currentLimit();
 
-    this.monthlyExpenseQuery.execute(this.model.spreadsheetUrl)
-      .subscribe((monthlyExpenseQuery: any[]) => this.onMonthlyExpenseQuery(monthlyExpenseQuery));
-
-    this.expenses = null;
+    return this.getMonthlyExpenses();
   }
 
-  private onMonthlyExpenseQuery(queryResult: any[]) {
-    this.model.expenses = queryResult.length === 0 ? 0 : queryResult[0].monthlyAmt;
-    this.currentLimit = this.model.currentLimit();
+  private notSetup(configQueryResult: Config) {
+    return configQueryResult.dailyLimit === 0 || configQueryResult.effectiveFrom === null;
+  }
+
+  private goToSetup() {
+    this.router.navigate(['setup']);
+    return EMPTY;
+  }
+
+  private getMonthlyExpenses() {
+    return this.monthlyExpenseQuery.execute(this.model.spreadsheetUrl).pipe(
+      tap((queryResult: any[]) => this.model.expenses = queryResult.length === 0 ? 0 : queryResult[0].monthlyAmt),
+      tap(_ => this.currentLimit = this.model.currentLimit())
+    );
   }
 
   onSubmit() {
@@ -65,10 +73,11 @@ export class DashboardComponent implements OnInit {
     this.eventManagerService.raise(ShowThrobberEvent);
 
     this.expenseCommand.execute(this.expenses).pipe(
-      switchMap(_ => this.monthlyExpenseQuery.execute(this.model.spreadsheetUrl)),
+      tap(_ => this.expenses = null),
+      switchMap(_ => this.getMonthlyExpenses()),
       catchError(_ => this.onError(_)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe((monthlyExpenseQuery: any[]) => this.onMonthlyExpenseQuery(monthlyExpenseQuery));
+    ).subscribe();
   }
 
   private onError(result: Result) {

@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseCommand {
-  private expenseSheetId: number = null;
+  private sheetId: number = null;
 
   constructor(
     private driveFileSearchQuery: DriveFileSearchQuery,
@@ -15,26 +15,29 @@ export class ExpenseCommand {
 
   execute(amt: number) {
     return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
-      switchMap(searchResult => this.expenseSheetId === null
-        ? this.getExpenseSheetId(searchResult[0].id, amt)
+      switchMap(searchResult => this.sheetId === null
+        ? this.getSheetId(searchResult[0].id, amt)
         : this.updateSpreadsheet(searchResult[0].id, amt))
     );
   }
 
-  private getExpenseSheetId(spreadsheetId: string, amt: number) {
+  private getSheetId(spreadsheetId: string, amt: number) {
     return this.sheetReadQuery.execute(spreadsheetId, 'Expenses', 'sheets(properties/sheetId)').pipe(
-      tap(spreadsheet => this.expenseSheetId = spreadsheet.sheets[0].properties.sheetId),
+      tap(spreadsheet => this.sheetId = spreadsheet.sheets[0].properties.sheetId),
       switchMap(_ => this.updateSpreadsheet(spreadsheetId, amt))
     );
   }
 
   private updateSpreadsheet(spreadsheetId: string, amt: number) {
+    const amtCell = GoogleSpreadsheet.CellData.Create(amt);
+    amtCell.userEnteredFormat = GoogleSpreadsheet.CellFormat.Create(GoogleSpreadsheet.NumberFormatType.CURRENCY);
+
     const expenseRow = GoogleSpreadsheet.RowData.Create([
       GoogleSpreadsheet.CellData.Create(new Date()),
-      GoogleSpreadsheet.CellData.Create(amt)
+      amtCell
     ]);
 
-    const request = GoogleSpreadsheet.AppendCellsRequest.Create(this.expenseSheetId, [expenseRow]);
+    const request = GoogleSpreadsheet.AppendCellsRequest.Create(this.sheetId, [expenseRow]);
 
     const bur = GoogleSpreadsheet.BatchUpdateRequest.Create(request);
 

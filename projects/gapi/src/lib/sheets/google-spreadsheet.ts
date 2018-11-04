@@ -163,6 +163,9 @@ export namespace GoogleSpreadsheet {
     effectiveValue: ExtendedValue;
     /** The formatted value of the cell. This is the value as it's shown to the user. This field is read-only. */
     formattedValue = '';
+    /** The format the user entered for the cell.
+     *  When writing, the new format will be merged with the existing format. */
+    userEnteredFormat: CellFormat;
     /** Any note on the cell. */
     note = '';
 
@@ -170,6 +173,13 @@ export namespace GoogleSpreadsheet {
       const cell = new CellData();
 
       cell.userEnteredValue = ExtendedValue.Create(inp);
+
+      if (inp instanceof Date) {
+        cell.userEnteredFormat = new CellFormat();
+        cell.userEnteredFormat.numberFormat = new NumberFormat();
+        cell.userEnteredFormat.numberFormat.type = NumberFormatType.DATE_TIME;
+      }
+
       return cell;
     }
   }
@@ -213,8 +223,8 @@ export namespace GoogleSpreadsheet {
 
         case 'object':
           if (inp instanceof Date) {
-            ev.formulaValue = `=Date(${inp.getFullYear()}, ${inp.getMonth() + 1}, ${inp.getDate()})`;
-            // ev.formulaValue = `=DATEVALUE("${inp.toLocaleDateString()}") + TIMEVALUE("${inp.toLocaleTimeString()}")`;
+            // ev.formulaValue = `=Date(${inp.getFullYear()}, ${inp.getMonth() + 1}, ${inp.getDate()})`;
+            ev.formulaValue = `=DATEVALUE("${inp.toLocaleDateString()}") + TIMEVALUE("${inp.toLocaleTimeString()}")`;
             // ev.stringValue = `${inp.toLocaleString().replace(',', '')}`;
           } else {
             ev.stringValue = JSON.stringify(inp);
@@ -256,6 +266,55 @@ export namespace GoogleSpreadsheet {
     N_A,
     /** Corresponds to the Loading... state. */
     LOADING
+  }
+
+  /** The format of a cell. */
+  export class CellFormat {
+    /** A format describing how number values should be represented to the user. */
+    numberFormat: NumberFormat;
+
+    static Create(format: NumberFormatType) {
+      const result = new CellFormat();
+
+      result.numberFormat = new NumberFormat();
+      result.numberFormat.type = format;
+
+      return result;
+    }
+  }
+
+  /** The number format of a cell. */
+  export class NumberFormat {
+    /** The type of the number format. When writing, this field must be set. */
+    type: NumberFormatType;
+    /** Pattern string used for formatting.
+     * If not set, a default pattern based on the user's locale will be used if necessary for the given type.
+     * See the [Date and Number Formats guide](https://developers.google.com/sheets/api/guides/formats)
+     * for more information about the supported patterns. */
+    pattern: string;
+  }
+
+  /** The number format of the cell.
+   * In this documentation the locale is assumed to be en_US, but the actual format depends on the locale of the spreadsheet. */
+  export enum NumberFormatType {
+    /** The number format is not specified and is based on the contents of the cell. Do not explicitly use this. */
+    NUMBER_FORMAT_TYPE_UNSPECIFIED,
+    /** Text formatting, e.g 1000.12 */
+    TEXT,
+    /** Number formatting, e.g, 1,000.12 */
+    NUMBER,
+    /** Percent formatting, e.g 10.12% */
+    PERCENT,
+    /** Currency formatting, e.g $1,000.12 */
+    CURRENCY,
+    /** Date formatting, e.g 9/26/2008 */
+    DATE,
+    /** Time formatting, e.g 3:59:00 PM */
+    TIME,
+    /** Date+Time formatting, e.g 9/26/08 15:59:00 */
+    DATE_TIME,
+    /** Scientific number formatting, e.g 1.01E+03 */
+    SCIENTIFIC
   }
 
   /** A single kind of update to apply to a spreadsheet.
