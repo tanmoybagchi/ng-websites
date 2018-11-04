@@ -15,6 +15,8 @@ export class MonthlyExpenseQuery {
 
     const param = `${startOfMOnth.getFullYear()}-${startOfMOnth.getMonth() + 1}-01`;
 
-    return this.sheetQuery.execute(spreadsheetUrl, `select sum(B) where A >= date '${param}' label sum(B) 'monthlyAmt'`, 'Expenses');
+    const query = `select sum(B) where A >= date '${param}' label sum(B) 'monthlyAmt'`;
+
+    return this.sheetQuery.execute(spreadsheetUrl, query, 'Expenses');
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
-import { DriveFileSearchQuery, DrivePermissionsCreateCommand, DrivePermissionsReadQuery } from 'gapi';
+import { DriveFileSearchQuery, DrivePermissionsCreateCommand, DrivePermissionsQuery } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class SetupPermissionsComponent implements OnInit {
   constructor(
     private driveFileSearchQuery: DriveFileSearchQuery,
     private drivePermissionsCreateCommand: DrivePermissionsCreateCommand,
-    private drivePermissionsReadQuery: DrivePermissionsReadQuery,
+    private drivePermissionsQuery: DrivePermissionsQuery,
     private eventManagerService: EventManagerService,
     private router: Router,
   ) { }
@@ -29,13 +29,13 @@ export class SetupPermissionsComponent implements OnInit {
 
     this.driveFileSearchQuery.execute(environment.database, undefined, undefined, true).pipe(
       tap(result => this.fileId = result[0].id),
-      switchMap(_ => this.drivePermissionsReadQuery.execute(this.fileId)),
+      switchMap(_ => this.drivePermissionsQuery.execute(this.fileId)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.PermissionsQuery(_));
+    ).subscribe(_ => this.onPermissionsQuery(_));
   }
 
-  private PermissionsQuery(queryResult: any) {
+  private onPermissionsQuery(queryResult: any) {
     this.model = queryResult;
   }
 

@@ -3,6 +3,7 @@ import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpda
 import { switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Config } from './config';
+import { SessionStorageService } from 'core';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigCommand {
@@ -13,6 +14,7 @@ export class ConfigCommand {
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
     private sheetCreateCommand: SheetCreateCommand,
     private sheetReadQuery: SheetReadQuery,
+    private storage: SessionStorageService
   ) { }
 
   execute(model: Config) {
@@ -21,7 +23,8 @@ export class ConfigCommand {
         ? this.createSpreadsheet(model)
         : this.sheetId === null
           ? this.getSheetId(searchResult[0].id, model)
-          : this.updateSpreadsheet(searchResult[0].id, model))
+          : this.updateSpreadsheet(searchResult[0].id, model)),
+      tap(_ => this.storage.set('config', model))
     );
   }
 
@@ -79,12 +82,18 @@ export class ConfigCommand {
   }
 
   private CreateExpensesSheet() {
-    const row = GoogleSpreadsheet.RowData.Create([
+    const headerRow = GoogleSpreadsheet.RowData.Create([
       GoogleSpreadsheet.CellData.Create('On'),
       GoogleSpreadsheet.CellData.Create('Amt')
     ]);
 
-    const grid = GoogleSpreadsheet.GridData.Create([row]);
+    const fakeDataRow = GoogleSpreadsheet.RowData.Create([
+      GoogleSpreadsheet.CellData.Create(new Date(2000, 0, 1)),
+      GoogleSpreadsheet.CellData.Create(0),
+      GoogleSpreadsheet.CellData.Create('Do not delete this row')
+    ]);
+
+    const grid = GoogleSpreadsheet.GridData.Create([headerRow, fakeDataRow]);
     const sheet = GoogleSpreadsheet.Sheet.Create('Expenses', [grid]);
     sheet.properties.gridProperties = new GoogleSpreadsheet.GridProperties();
     sheet.properties.gridProperties.frozenRowCount = 1;

@@ -12,7 +12,7 @@ export * from './lib/drive/drive-file-read-query.service';
 export * from './lib/drive/drive-file-search-query.service';
 export * from './lib/drive/drive-mime-types';
 export * from './lib/drive/drive-permissions-create-command.service';
-export * from './lib/drive/drive-permissions-read-query.service';
+export * from './lib/drive/drive-permissions-query.service';
 export * from './lib/drive/drive-save-command.service';
 export * from './lib/drive/drive-upload-command.service';
 export * from './lib/sheets/google-spreadsheet';

@@ -4,7 +4,7 @@ import { Result } from 'core';
 import { throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class DrivePermissionsReadQuery {
+export class DrivePermissionsQuery {
   constructor(
     private http: HttpClient
   ) { }
