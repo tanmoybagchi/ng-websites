@@ -3,7 +3,7 @@ export class Config {
   @Reflect.metadata('design:type', Date)
   effectiveFrom: Date = null;
   spreadsheetUrl: string;
-  sheetId: number;
+  configSheetId: number;
   expenses = 0;
 
   currentLimit() {

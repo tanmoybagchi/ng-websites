@@ -31,7 +31,7 @@ export class ConfigCommand {
 
     const request = GoogleSpreadsheet.UpdateCellsRequest.Create([dailyLimitRow, effectiveFromRow]);
 
-    request.range = GoogleSpreadsheet.GridRange.Create(model.sheetId);
+    request.range = GoogleSpreadsheet.GridRange.Create(model.configSheetId);
     request.range.startRowIndex = 0;
     request.range.startColumnIndex = 1;
 

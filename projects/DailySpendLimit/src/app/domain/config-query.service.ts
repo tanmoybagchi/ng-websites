@@ -25,7 +25,7 @@ export class ConfigQuery {
             const config = new Config();
 
             config.spreadsheetUrl = spreadsheet.spreadsheetUrl.replace('/edit', '');
-            config.sheetId = spreadsheet.sheets[0].properties.sheetId;
+            config.configSheetId = spreadsheet.sheets[0].properties.sheetId;
             config.dailyLimit = spreadsheet.sheets[0].data[0].rowData[0].values[1].effectiveValue.numberValue;
             config.effectiveFrom = new Date(spreadsheet.sheets[0].data[0].rowData[1].values[1].formattedValue);
 

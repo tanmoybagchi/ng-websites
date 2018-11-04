@@ -214,6 +214,8 @@ export namespace GoogleSpreadsheet {
         case 'object':
           if (inp instanceof Date) {
             ev.formulaValue = `=Date(${inp.getFullYear()}, ${inp.getMonth() + 1}, ${inp.getDate()})`;
+            // ev.formulaValue = `=DATEVALUE("${inp.toLocaleDateString()}") + TIMEVALUE("${inp.toLocaleTimeString()}")`;
+            // ev.stringValue = `${inp.toLocaleString().replace(',', '')}`;
           } else {
             ev.stringValue = JSON.stringify(inp);
           }

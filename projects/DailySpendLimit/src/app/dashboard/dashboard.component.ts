@@ -5,9 +5,10 @@ import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { Config } from '../domain/config';
-import { ConfigQuery } from '../domain/config-query.service';
 import { ConfigCommand } from '../domain/config-command.service';
-import { ExpenseQuery } from '../domain/expense-query.service';
+import { ConfigQuery } from '../domain/config-query.service';
+import { MonthlyExpenseQuery } from '../domain/monthly-expense-query.service';
+import { ExpenseCommand } from '../domain/expense-command.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -23,7 +24,8 @@ export class DashboardComponent implements OnInit {
     private configCommand: ConfigCommand,
     private configQuery: ConfigQuery,
     private eventManagerService: EventManagerService,
-    private expenseQuery: ExpenseQuery,
+    private monthlyExpenseQuery: MonthlyExpenseQuery,
+    private expenseCommand: ExpenseCommand,
     private router: Router,
   ) { }
 
@@ -44,14 +46,15 @@ export class DashboardComponent implements OnInit {
 
     this.model = configQueryResult;
 
-    this.expenseQuery.execute(this.model.spreadsheetUrl)
-      .subscribe(expenseQueryResult => {
-        this.model.expenses = expenseQueryResult[0]['sum Amt'];
-        this.currentLimit = this.model.currentLimit();
-        console.log(this.model);
-      });
+    this.monthlyExpenseQuery.execute(this.model.spreadsheetUrl)
+      .subscribe((monthlyExpenseQuery: any[]) => this.onMonthlyExpenseQuery(monthlyExpenseQuery));
 
     this.expenses = null;
+  }
+
+  private onMonthlyExpenseQuery(queryResult: any[]) {
+    this.model.expenses = queryResult.length === 0 ? 0 : queryResult[0].monthlyAmt;
+    this.currentLimit = this.model.currentLimit();
   }
 
   onSubmit() {
@@ -61,13 +64,11 @@ export class DashboardComponent implements OnInit {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.model.expenses += this.expenses;
-
-    this.configCommand.execute(this.model).pipe(
-      switchMap(_ => this.configQuery.execute()),
+    this.expenseCommand.execute(this.expenses).pipe(
+      switchMap(_ => this.monthlyExpenseQuery.execute(this.model.spreadsheetUrl)),
       catchError(_ => this.onError(_)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onConfigQuery(_));
+    ).subscribe((monthlyExpenseQuery: any[]) => this.onMonthlyExpenseQuery(monthlyExpenseQuery));
   }
 
   private onError(result: Result) {

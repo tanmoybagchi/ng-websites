@@ -4,7 +4,7 @@ import { SheetQuery } from 'gapi';
 @Injectable({
   providedIn: 'root'
 })
-export class ExpenseQuery {
+export class MonthlyExpenseQuery {
   constructor(
     private sheetQuery: SheetQuery,
   ) { }
@@ -15,6 +15,6 @@ export class ExpenseQuery {
 
     const param = `${startOfMOnth.getFullYear()}-${startOfMOnth.getMonth() + 1}-01`;
 
-    return this.sheetQuery.execute(spreadsheetUrl, `select sum(B) where A >= date '${param}'`, 'Expenses');
+    return this.sheetQuery.execute(spreadsheetUrl, `select sum(B) where A >= date '${param}' label sum(B) 'monthlyAmt'`, 'Expenses');
   }
 }
