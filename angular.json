@@ -283,7 +283,8 @@
             "polyfills": "projects/DailySpendLimit/src/polyfills.ts",
             "tsConfig": "projects/DailySpendLimit/tsconfig.app.json",
             "assets": [
-              "projects/DailySpendLimit/src/assets"
+              "projects/DailySpendLimit/src/assets",
+              "projects/DailySpendLimit/src/manifest.json"
             ],
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
@@ -318,7 +319,8 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true
             }
           }
         },
@@ -352,7 +354,8 @@
             "scripts": [],
             "assets": [
               "projects/DailySpendLimit/src/favicon.ico",
-              "projects/DailySpendLimit/src/assets"
+              "projects/DailySpendLimit/src/assets",
+              "projects/DailySpendLimit/src/manifest.json"
             ]
           }
         },

@@ -1,0 +1,16 @@
+{
+  "name": "Daily Spend Limit",
+  "short_name": "DailySpendLimit",
+  "theme_color": "#1976d2",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "/DailySpendLimit/",
+  "start_url": "/DailySpendLimit/",
+  "icons": [
+    {
+      "src": "assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
