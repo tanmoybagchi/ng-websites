@@ -1,6 +1,7 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+// tslint:disable-next-line:max-line-length
 import { MatCardModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatListModule, MatProgressSpinnerModule, MatSelectModule, MatToolbarModule } from '@angular/material';
 import { BytesPipe } from './bytes.pipe';
 import { GeneralErrorComponent } from './general-error/general-error.component';

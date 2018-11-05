@@ -1,0 +1,46 @@
+<page-title name="Recipes" [canAddNew]="false"></page-title>
+
+<form (ngSubmit)="addSearchTerm()">
+  <mat-card>
+    <h3>Type the ingredients one at a time or separate them by +</h3>
+
+    <mat-chip-list [selectable]="false">
+      <mat-chip [removable]="true" (removed)="removeSearchTerm($event)" [value]="item" *ngFor="let item of searchTerms">
+        {{item}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+
+    <input-search label="What do you have in your kitchen?" placeholder="Enter ingredient" [model]="search" (modelChange)="search = $event"></input-search>
+  </mat-card>
+</form>
+
+<mat-card style="margin-top: .5em" *ngIf="searched">
+  <mat-card-header>
+    <mat-card-subtitle>{{recipes.length}} result(s)</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let recipe of recipes">
+        <h3 matLine>{{recipe.page}}</h3>
+        <div matLine *ngIf="recipe.quantity">quantity: {{recipe.quantity}}</div>
+        <div matLine *ngIf="recipe.slowCookerSize">slow cooker size: {{recipe.slowCookerSize}}</div>
+        <div matLine *ngIf="recipe.rating">rating: {{recipe.rating}}</div>
+        <div matLine *ngIf="recipe.ingredients">
+          <span *ngFor="let i of recipe.ingredients">{{i}}&nbsp;</span>
+        </div>
+        <div matLine *ngIf="recipe.missingIngredients">
+          <span *ngFor="let mi of recipe.missingIngredients">
+            <span style="text-decoration: line-through">{{mi}}</span>
+            &nbsp;
+          </span>
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item *ngIf="recipes.length === 0">No recipes found.</mat-list-item>
+    </mat-list>
+  </mat-card-content>
+  <!-- <mat-card-actions>
+    <button mat-button>Ok</button>
+  </mat-card-actions> -->
+</mat-card>

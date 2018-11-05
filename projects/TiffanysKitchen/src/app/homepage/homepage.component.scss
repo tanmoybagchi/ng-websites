@@ -1,0 +1,20 @@
+// @import url( 'https://fonts.googleapis.com/css?family=Great+Vibes');
+@import '../../styles.scss';
+
+:host {
+  display: flex;
+  flex: 1 1 100%;
+}
+
+.app-title {
+  background-color: rgba(0, 0, 0, .5);
+  color: mat-color($my-app-accent, A400);
+  font-family: 'Great Vibes', cursive;
+  font-size: 5.5em;
+  font-style: italic;
+  line-height: 1.35;
+  text-align: center;
+  margin: .5em 0;
+  width: 100%;
+  letter-spacing: 0.05em
+}

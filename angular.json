@@ -45,7 +45,26 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "styleext": "scss",
+          "spec": false
+        },
+        "@schematics/angular:class": {
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false
+        },
+        "@schematics/angular:guard": {
+          "spec": false
+        },
+        "@schematics/angular:module": {
+          "spec": false
+        },
+        "@schematics/angular:pipe": {
+          "spec": false
+        },
+        "@schematics/angular:service": {
+          "spec": false
         }
       },
       "architect": {
@@ -58,10 +77,13 @@
             "polyfills": "projects/TiffanysKitchen/src/polyfills.ts",
             "tsConfig": "projects/TiffanysKitchen/tsconfig.app.json",
             "assets": [
-              "projects/TiffanysKitchen/src/favicon.ico",
-              "projects/TiffanysKitchen/src/assets"
+              "projects/TiffanysKitchen/src/assets",
+              "projects/TiffanysKitchen/src/manifest.json"
             ],
             "styles": [
+              "./node_modules/typeface-great-vibes/index.css",
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
               "projects/TiffanysKitchen/src/styles.scss"
             ],
             "scripts": []
@@ -89,7 +111,8 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true
             }
           }
         },
@@ -122,8 +145,8 @@
             ],
             "scripts": [],
             "assets": [
-              "projects/TiffanysKitchen/src/favicon.ico",
-              "projects/TiffanysKitchen/src/assets"
+              "projects/TiffanysKitchen/src/assets",
+              "projects/TiffanysKitchen/src/manifest.json"
             ]
           }
         },

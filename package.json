@@ -14,8 +14,10 @@
     "ngs-dsl": "npm run ngs --repo:app=DailySpendLimit",
     "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot=true --progress=false --base-href=/",
     "serve-dsl": "npm run serve --repo:app=DailySpendLimit",
+    "serve-tk": "npm run serve --repo:app=TiffanysKitchen",
     "build-app": "node_modules\\.bin\\ng build %npm_package_config_app% --prod --noprogress --output-path=../%npm_package_config_app%/docs/ --base-href=/%npm_package_config_app%/ && copy ..\\%npm_package_config_app%\\docs\\index.html ..\\%npm_package_config_app%\\docs\\404.html",
-    "build-dsl": "npm run build-app --repo:app=DailySpendLimit"
+    "build-dsl": "npm run build-app --repo:app=DailySpendLimit",
+    "build-tk": "npm run build-app --repo:app=TiffanysKitchen"
   },
   "private": true,
   "dependencies": {

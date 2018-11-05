@@ -30,8 +30,6 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 // that you are using.
 @include angular-material-theme($my-app-theme);
 
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -41,4 +39,3 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 body {
   margin: 0;
 }
-

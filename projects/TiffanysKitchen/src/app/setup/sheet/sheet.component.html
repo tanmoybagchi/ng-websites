@@ -1,0 +1,20 @@
+<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
+  <mat-toolbar-row *ngFor="let item of errors.general.default">
+    <span>{{item}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Choose Sheet</mat-card-title>
+    <mat-card-subtitle>Which sheet?</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of model?.sheets" (click)="onSelect(item)">
+        <h3 matLine> {{item.properties.title}}</h3>
+      </a>
+    </mat-nav-list>
+  </mat-card-content>
+</mat-card>

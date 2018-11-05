@@ -1,0 +1,16 @@
+{
+  "name": "Tiffanys Kitchen",
+  "short_name": "Tiff Kitchen",
+  "theme_color": "#00bcd4",
+  "background_color": "#00bcd4",
+  "display": "standalone",
+  "scope": "/TiffanysKitchen/",
+  "start_url": "/TiffanysKitchen/",
+  "icons": [
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

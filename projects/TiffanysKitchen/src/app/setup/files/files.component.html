@@ -1,0 +1,31 @@
+<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
+  <mat-toolbar-row *ngFor="let item of errors.general.default">
+    <span>{{item}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Choose Database</mat-card-title>
+    <mat-card-subtitle>Select one or upload spreadsheet</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of model" (click)="onFileSelect(item)">
+        <h3 matLine> {{item.name}}</h3>
+        <p matLine>
+          Last modified: {{item.modifiedTime | date}}
+        </p>
+      </a>
+    </mat-nav-list>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="onAddNewClick()">
+      Upload spreadsheet
+      <input type="file" #newFile accept=".csv,.xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        style="display: none" (change)="onNewFileChange($event)">
+    </button>
+  </mat-card-actions>
+</mat-card>

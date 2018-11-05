@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressSpinnerModule, MatToolbarModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { MaterialHelpersModule } from 'material-helpers';
 
@@ -13,27 +13,16 @@ import { MaterialHelpersModule } from 'material-helpers';
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,
-    MatButtonToggleModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
+    MatChipsModule,
     MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSortModule,
-    MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
   ],
   declarations: [],
   entryComponents: [],
@@ -42,28 +31,16 @@ import { MaterialHelpersModule } from 'material-helpers';
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,
-    MatButtonModule,
-    MatButtonToggleModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
+    MatChipsModule,
     MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSortModule,
-    MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
     RouterModule,
   ]
 })

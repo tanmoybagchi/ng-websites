@@ -1,14 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="utf-8">
-  <title>TiffanysKitchen</title>
+  <title>Tiffany's Kitchen</title>
+  <meta name="theme-color" content="#00bcd4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Tiffany's kitchen" />
+  <meta name="author" content="Tanmoy Bagchi" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no">
   <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--Frame busting. https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet#Best-for-now_Legacy_Browser_Frame_Breaking_Script-->
+  <style id="antiClickjack">
+    body {
+      display: none !important;
+    }
+  </style>
+  <script type="text/javascript">
+    if (self === top) {
+      var antiClickjack = document.getElementById("antiClickjack");
+      antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <!--End Frame busting.-->
+  <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body class="mat-app-background mat-typography">
+  <noscript>
+    <h1>Tiffany's Kitchen</h1>
+    <h4 style="color: red">
+      For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.
+    </h4>
+  </noscript>
+
   <app-root></app-root>
 </body>
 </html>
