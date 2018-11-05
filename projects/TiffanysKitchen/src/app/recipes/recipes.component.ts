@@ -106,8 +106,9 @@ export class RecipesComponent implements OnInit {
 
     this.recipes
       .forEach(rvm => {
-        // tslint:disable-next-line:max-line-length
-        rvm.missingIngredients = this.searchTerms.filter(st => rvm.ingredients.every(i => i.indexOf(st.toLowerCase()) === -1));
+        rvm.missingIngredients = this.searchTerms
+          .map(st => st.toLowerCase())
+          .filter(st => rvm.ingredients.every(i => i.indexOf(st) === -1));
       });
 
     this.recipes
