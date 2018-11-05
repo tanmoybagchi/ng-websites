@@ -27,7 +27,7 @@ export class FilesComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveFileSearchQuery.execute('', undefined, DriveMimeTypes.Spreadsheet).pipe(
+    this.driveFileSearchQuery.execute(undefined, undefined, DriveMimeTypes.Spreadsheet).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(queryResult => this.model = queryResult);
@@ -60,10 +60,10 @@ export class FilesComponent implements OnInit {
     this.uploadCommand.execute(this.file, DriveMimeTypes.Spreadsheet).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onUpload(_));
+    ).subscribe(_ => this.onFileSelect(_));
   }
 
-  onUpload(item) {
+  onFileSelect(item) {
     this.localStorageService.set('spreadsheetId', item.id);
     this.router.navigate(['sheet'], { relativeTo: this.route });
   }

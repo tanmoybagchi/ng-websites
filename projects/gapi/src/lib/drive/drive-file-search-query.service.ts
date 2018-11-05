@@ -17,12 +17,8 @@ export class DriveFileSearchQuery {
     this.data = this.storage.get(this.storageKey) || [];
   }
 
-  execute(name: string, parents?: string, mimeType?: DriveMimeTypes, cacheResults?: boolean) {
-    if (String.isNullOrWhitespace(name)) {
-      return throwError(Result.CreateErrorResult('Required', 'name'));
-    }
-
-    if (cacheResults) {
+  execute(name?: string, parents?: string, mimeType?: DriveMimeTypes, cacheResults?: boolean) {
+    if (String.hasData(name) && cacheResults) {
       const item = this.data.find(x => x.name === name && x.parents === parents);
       if (item) {
         return of(item.result);
@@ -32,7 +28,7 @@ export class DriveFileSearchQuery {
     return this.searchDrive(name, parents, mimeType).pipe(
       map((x: { files: any[] }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))),
       tap(result => {
-        if (cacheResults && result.length > 0) {
+        if (String.hasData(name) && cacheResults && result.length > 0) {
           this.data.push({ name, parents, result });
           this.storage.set(this.storageKey, this.data);
         }
@@ -40,9 +36,10 @@ export class DriveFileSearchQuery {
     );
   }
 
-  private searchDrive(name: string, parents: string, mimeType: string) {
+  private searchDrive(name?: string, parents?: string, mimeType?: string) {
     const searchParams: string[] = [];
-    searchParams.push(`name='${name}'`);
+    // tslint:disable-next-line:no-unused-expression
+    String.hasData(name) && searchParams.push(`name='${name}'`);
     // tslint:disable-next-line:no-unused-expression
     String.hasData(mimeType) && searchParams.push(`mimeType = '${mimeType}'`);
     // tslint:disable-next-line:no-unused-expression
