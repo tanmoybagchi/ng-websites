@@ -1,8 +1,6 @@
-<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
-  <mat-toolbar-row *ngFor="let item of errors.general.default">
-    <span>{{item}}</span>
-  </mat-toolbar-row>
-</mat-toolbar>
+<page-title name="Setup" [canAddNew]="false"></page-title>
+
+<general-error [errors]="errors"></general-error>
 
 <mat-card>
   <mat-card-header>
