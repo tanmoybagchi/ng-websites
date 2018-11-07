@@ -12,6 +12,5 @@ export const environment = {
   rootFolder: 'Website Data',
   assetFolder: 'assets',
   database: 'pages.json',
-  gcalendar: 'https://calendar.google.com/calendar/b/1?cid=c3RhdmVzY2h1cmNoZHNtQGdtYWlsLmNvbQ',
-  gkey: 'AIzaSyDeiTMrzoE9u7N5qzPqq6fiuw8TDVQ9b_4'
+  gcalendar: 'https://calendar.google.com/calendar/b/1?cid=c3RhdmVzY2h1cmNoZHNtQGdtYWlsLmNvbQ'
 };

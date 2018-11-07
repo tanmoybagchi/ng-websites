@@ -16,8 +16,7 @@ export const environment = {
   rootFolder: 'Websites',
   assetFolder: 'staveschurch_assets',
   database: 'staveschurch.json',
-  gcalendar: 'https://calendar.google.com/calendar?cid=dGFubW95YmFnY2hpNzZAZ21haWwuY29t',
-  gkey: 'AIzaSyDeiTMrzoE9u7N5qzPqq6fiuw8TDVQ9b_4'
+  gcalendar: 'https://calendar.google.com/calendar?cid=dGFubW95YmFnY2hpNzZAZ21haWwuY29t'
 };
 
 /*
