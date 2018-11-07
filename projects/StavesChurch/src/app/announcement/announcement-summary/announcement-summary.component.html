@@ -1,0 +1,13 @@
+<div *ngFor="let item of model">
+  <h3>{{item.content.title}}</h3>
+</div>
+
+<ng-template #urgentAnnouncement>
+  <h2 mat-dialog-title>{{urgent.content.title}}</h2>
+  <mat-dialog-content (click)="onContentClick($event)">
+    <p [innerHTML]="urgent.content.sanitizedDesc"></p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button color="accent" mat-dialog-close>OK</button>
+  </mat-dialog-actions>
+</ng-template>

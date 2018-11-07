@@ -201,15 +201,18 @@
             "index": "projects/StavesChurch/src/index.html",
             "main": "projects/StavesChurch/src/main.ts",
             "polyfills": "projects/StavesChurch/src/polyfills.ts",
-            "tsConfig": "projects/StavesChurch/tsconfig.app.json",
+            "tsConfig": "projects/StavesChurch/tsconfig.json",
             "assets": [
-              "projects/StavesChurch/src/favicon.ico",
               "projects/StavesChurch/src/assets"
             ],
             "styles": [
-              "projects/StavesChurch/src/styles.scss"
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "projects/StavesChurch/src/styles/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -263,11 +266,14 @@
             "tsConfig": "projects/StavesChurch/tsconfig.spec.json",
             "karmaConfig": "projects/StavesChurch/karma.conf.js",
             "styles": [
-              "projects/StavesChurch/src/styles.scss"
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "projects/StavesChurch/src/styles/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
+            ],
             "assets": [
-              "projects/StavesChurch/src/favicon.ico",
               "projects/StavesChurch/src/assets"
             ]
           }
@@ -276,7 +282,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/StavesChurch/tsconfig.app.json",
+              "projects/StavesChurch/tsconfig.json",
               "projects/StavesChurch/tsconfig.spec.json"
             ],
             "exclude": [

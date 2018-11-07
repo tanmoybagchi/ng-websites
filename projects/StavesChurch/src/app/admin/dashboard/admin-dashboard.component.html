@@ -1,0 +1,11 @@
+<mat-toolbar>
+  <span>Admin</span>
+</mat-toolbar>
+
+<mat-card>
+  Welcome {{userName}}. Which part of this website would you like to change?
+
+  <mat-nav-list>
+    <a mat-list-item *ngFor="let item of pages.adminList" routerLink="../{{item.link}}">{{item.name}}</a>
+  </mat-nav-list>
+</mat-card>

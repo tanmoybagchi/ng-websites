@@ -1,0 +1,11 @@
+<mat-card>
+  <mat-card-content>
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="External link" [(ngModel)]="extUrl" [errorStateMatcher]="extUrlErrorStateMatcher">
+      <mat-error>{{extUrlError}}</mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick() ">OK</button>
+  </mat-card-actions>
+</mat-card>

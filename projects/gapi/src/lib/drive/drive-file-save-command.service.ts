@@ -7,7 +7,7 @@ import { DriveMimeTypes } from './drive-mime-types';
 import { DriveCreateCommand } from './drive-create-command.service';
 
 @Injectable({ providedIn: 'root' })
-export class DriveSaveCommand {
+export class DriveFileSaveCommand {
   constructor(
     private http: HttpClient,
     private createCommand: DriveCreateCommand
@@ -35,12 +35,12 @@ export class DriveSaveCommand {
     const uploadBaseUrl = `https://www.googleapis.com/upload/drive/v3/files`;
 
     return this.http.patch(`${uploadBaseUrl}/${fileId}`, fileContent, { params: httpParams }).pipe(
-      map(x => DomainHelper.adapt(DriveSaveCommand.Result, x))
+      map(x => DomainHelper.adapt(DriveFileSaveCommand.Result, x))
     );
   }
 }
 
-export namespace DriveSaveCommand {
+export namespace DriveFileSaveCommand {
   // tslint:disable-next-line:no-shadowed-variable
   export class Result {
     id = '';

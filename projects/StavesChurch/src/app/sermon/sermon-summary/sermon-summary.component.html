@@ -1,0 +1,4 @@
+<p *ngFor="let item of model">
+  {{item?.content.title}}
+  <audio controls preload="metadata" volume="1.0" [src]="item?.content.location" style="width: 100%"></audio>
+</p>

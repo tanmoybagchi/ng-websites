@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" fxLayout="column" fxLayout.gt-xs="row">
+  <mat-toolbar-row fxFlex="100%" fxFlex.gt-xs="10em" ngClass.lt-sm="mat-elevation-z6">
+    <mat-toolbar-row style="padding: 0; outline: none; cursor: pointer;" routerLink="/">
+      <div style="position: relative; display: inline-block; line-height: 1em; height: 1em; width: 1em; font-size: 2em">
+        <i class="church church-cross-and-flame-bottom" style="position: absolute; left: 0; width: 100%; text-align: center"></i>
+        <i class="church church-cross-and-flame-top" style="position: absolute; left: 0; width: 100%; text-align: center; color: #e70033"></i>
+      </div>
+      Staves Church
+    </mat-toolbar-row>
+    <!-- <button mat-button fxShow="true" fxShow.gt-xs="false" *ngIf="user" (click)="logout">Logout</button> -->
+  </mat-toolbar-row>
+
+  <mat-toolbar-row>
+    <a mat-button style="min-width: 0; padding: 0 8px" *ngFor="let item of menu" [routerLink]="item.link" fxHide
+      [fxShow.xs]="item.xs" [fxShow.sm]="item.xs || item.sm" [fxShow.md]="item.xs || item.sm || item.md" [fxShow.lg]="item.xs || item.sm || item.md || item.lg"
+      [fxShow.xl]="item.xs || item.sm || item.md || item.lg || item.xl">
+      {{item.name}}
+    </a>
+
+    <button mat-icon-button [matMenuTriggerFor]="moreMenu" fxHide.gt-md>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #moreMenu="matMenu">
+      <a mat-menu-item *ngFor="let item of menu" [routerLink]="item.link" [fxHide.xs]="item.xs" [fxHide.sm]="item.xs || item.sm"
+        [fxHide.md]="item.xs || item.sm || item.md" [fxHide.lg]="item.xs || item.sm || item.md || item.lg" [fxHide.xl]="item.xs || item.sm || item.md || item.lg || item.xl">
+        {{item.name}}
+      </a>
+    </mat-menu>
+
+    <!-- <button mat-button fxShow="false" fxShow.gt-xs="true" *ngIf="user" (click)="logout">Logout</button> -->
+  </mat-toolbar-row>
+</mat-toolbar>

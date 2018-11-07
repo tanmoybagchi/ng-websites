@@ -1,0 +1,27 @@
+<mat-list *ngIf="errors?.general?.default">
+  <mat-list-item *ngFor="let item of errors.general.default">{{item}}</mat-list-item>
+</mat-list>
+
+<mat-toolbar>
+  <div>Ministries</div>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-content (click)="onContentClick($event)">
+    <section *ngIf="showOverview">
+      <p [innerHTML]="sanitizedHeader"></p>
+
+      <mat-nav-list>
+        <a mat-list-item *ngFor="let item of model.list" routerLink="{{item.name}}">{{item.name}}</a>
+      </mat-nav-list>
+    </section>
+
+    <section *ngIf="!showOverview">
+      <h2 style="margin: 0">{{ministryName}}</h2>
+      <p [innerHTML]="sanitizedPurpose"></p>
+    </section>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>

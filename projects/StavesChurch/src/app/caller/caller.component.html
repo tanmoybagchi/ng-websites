@@ -1,0 +1,18 @@
+<mat-list *ngIf="errors?.general?.default">
+  <mat-list-item *ngFor="let item of errors.general.default">{{item}}</mat-list-item>
+</mat-list>
+
+<mat-toolbar>
+  <div>Caller</div>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-content fxLayout="column" fxLayoutGap="1em">
+    <div *ngFor="let item of model">
+      <h3><a [href]="item?.content.location" target="_blank" rel="noopener">{{item?.effectiveFrom | date}}: {{item?.content.title}}</a></h3>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>

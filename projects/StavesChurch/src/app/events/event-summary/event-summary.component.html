@@ -1,0 +1,17 @@
+<mat-list style="padding:0">
+  <mat-list-item *ngFor="let item of model?.items">
+    <p matListAvatar>
+      <time class="icon">
+        <strong>{{item.start | date:'MMM'}}</strong>
+        <span>{{item.start | date:'dd'}}</span>
+      </time>
+    </p>
+    <h4 mat-line>
+      {{item.summary}}
+    </h4>
+    <p mat-line matTooltip="{{item.location}}" *ngIf="item.location"> {{item.location.split(',')[0]}} </p>
+    <p mat-line *ngIf="!item.end"> &nbsp; </p>
+    <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end | date:'MMM dd'}}</p>
+    <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end | date:'shortTime'}}</p>
+  </mat-list-item>
+</mat-list>

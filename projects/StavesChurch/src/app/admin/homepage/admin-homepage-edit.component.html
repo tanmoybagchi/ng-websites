@@ -1,0 +1,68 @@
+<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
+  <mat-toolbar-row *ngFor="let item of errors.general.default">
+    <span>{{item}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-toolbar>
+  <span>Homepage edit</span>
+</mat-toolbar>
+
+<mat-card *ngIf="!choosingPhoto">
+  <mat-card-content>
+    <mat-form-field style="height: 6em; width: 9em">
+      <input matInput [matDatepicker]="picker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom"
+        (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error>{{errors?.effectiveFrom}}</mat-error>
+    </mat-form-field>
+
+    <mat-card>
+      <mat-toolbar>
+        <span fxFlex="1 1 auto">Banner</span>
+        <button mat-raised-button (click)="onChangePhotoClick()" *ngIf="!readOnly">Change photo</button>
+      </mat-toolbar>
+
+      <homepage-banner [photoIdentifier]="model.content.bannerPhotoIdentifier" [photoTransparency]="model.content.bannerPhotoTransparency"
+        [titleColor]="model.content.bannerTitleColor" [title]="model.content.bannerTitle" [subTitle]="model.content.bannerSubTitle"></homepage-banner>
+
+      <mat-form-field style="width: 100%; margin-top: 1em;">
+        <input matInput placeholder="Title" [(ngModel)]="model.content.bannerTitle" (change)="saveStream.next()"
+          [errorStateMatcher]="createErrorStateMatcher('content.bannerTitle')" [disabled]="readOnly">
+        <mat-error>{{errors?.content?.bannerTitle}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width: 100%">
+        <input matInput placeholder="Subtitle" [(ngModel)]="model.content.bannerSubTitle" (change)="saveStream.next()"
+          [disabled]="readOnly">
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always" class="mat-form-field--no-underline">
+        <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+        <input matInput placeholder="Title Color" style="display: none">
+        <mat-radio-group [(ngModel)]="model.content.bannerTitleColor" (change)="saveStream.next()" [disabled]="readOnly">
+          <mat-radio-button value="black" style="margin-right: .5em">Black</mat-radio-button>
+          <mat-radio-button value="white">White</mat-radio-button>
+        </mat-radio-group>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always" class="mat-form-field--no-underline">
+        <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+        <input matInput placeholder="Photo Transparency" style="display: none">
+        <mat-slider min="0" max="1" step="0.01" [value]="model.content.bannerPhotoTransparency" style="width: 20em"
+          (input)="onTransparencyChange($event)" [disabled]="readOnly"></mat-slider>
+      </mat-form-field>
+    </mat-card>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)" (change)="onChange($event)"
+      (delete)="onDelete($event)" (recall)="onRecall($event)" (recover)="onRecover($event)" (error)="onError($event)"></page-command-buttons>
+    <br>
+    <page-status [model]="model"></page-status>
+  </mat-card-actions>
+</mat-card>
+
+<admin-photo-list *ngIf="choosingPhoto" title="Choose photo" [showDone]="true" (done)="onPhotoListDone($event)"
+  [allowSelection]="true" [selected]="model.content.bannerPhotoIdentifier"></admin-photo-list>

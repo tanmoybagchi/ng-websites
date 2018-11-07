@@ -1,0 +1,64 @@
+<mat-list *ngIf="errors?.general?.default">
+  <mat-list-item *ngFor="let item of errors.general.default">{{item}}</mat-list-item>
+</mat-list>
+
+<mat-toolbar>
+  <div>Announcement list</div>
+</mat-toolbar>
+
+<mat-card>
+  <section fxLayout="row">
+    <section fxFlex="grow" fxLayoutGap="1em">
+      <mat-slide-toggle [(ngModel)]="showCurrent">Show Current</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="showDeleted" [disabled]="showCurrent">Show Deleted</mat-slide-toggle>
+    </section>
+    <a mat-raised-button color="accent" (click)="onAddNewClick()">Add new</a>
+  </section>
+
+  <section *ngIf="dataSource.filteredData.length > 0">
+    <!-- <h3>Click anywhere on the row to see details.</h3> -->
+
+    <mat-table [dataSource]="dataSource" matSort [trackBy]="id">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
+
+      <!-- EffectiveFrom Column -->
+      <ng-container matColumnDef="effectiveFrom">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Effective From </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.effectiveFrom | date:'shortDate'}} </mat-cell>
+      </ng-container>
+
+      <!-- EffectiveTo Column -->
+      <ng-container matColumnDef="effectiveTo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Effective To </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.effectiveTo | date:'shortDate'}} </mat-cell>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <a mat-raised-button color="primary" (click)="onRowClick(row)">See details</a>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </section>
+
+  <section *ngIf="dataSource.filteredData.length === 0">
+    <h2>Nothing to show!</h2>
+  </section>
+</mat-card>

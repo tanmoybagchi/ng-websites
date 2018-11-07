@@ -1,0 +1,48 @@
+<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
+  <mat-toolbar-row *ngFor="let item of errors.general.default">
+    <span>{{item}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-toolbar>
+  <span>Caller edit</span>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-content>
+    <mat-form-field style="height: 6em; width: 9em">
+      <input matInput [matDatepicker]="picker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom"
+        (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error>{{errors?.effectiveFrom}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Title" [(ngModel)]="model.content.title" (change)="saveStream.next()"
+        [errorStateMatcher]="createErrorStateMatcher('content.title')" [disabled]="readOnly">
+      <mat-error>{{errors?.content?.title}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always" class="mat-form-field--no-underline" style="width: 100%;">
+      <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+      <input matInput placeholder="File" style="display: none">
+      <button mat-raised-button color="accent" style="margin-top: 0.25em" (click)="onAddNewClick()">
+        Choose file
+        <input type="file" #newFile accept="application/pdf" style="display: none" (change)="onNewFileChange($event)">
+      </button>
+    </mat-form-field>
+
+    <section style="height: 100vh" *ngIf="sanitizedLocation">
+      <object type="application/pdf" [data]="sanitizedLocation" height="100%" width="100%"></object>
+    </section>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)"
+      [allowOverlap]="true" (change)="onChange($event)" (delete)="onDelete($event)" (recall)="onRecall($event)"
+      (recover)="onRecover($event)" (error)="onError($event)"></page-command-buttons>
+    <br>
+    <page-status [model]="model"></page-status>
+  </mat-card-actions>
+</mat-card>

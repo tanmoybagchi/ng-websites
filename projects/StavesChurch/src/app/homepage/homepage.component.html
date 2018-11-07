@@ -1,0 +1,42 @@
+<homepage-banner [photoIdentifier]="model.bannerPhotoIdentifier" [photoTransparency]="model.bannerPhotoTransparency"
+  [titleColor]="model.bannerTitleColor" [title]="model.bannerTitle" [subTitle]="model.bannerSubTitle"></homepage-banner>
+
+<section fxLayout="column" fxLayoutGap="1em">
+  <section fxLayout="column" fxLayoutGap="1em" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center stretch">
+    <section fxFlex="100%" fxFlex.gt-xs="33%">
+      <mat-card fxLayout="column" ngStyle.gt-xs="height: 100%">
+        <mat-card-content fxFlex.gt-xs="grow">
+          <h2>Announcements</h2>
+          <app-announcement-summary></app-announcement-summary>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-raised-button color="accent" routerLink="announcements">Learn more</a>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+
+    <section fxFlex="100%" fxFlex.gt-xs="33%">
+      <mat-card fxLayout="column" ngStyle.gt-xs="height: 100%">
+        <mat-card-content fxFlex.gt-xs="grow">
+          <h2>Events</h2>
+          <app-event-summary></app-event-summary>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-raised-button color="accent" routerLink="events">Learn more</a>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+
+    <section fxFlex="100%" fxFlex.gt-xs="33%">
+      <mat-card fxLayout="column" ngStyle.gt-xs="height: 100%">
+        <mat-card-content fxFlex.gt-xs="grow">
+          <h2>Sermons</h2>
+          <app-sermon-summary></app-sermon-summary>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-raised-button color="accent" routerLink="sermons">Learn more</a>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+  </section>
+</section>

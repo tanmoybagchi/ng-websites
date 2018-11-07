@@ -1,0 +1,34 @@
+<mat-toolbar>
+  <div>Events</div>
+  <button mat-button (click)="onTodayClick()">Today</button>
+  <button mat-icon-button (click)="onLeftClick()"><mat-icon>chevron_left</mat-icon></button>
+  <button mat-icon-button (click)="onRightClick()"><mat-icon>chevron_right</mat-icon></button>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-content>
+    <mat-list style="padding:0">
+      <mat-list-item *ngFor="let item of model?.items.slice(itemIndex, itemIndex+10)" style="height: 7em;">
+        <p matListAvatar style="height: 5em; width: 4em">
+          <time class="icon">
+            <strong>{{item.start | date:'MMM'}}</strong>
+            <span>{{item.start | date:'dd'}}</span>
+            <em>{{item.start | date:'EEE'}}</em>
+          </time>
+        </p>
+        <h4 mat-line>
+          {{item.summary}}
+        </h4>
+        <p mat-line *ngIf="item.location">
+          <a href="https://www.google.com/maps?q={{item.location}}" target="_blank" rel="noopener">{{item.location.split(',')[0]}}</a>
+        </p>
+        <p mat-line *ngIf="!item.end"> &nbsp; </p>
+        <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end | date:'MMM dd'}}</p>
+        <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end | date:'shortTime'}}</p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>

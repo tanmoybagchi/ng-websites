@@ -1,0 +1,37 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@app/*": [
+        "projects/StavesChurch/src/app/*"
+      ],
+      "@env/*": [
+        "projects/StavesChurch/src/environments/*"
+      ],
+      "core": [
+        "dist/core"
+      ],
+      "core/*": [
+        "dist/core/*"
+      ],
+      "gapi": [
+        "dist/gapi"
+      ],
+      "gapi/*": [
+        "dist/gapi/*"
+      ],
+      "material-helpers": [
+        "dist/material-helpers"
+      ],
+      "material-helpers/*": [
+        "dist/material-helpers/*"
+      ],
+    },
+    "outDir": "../../out-tsc/app",
+    "types": []
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

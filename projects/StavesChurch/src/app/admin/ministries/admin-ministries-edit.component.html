@@ -1,0 +1,45 @@
+<general-error [errors]="errors"></general-error>
+
+<mat-toolbar>
+  <span>Ministries Edit</span>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-content>
+    <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
+      placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
+
+    <h2 style="margin:0">Header</h2>
+    <editor [content]="model.content.header" (changed)="onHeaderChange($event)" [disabled]="readOnly"></editor>
+
+    <h2 style="margin-top:1em;margin-bottom: -1em">Ministries</h2>
+    <section style="margin-top: 1em" *ngFor="let item of model.content.list; let i=index">
+      <section fxLayout="row">
+        <input-text fxFlex="grow" [model]="item.name" (modelChange)="onMinistryNameChange(item, $event)" label="Name"
+          [disabled]="readOnly" [errMsg]="errors?.content?.list[i]?.name"></input-text>
+        <button mat-icon-button matTooltip="Add ministry" matTooltipShowDelay="500" (click)="addAfter(item)" [disabled]="readOnly">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Remove ministry" matTooltipShowDelay="500" (click)="remove(item)"
+          [disabled]="readOnly">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(item)" [disabled]="readOnly || i === 0">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(item)" [disabled]="readOnly || i === model.content.list.length-1">
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
+      </section>
+
+      <editor [content]="item.purpose" (changed)="onMinistryPurposeChange(item, $event)" [disabled]="readOnly"></editor>
+    </section>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)" (change)="onChange($event)"
+      (delete)="onDelete($event)" (recall)="onRecall($event)" (recover)="onRecover($event)" (error)="onError($event)"></page-command-buttons>
+    <br>
+    <page-status [model]="model"></page-status>
+  </mat-card-actions>
+</mat-card>
