@@ -17,6 +17,6 @@ export class Config {
 
     const daysElapsed = Math.ceil((now - from) / one_day);
 
-    return (this.dailyLimit * daysElapsed) - this.expenses;
+    return (this.dailyLimit * daysElapsed) - Math.ceil(this.expenses);
   }
 }
