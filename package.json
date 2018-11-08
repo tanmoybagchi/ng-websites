@@ -12,6 +12,7 @@
     "ngm-dsl": "npm run ngm --repo:app=DailySpendLimit",
     "ngs": "node_modules\\.bin\\ng g service --project=%npm_package_config_app%",
     "ngs-dsl": "npm run ngs --repo:app=DailySpendLimit",
+    "ngs-sc": "npm run ngs --repo:app=StavesChurch",
     "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot=true --progress=false --base-href=/",
     "serve-dsl": "npm run serve --repo:app=DailySpendLimit",
     "serve-sc": "npm run serve --repo:app=StavesChurch",
