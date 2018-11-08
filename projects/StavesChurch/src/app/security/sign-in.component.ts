@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment as env } from '@env/environment';
 import { AuthTokenService } from 'core';
 import { GoogleAccessToken, ServiceAccountSigninCommand } from 'gapi';
 
@@ -15,15 +14,10 @@ export class SignInComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.serviceAccountSigninCommand
-      .execute(env.gserviceaccountscope, env.gserviceaccount, env.gserviceaccountkey)
-      .subscribe(_ => this.onSignIn(_));
+    this.serviceAccountSigninCommand.execute().subscribe(_ => this.onSignIn());
   }
 
-  private onSignIn(oauthToken: GoogleAccessToken) {
-    const exp = Date.now() + oauthToken.expires_in * 1000;
-    this.authTokenService.setAuthToken(`${oauthToken.token_type} ${oauthToken.access_token}`, exp);
-
+  private onSignIn() {
     this.router.navigate([''], { replaceUrl: true });
   }
 }

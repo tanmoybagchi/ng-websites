@@ -4,6 +4,7 @@
 
 export * from './lib/auth/google-access-token';
 export * from './lib/auth/service-account-signin-command.service';
+export * from './lib/auth/service-account';
 export * from './lib/auth/signin-command.service';
 export * from './lib/auth/token-verify-command.service';
 export * from './lib/drive/drive-create-command.service';

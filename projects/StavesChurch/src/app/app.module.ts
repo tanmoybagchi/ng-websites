@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { routes } from '@app/app-routes';
+import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
 import { AnnouncementModule } from './announcement/announcement.module';
@@ -28,7 +29,7 @@ import { SharedModule } from './shared/shared.module';
     CallerModule,
     CoreModule.forRoot({ keyPrefix: 'StavesChurch' }, { logLevel: LogLevel.Warn }),
     EventsModule,
-    GapiModule,
+    GapiModule.forRoot({ id: env.gserviceaccount, password: env.gserviceaccountkey, scope: env.gserviceaccountscope }),
     HomepageModule,
     MinistriesModule,
     PageModule,

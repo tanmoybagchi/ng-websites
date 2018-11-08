@@ -26,16 +26,11 @@ export class EventsQuery {
 
     const httpParams = new HttpParams({ fromObject: eventsInput });
 
-    return this.serviceAccountSigninCommand.execute(env.gserviceaccountscope, env.gserviceaccount, env.gserviceaccountkey).pipe(
-      switchMap(googleAccessToken => {
-        const options = {
-          params: httpParams,
-          headers: { 'Authorization': `${googleAccessToken.token_type} ${googleAccessToken.access_token}` }
-        };
-
+    return this.serviceAccountSigninCommand.execute().pipe(
+      switchMap(_ => {
         const url = `https://www.googleapis.com/calendar/v3/calendars/${env.login_hint}/events`;
 
-        return this.http.get<EventList>(url, options).pipe(
+        return this.http.get<EventList>(url, { params: httpParams }).pipe(
           map(x => EventList.convertFromJson(x))
         );
       })
