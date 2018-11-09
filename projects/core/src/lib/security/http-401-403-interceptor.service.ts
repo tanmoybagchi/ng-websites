@@ -44,7 +44,7 @@ export class Http401403Interceptor implements HttpInterceptor {
           return throwError(err);
         }
 
-        if (err.status === 403 && err.headers.has('Authorization')) {
+        if (err.status === 403) {
           return throwError(Result.CreateErrorResult('forbidden'));
         }
 
