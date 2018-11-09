@@ -1,23 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthTokenService } from 'core';
-import { GoogleAccessToken, ServiceAccountSigninCommand } from 'gapi';
+import { Component } from '@angular/core';
+import { environment } from '@env/environment';
 
 @Component({
-  template: ''
+  // tslint:disable-next-line:max-line-length
+  template: '<google-sign-in [client_id]="client_id" retUrl="admin/dashboard" [scope]="scope"></google-sign-in>'
 })
-export class SignInComponent implements OnInit {
-  constructor(
-    private authTokenService: AuthTokenService,
-    private router: Router,
-    private serviceAccountSigninCommand: ServiceAccountSigninCommand
-  ) { }
+export class SignInComponent {
+  client_id = environment.client_id;
+  scope = environment.scope;
 
-  ngOnInit() {
-    this.serviceAccountSigninCommand.execute().subscribe(_ => this.onSignIn());
-  }
-
-  private onSignIn() {
-    this.router.navigate([''], { replaceUrl: true });
-  }
+  constructor() { }
 }

@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthTokenService } from 'core';
-import { Observable, of, noop } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { AuthTokenService, CoreModule } from 'core';
+import { noop, Observable, of } from 'rxjs';
+import { map, share, switchMap } from 'rxjs/operators';
 import { GoogleAccessToken } from './google-access-token';
 import { ServiceAccount } from './service-account';
 
@@ -67,4 +67,20 @@ export class ServiceAccountSigninCommand {
 
     return window['KJUR'].jws.JWS.sign(null, jwtHeader, jwtClaimSet, this.serviceAccount.password);
   }
+}
+
+export function ServiceAccountSignin() {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    const originalMethod: Function = descriptor.value;
+
+    descriptor.value = function () {
+      const args = arguments;
+
+      return CoreModule.injector.get(ServiceAccountSigninCommand).execute().pipe(
+        switchMap(_ => originalMethod.apply(this, args))
+      );
+    };
+
+    return descriptor;
+  };
 }

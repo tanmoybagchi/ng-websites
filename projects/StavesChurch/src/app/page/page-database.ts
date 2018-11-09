@@ -3,7 +3,7 @@ import { environment } from '@env/environment';
 import { DomainHelper, LocalStorageService } from 'core';
 import { DriveFileReadQuery, DriveFileSearchQuery } from 'gapi';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, share } from 'rxjs/operators';
 import { Page } from './page';
 import { PageModule } from './page.module';
 
@@ -37,7 +37,8 @@ export class PageDatabase {
     }
 
     this.observable = this.driveFileSearchQuery.execute(environment.database).pipe(
-      switchMap(files => this.onDriveFileSearch(files))
+      switchMap(files => this.onDriveFileSearch(files)),
+      share()
     );
   }
 

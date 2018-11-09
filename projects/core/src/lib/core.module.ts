@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { Injector, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { Http400404Interceptor } from './http-400-404-interceptor.service';
 import { Http500Interceptor } from './http-500-interceptor.service';
 import { ConsoleLoggerService } from './logger/console-logger.service';
@@ -23,13 +23,8 @@ import { StorageConfig } from './storage/storage-config';
   ]
 })
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
-    if (parentModule) {
-      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
-    }
-  }
+  static injector: Injector = null;
 
-  // tslint:disable-next-line:max-line-length
   static forRoot(storageConfig: StorageConfig, loggerConfig: LoggerConfig): ModuleWithProviders {
     return {
       ngModule: CoreModule,
@@ -38,5 +33,13 @@ export class CoreModule {
         { provide: LoggerConfig, useValue: loggerConfig }
       ]
     };
+  }
+
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
+    if (parentModule) {
+      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
+    }
+
+    CoreModule.injector = injector;
   }
 }

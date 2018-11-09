@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { HomepageComponent } from '@app/homepage/homepage.component';
 import { MinistriesComponent } from '@app/ministries/ministries.component';
 import { PageComponent } from '@app/page/page.component';
-import { AdminSignInComponent } from '@app/security/admin-sign-in.component';
 import { AdminGuard } from '@app/security/admin.guard';
 import { ServerErrorComponent } from 'material-helpers';
 import { AnnouncementsComponent } from './announcement/announcements/announcements.component';
@@ -25,7 +24,6 @@ export const routes: Routes = [
   { path: 'photos/:identifier', component: PhotoViewerComponent },
   { path: 'sermons', component: SermonComponent },
   { path: 'sign-in', component: SignInComponent },
-  { path: 'admin-sign-in', component: AdminSignInComponent },
   { path: ':kind', component: PageComponent },
   { path: '', component: HomepageComponent, pathMatch: 'full' },
 ];

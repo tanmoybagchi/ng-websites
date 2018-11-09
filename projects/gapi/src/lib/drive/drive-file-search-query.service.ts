@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthTokenService, DomainHelper, SessionStorageService } from 'core';
+import { DomainHelper, SessionStorageService } from 'core';
 import { of } from 'rxjs';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { ServiceAccountSignin } from '../auth/service-account-signin-command.service';
 import { DriveMimeTypes } from './drive-mime-types';
-import { ServiceAccountSigninCommand } from '../auth/service-account-signin-command.service';
 
 @Injectable({ providedIn: 'root' })
 export class DriveFileSearchQuery {
@@ -12,14 +12,13 @@ export class DriveFileSearchQuery {
   private readonly storageKey = 'drive_items';
 
   constructor(
-    private authTokenService: AuthTokenService,
     private http: HttpClient,
     private storage: SessionStorageService,
-    private serviceAccountSigninCommand: ServiceAccountSigninCommand
   ) {
     this.data = this.storage.get(this.storageKey) || [];
   }
 
+  @ServiceAccountSignin()
   execute(name?: string, parents?: string, mimeType?: DriveMimeTypes, cacheResults?: boolean) {
     if (String.hasData(name) && cacheResults) {
       const item = this.data.find(x => x.name === name && x.parents === parents);
@@ -28,24 +27,14 @@ export class DriveFileSearchQuery {
       }
     }
 
-    if (String.isNullOrWhitespace(this.authTokenService.getAuthToken())) {
-      return this.serviceAccountSigninCommand.execute().pipe(
-        switchMap(_ => this.executeInternal(name, parents, mimeType, cacheResults))
-      );
-    }
-
-    return this.executeInternal(name, parents, mimeType, cacheResults);
-  }
-
-  private executeInternal(name: string, parents: string, mimeType: DriveMimeTypes, cacheResults: boolean) {
-    return this.searchDrive(name, parents, mimeType).pipe(map((x: {
-      files: any[];
-    }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))), tap(result => {
-      if (String.hasData(name) && cacheResults && result.length > 0) {
-        this.data.push({ name, parents, result });
-        this.storage.set(this.storageKey, this.data);
-      }
-    }));
+    return this.searchDrive(name, parents, mimeType).pipe(
+      map((x: { files: any[]; }) => x.files.map(f => DomainHelper.adapt(DriveFileSearchQuery.Result, f))), tap(result => {
+        if (String.hasData(name) && cacheResults && result.length > 0) {
+          this.data.push({ name, parents, result });
+          this.storage.set(this.storageKey, this.data);
+        }
+      })
+    );
   }
 
   private searchDrive(name?: string, parents?: string, mimeType?: string) {
