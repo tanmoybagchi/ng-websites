@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DriveMimeTypes } from './drive-mime-types';
 import { DriveCreateCommand } from './drive-create-command.service';
+import { DriveFile } from './drive-file';
 
 @Injectable({ providedIn: 'root' })
 export class DriveFileSaveCommand {
@@ -13,7 +14,7 @@ export class DriveFileSaveCommand {
     private createCommand: DriveCreateCommand
   ) { }
 
-  execute(fileContent: any, fileId?: string, fileName?: string, mimeType?: DriveMimeTypes) {
+  execute(fileContent: any, fileId?: string, filePath?: string, mimeType?: DriveMimeTypes) {
     if (fileContent === undefined || fileContent === null) {
       return throwError(Result.CreateErrorResult('Required', 'fileContent'));
     }
@@ -22,31 +23,22 @@ export class DriveFileSaveCommand {
       return this.upload(fileContent, fileId);
     }
 
-    return this.createCommand.execute(fileName, mimeType).pipe(
-      switchMap(_ => this.upload(fileContent, _.id))
+    if (String.isNullOrWhitespace(filePath)) {
+      return throwError(Result.CreateErrorResult('Required', 'filePath'));
+    }
+
+    return this.createCommand.execute(filePath, mimeType).pipe(
+      switchMap(cr => this.upload(fileContent, cr.id))
     );
   }
 
   private upload(fileContent: any, fileId: string) {
     const httpParams = new HttpParams()
       .append('uploadType', 'media')
-      .append('fields', 'id,name,modifiedTime,version');
+      .append('fields', DriveFile.fields);
 
-    const uploadBaseUrl = `https://www.googleapis.com/upload/drive/v3/files`;
-
-    return this.http.patch(`${uploadBaseUrl}/${fileId}`, fileContent, { params: httpParams }).pipe(
-      map(x => DomainHelper.adapt(DriveFileSaveCommand.Result, x))
+    return this.http.patch(`${DriveFile.uploadURI}/${fileId}`, fileContent, { params: httpParams }).pipe(
+      map(x => DomainHelper.adapt(DriveFile, x))
     );
-  }
-}
-
-export namespace DriveFileSaveCommand {
-  // tslint:disable-next-line:no-shadowed-variable
-  export class Result {
-    id = '';
-    name = '';
-    @Reflect.metadata('design:type', Date)
-    modifiedTime: Date = null;
-    version = 0;
   }
 }

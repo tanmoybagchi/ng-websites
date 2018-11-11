@@ -2,8 +2,9 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { DomSanitizer } from '@angular/platform-browser';
 import { AdminPageDatabase } from '@app/admin/admin-page-database';
 import { PhotoContent } from '@app/photo/photo';
+import { environment as env } from '@env/environment';
 import { Result } from 'core';
-import { DriveUploadCommand } from 'gapi';
+import { DriveFile, DriveUploadCommand } from 'gapi';
 import { concat, EMPTY, Observable, zip } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { AdminPhoto } from './admin-photo';
@@ -71,7 +72,28 @@ export class AdminPhotoUploadComponent implements OnInit {
   }
 
   private handleFiles() {
-    const processes: Observable<AdminPhoto>[] = [];
+    const photoProcessors$ = this.setupPhotoProcessers();
+
+    const photos: AdminPhoto[] = [];
+
+    concat(...photoProcessors$).subscribe(x => {
+      photos.push(x);
+
+      if (photos.length < photoProcessors$.length) {
+        return;
+      }
+
+      this.adminPageDatabase.addAll(photos).subscribe(_ => {
+        for (let index = 0; index < this.files.length; index++) {
+          const f = this.files[index];
+          f['isUploading'] = false;
+        }
+      });
+    });
+  }
+
+  private setupPhotoProcessers() {
+    const photoProcessors$: Observable<AdminPhoto>[] = [];
 
     for (let index = 0; index < this.files.length; index++) {
       const f = this.files[index];
@@ -87,9 +109,9 @@ export class AdminPhotoUploadComponent implements OnInit {
       f['objectUrl'] = window.URL.createObjectURL(f);
       f['previewUrl'] = this.sanitizer.bypassSecurityTrustUrl(f['objectUrl']);
 
-      const obs = new Observable<AdminPhoto>(observer => {
+      const photoProcessor$ = new Observable<AdminPhoto>(observer => {
         this.adminPhotoProcessCommand.execute(f).pipe(
-          switchMap(_ => this.onPhotos(_, f.name)),
+          switchMap(_ => this.createAdminPhoto(_, f.name)),
           catchError(err => this.onError(err, f))
         ).subscribe(_ => {
           observer.next(_);
@@ -97,28 +119,13 @@ export class AdminPhotoUploadComponent implements OnInit {
         });
       });
 
-      processes.push(obs);
+      photoProcessors$.push(photoProcessor$);
     }
 
-    const models: AdminPhoto[] = [];
-
-    concat(...processes).subscribe(x => {
-      models.push(x);
-
-      if (models.length < processes.length) {
-        return;
-      }
-
-      this.adminPageDatabase.addAll(models).subscribe(_ => {
-        for (let index = 0; index < this.files.length; index++) {
-          const f = this.files[index];
-          f['isUploading'] = false;
-        }
-      });
-    });
+    return photoProcessors$;
   }
 
-  private onPhotos(photos: AdminPhotoProcessCommand.Result[], fileName: string) {
+  private createAdminPhoto(photos: AdminPhotoProcessCommand.Result[], fileName: string) {
     const model = new AdminPhoto();
     model.kind = 'photo';
     model.status = 'Approved';
@@ -138,12 +145,14 @@ export class AdminPhotoUploadComponent implements OnInit {
       return res;
     });
 
-    return zip(...photos.map(photo => this.driveUploadCommand.execute(photo.file))).pipe(
+    const uploaders$ = photos.map(photo => this.driveUploadCommand.execute(photo.file, `${env.rootFolder}\\${env.assetFolder}`));
+
+    return zip(...uploaders$).pipe(
       map(_ => this.onDriveUploads(_, model))
     );
   }
 
-  private onDriveUploads(upload: DriveUploadCommand.Result[], model: AdminPhoto) {
+  private onDriveUploads(upload: DriveFile[], model: AdminPhoto) {
     upload.forEach(x => {
       model.content.find(y => y.fileName === x.name).location = x.webContentLink.replace('&export=download', '');
     });

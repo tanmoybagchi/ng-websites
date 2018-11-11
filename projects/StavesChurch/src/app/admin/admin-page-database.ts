@@ -30,7 +30,7 @@ export class AdminPageDatabase {
         newPage.id = this.pageDatabase.pages.length === 0 ? 1 : Math.max(...this.pageDatabase.pages.map(x => x.id)) + 1;
         newPage.identifier = this.uid();
         newPage.version = 1;
-        newPage.savedBy = environment.login_name;
+        newPage.savedBy = environment.g_oauth_login_name;
         newPage.savedOn = new Date();
         // tslint:disable-next-line:no-unused-expression
         typeof pageToAdd.content === 'object' && (newPage.content = JSON.stringify(pageToAdd.content));
@@ -59,7 +59,7 @@ export class AdminPageDatabase {
           newPage.id = Math.max(...this.pageDatabase.pages.map(x => x.id)) + 1;
           newPage.identifier = this.uid();
           newPage.version = 1;
-          newPage.savedBy = environment.login_name;
+          newPage.savedBy = environment.g_oauth_login_name;
           newPage.savedOn = new Date();
           // tslint:disable-next-line:no-unused-expression
           typeof pageToAdd.content === 'object' && (newPage.content = JSON.stringify(pageToAdd.content));
@@ -106,7 +106,7 @@ export class AdminPageDatabase {
         DomainHelper.adapt(savedPage, updatedPage);
 
         savedPage.version++;
-        savedPage.savedBy = environment.login_name;
+        savedPage.savedBy = environment.g_oauth_login_name;
         savedPage.savedOn = new Date();
         // tslint:disable-next-line:no-unused-expression
         typeof updatedPage.content === 'object' && (savedPage.content = JSON.stringify(updatedPage.content));
@@ -146,7 +146,7 @@ export class AdminPageDatabase {
           DomainHelper.adapt(savedPage, updatePage);
 
           savedPage.version++;
-          savedPage.savedBy = environment.login_name;
+          savedPage.savedBy = environment.g_oauth_login_name;
           savedPage.savedOn = new Date();
           // tslint:disable-next-line:no-unused-expression
           typeof updatePage.content === 'object' && (savedPage.content = JSON.stringify(updatePage.content));

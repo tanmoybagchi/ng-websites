@@ -1,42 +1,50 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomainHelper, Result } from 'core';
-import { throwError } from 'rxjs';
+import { throwError, iif } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { DriveFile } from './drive-file';
 import { DriveMimeTypes } from './drive-mime-types';
+import { DriveFileSearchQuery } from './drive-file-search-query.service';
 
 @Injectable({ providedIn: 'root' })
 export class DriveCreateCommand {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private driveFileSearchQuery: DriveFileSearchQuery
   ) { }
 
-  execute(fileName: string, mimeType?: DriveMimeTypes) {
-    if (String.isNullOrWhitespace(fileName)) {
-      return throwError(Result.CreateErrorResult('Required', 'filename'));
+  execute(filePath: string, mimeType?: DriveMimeTypes) {
+    if (String.isNullOrWhitespace(filePath)) {
+      return throwError(Result.CreateErrorResult('Required', 'filePath'));
     }
 
-    const body = { name: fileName };
-    if (mimeType) {
-      (body as any).mimeType = mimeType;
+    const pathParts = filePath.split('\\');
+
+    if (pathParts.length === 1) {
+      return this.createFile(filePath, mimeType, undefined);
     }
 
-    const httpParams = new HttpParams()
-      .append('fields', 'id,name,modifiedTime,version');
+    const filename = pathParts.pop();
 
-    return this.http.post('https://www.googleapis.com/drive/v3/files', body, { params: httpParams }).pipe(
-      map(_ => DomainHelper.adapt(DriveCreateCommand.Result, _))
+    return this.driveFileSearchQuery.execute(pathParts.join('\\'), undefined, true).pipe(
+      switchMap(qr => this.createFile(filename, mimeType, qr[0].id))
     );
   }
-}
 
-export namespace DriveCreateCommand {
-  // tslint:disable-next-line:no-shadowed-variable
-  export class Result {
-    id = '';
-    name = '';
-    @Reflect.metadata('design:type', Date)
-    modifiedTime: Date = null;
-    version = 0;
+  private createFile(fileName: string, mimeType?: DriveMimeTypes, parents?: string) {
+    const body: { name: string, mimeType?: DriveMimeTypes, parents?: string[] } = { name: fileName };
+
+    // tslint:disable-next-line:no-unused-expression
+    mimeType && (body.mimeType = mimeType);
+    // tslint:disable-next-line:no-unused-expression
+    String.hasData(parents) && (body.parents = [parents]);
+
+    const httpParams = new HttpParams()
+      .append('fields', DriveFile.fields);
+
+    return this.http.post(DriveFile.metadataURI, body, { params: httpParams }).pipe(
+      map(_ => DomainHelper.adapt(DriveFile, _))
+    );
   }
 }

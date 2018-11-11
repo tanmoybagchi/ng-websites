@@ -12,6 +12,6 @@ export class AdminDashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.userName = environment.login_name;
+    this.userName = environment.g_oauth_login_name;
   }
 }

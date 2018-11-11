@@ -28,7 +28,7 @@ export class AdminPhotoProcessCommand {
       switchMap(_ => {
         window.URL.revokeObjectURL(img.src);
 
-        const tan: Observable<AdminPhotoProcessCommand.Result>[] = [];
+        const resizers$: Observable<AdminPhotoProcessCommand.Result>[] = [];
         const aspect_ratio = img.width / img.height;
 
         this.sizes.forEach(item => {
@@ -59,8 +59,8 @@ export class AdminPhotoProcessCommand {
           const context = canvas.getContext('2d');
           context.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
 
-          const observable = new Observable<AdminPhotoProcessCommand.Result>(observer => {
-            canvas.toBlob((x => {
+          const resizer$ = new Observable<AdminPhotoProcessCommand.Result>(observer => {
+            canvas.toBlob(x => {
               const result = new AdminPhotoProcessCommand.Result();
 
               const fileNameParts = file.name.split('.');
@@ -75,20 +75,18 @@ export class AdminPhotoProcessCommand {
                 fileName,
                 { lastModified: file.lastModified, type: this.mimeType }
               );
-              if (item.name === 'Original') {
-              }
               result.height = height;
               result.width = width;
 
               observer.next(result);
               observer.complete();
-            }), this.mimeType);
+            }, this.mimeType);
           });
 
-          tan.push(observable);
+          resizers$.push(resizer$);
         });
 
-        return zip(...tan);
+        return zip(...resizers$);
       })
     );
   }

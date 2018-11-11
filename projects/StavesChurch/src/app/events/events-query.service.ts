@@ -23,7 +23,7 @@ export class EventsQuery {
       singleEvents: 'true'
     };
 
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${env.login_hint}/events`;
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${env.g_oauth_login_hint}/events`;
 
     return this.http.get<EventList>(url, { params: new HttpParams({ fromObject: eventsInput }) }).pipe(
       map(x => EventList.convertFromJson(x))

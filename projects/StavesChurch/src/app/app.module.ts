@@ -29,7 +29,7 @@ import { SharedModule } from './shared/shared.module';
     CallerModule,
     CoreModule.forRoot({ keyPrefix: 'StavesChurch' }, { logLevel: LogLevel.Warn }),
     EventsModule,
-    GapiModule.forRoot({ id: env.gserviceaccount, password: env.gserviceaccountkey, scope: env.gserviceaccountscope }),
+    GapiModule.forRoot({ id: env.g_serviceaccount_id, password: env.g_serviceaccount_key, scope: env.g_serviceaccount_scope }),
     HomepageModule,
     MinistriesModule,
     PageModule,

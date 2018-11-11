@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment as env } from '@env/environment';
 import { DomainHelper, LocalStorageService } from 'core';
-import { DriveFileReadQuery, DriveFileSearchQuery } from 'gapi';
+import { DriveFile, DriveFileReadQuery, DriveFileSearchQuery } from 'gapi';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap, share } from 'rxjs/operators';
+import { map, share, switchMap } from 'rxjs/operators';
 import { Page } from './page';
 import { PageModule } from './page.module';
 
@@ -36,13 +36,13 @@ export class PageDatabase {
       this.pages = (cachedItem.pages || []).map(page => DomainHelper.adapt(Page, page));
     }
 
-    this.observable = this.driveFileSearchQuery.execute(environment.database).pipe(
+    this.observable = this.driveFileSearchQuery.execute(`${env.rootFolder}\\${env.database}`).pipe(
       switchMap(files => this.onDriveFileSearch(files)),
       share()
     );
   }
 
-  private onDriveFileSearch(files: DriveFileSearchQuery.Result[]) {
+  private onDriveFileSearch(files: DriveFile[]) {
     if (files.length !== 1) {
       this.pages = [];
       this.initialising = false;

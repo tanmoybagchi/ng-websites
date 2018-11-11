@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ServiceAccountSignin } from '../auth/service-account-signin-command.service';
+import { DriveFile } from './drive-file';
 
 @Injectable({ providedIn: 'root' })
 export class DriveFileReadQuery {
@@ -10,8 +11,6 @@ export class DriveFileReadQuery {
 
   @ServiceAccountSignin()
   execute(fileId: string) {
-    const baseUrl = 'https://www.googleapis.com/drive/v3/files';
-
-    return this.http.get(`${baseUrl}/${fileId}?alt=media`);
+    return this.http.get(`${DriveFile.metadataURI}/${fileId}?alt=media`);
   }
 }
