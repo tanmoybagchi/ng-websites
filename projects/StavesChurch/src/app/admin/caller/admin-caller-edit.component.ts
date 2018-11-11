@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment as env } from '@env/environment';
 import { AutoFocusService, ErrorFocusService, EventManagerService, Result } from 'core';
-import { DriveUploadCommand } from 'gapi';
+import { DriveFile, DriveUploadCommand } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { PageUpdateCommand } from '../page/commands/page-update-command.service';
@@ -67,14 +68,14 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveUploadCommand.execute(this.file).pipe(
+    this.driveUploadCommand.execute(this.file, `${env.rootFolder}\\${env.assetFolder}`).pipe(
       tap(x => this.onUpload(x)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe();
   }
 
-  private onUpload(x: any) {
+  private onUpload(x: DriveFile) {
     this.model.content.title = this.file.name;
     this.model.content.location = x.webContentLink.replace('&export=download', '');
     this.sanitizedLocation = this.sanitizer.bypassSecurityTrustResourceUrl(this.model.content.location);

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventManagerService, LocalStorageService, Result } from 'core';
-import { DriveFileSearchQuery, DriveMimeTypes, DriveUploadCommand } from 'gapi';
+import { DriveFile, DriveFileSearchQuery, DriveMimeTypes, DriveUploadCommand } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { catchError, finalize } from 'rxjs/operators';
 export class FilesComponent implements OnInit {
   file: File;
   errors: any;
-  model: DriveFileSearchQuery.Result[];
+  model: DriveFile[];
   @ViewChild('newFile') private newFileElRef: ElementRef;
 
   constructor(
@@ -27,7 +27,7 @@ export class FilesComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveFileSearchQuery.execute(undefined, undefined, DriveMimeTypes.Spreadsheet).pipe(
+    this.driveFileSearchQuery.execute(undefined, DriveMimeTypes.Spreadsheet).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(queryResult => this.model = queryResult);
@@ -57,7 +57,7 @@ export class FilesComponent implements OnInit {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.uploadCommand.execute(this.file, DriveMimeTypes.Spreadsheet).pipe(
+    this.uploadCommand.execute(this.file, undefined, DriveMimeTypes.Spreadsheet).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onFileSelect(_));
