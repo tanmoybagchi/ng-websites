@@ -4,9 +4,9 @@ import { AdminPageDatabase } from '@app/admin/admin-page-database';
 import { PhotoContent } from '@app/photo/photo';
 import { environment as env } from '@env/environment';
 import { Result } from 'core';
-import { DriveFile, DriveUploadCommand } from 'gapi';
-import { concat, EMPTY, Observable, zip } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { DriveFile, DriveUploadCommand, DriveFileSearchQuery } from 'gapi';
+import { concat, EMPTY, Observable, zip, from } from 'rxjs';
+import { catchError, map, switchMap, tap, filter } from 'rxjs/operators';
 import { AdminPhoto } from './admin-photo';
 import { AdminPhotoProcessCommand } from './admin-photo-process.service';
 
@@ -25,6 +25,7 @@ export class AdminPhotoUploadComponent implements OnInit {
     private adminPageDatabase: AdminPageDatabase,
     private adminPhotoProcessCommand: AdminPhotoProcessCommand,
     private driveUploadCommand: DriveUploadCommand,
+    private driveFileSearchQuery: DriveFileSearchQuery,
     private sanitizer: DomSanitizer,
   ) { }
 
@@ -76,20 +77,18 @@ export class AdminPhotoUploadComponent implements OnInit {
 
     const photos: AdminPhoto[] = [];
 
-    concat(...photoProcessors$).subscribe(x => {
-      photos.push(x);
-
-      if (photos.length < photoProcessors$.length) {
-        return;
-      }
-
-      this.adminPageDatabase.addAll(photos).subscribe(_ => {
+    this.driveFileSearchQuery.execute(`${env.rootFolder}\\${env.assetFolder}`, undefined, true).pipe(
+      switchMap(_ => concat(...photoProcessors$)),
+      tap(x => photos.push(x)),
+      filter(x => photos.length >= photoProcessors$.length),
+      switchMap(x => this.adminPageDatabase.addAll(photos)),
+      tap(_ => {
         for (let index = 0; index < this.files.length; index++) {
           const f = this.files[index];
           f['isUploading'] = false;
         }
-      });
-    });
+      })
+    ).subscribe();
   }
 
   private setupPhotoProcessers() {
