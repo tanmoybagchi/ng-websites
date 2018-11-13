@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Config } from '@app/domain/config';
+import { ConfigQuery } from '@app/domain/config-query.service';
+import { ExpenseCommand } from '@app/domain/expense-command.service';
+import { MonthlyExpenseQuery } from '@app/domain/monthly-expense-query.service';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import { Config } from '../domain/config';
-import { ConfigQuery } from '../domain/config-query.service';
-import { ExpenseCommand } from '../domain/expense-command.service';
-import { MonthlyExpenseQuery } from '../domain/monthly-expense-query.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -22,8 +22,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private configQuery: ConfigQuery,
     private eventManagerService: EventManagerService,
-    private monthlyExpenseQuery: MonthlyExpenseQuery,
     private expenseCommand: ExpenseCommand,
+    private monthlyExpenseQuery: MonthlyExpenseQuery,
     private router: Router,
   ) { }
 

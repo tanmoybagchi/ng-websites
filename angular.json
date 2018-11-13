@@ -329,7 +329,7 @@
             "index": "projects/DailySpendLimit/src/index.html",
             "main": "projects/DailySpendLimit/src/main.ts",
             "polyfills": "projects/DailySpendLimit/src/polyfills.ts",
-            "tsConfig": "projects/DailySpendLimit/tsconfig.app.json",
+            "tsConfig": "projects/DailySpendLimit/tsconfig.json",
             "assets": [
               "projects/DailySpendLimit/src/assets",
               "projects/DailySpendLimit/src/manifest.json"
@@ -409,7 +409,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/DailySpendLimit/tsconfig.app.json",
+              "projects/DailySpendLimit/tsconfig.json",
               "projects/DailySpendLimit/tsconfig.spec.json"
             ],
             "exclude": [

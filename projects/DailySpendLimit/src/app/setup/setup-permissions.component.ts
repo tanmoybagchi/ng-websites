@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { EventManagerService, Result } from 'core';
-import { DriveFileSearchQuery, DrivePermissionsCreateCommand, DrivePermissionsQuery } from 'gapi';
+import { DriveFileSearchQuery, DrivePermission, DrivePermissionsCreateCommand, DrivePermissionsQuery } from 'gapi';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './setup-permissions.component.html'
@@ -27,7 +27,7 @@ export class SetupPermissionsComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveFileSearchQuery.execute(environment.database, undefined, undefined, true).pipe(
+    this.driveFileSearchQuery.execute(environment.database, undefined, true).pipe(
       tap(result => this.fileId = result[0].id),
       switchMap(_ => this.drivePermissionsQuery.execute(this.fileId)),
       catchError(err => this.onError(err)),
@@ -47,7 +47,7 @@ export class SetupPermissionsComponent implements OnInit {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.drivePermissionsCreateCommand.execute(this.fileId, this.email, DrivePermissionsCreateCommand.Roles.writer).pipe(
+    this.drivePermissionsCreateCommand.execute(this.fileId, this.email, DrivePermission.Roles.writer).pipe(
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onPermissionsCommand());
   }

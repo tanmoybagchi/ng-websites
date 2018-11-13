@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@app/shared/shared.module';
 import { SetupPermissionsComponent } from './setup-permissions.component';
 import { SetupDailyLimitComponent } from './setup-daily-limit.component';
 

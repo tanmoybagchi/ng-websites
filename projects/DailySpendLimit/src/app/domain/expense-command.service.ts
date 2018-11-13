@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
 import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetReadQuery } from 'gapi';
 import { switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseCommand {
@@ -14,7 +14,7 @@ export class ExpenseCommand {
   ) { }
 
   execute(amt: number) {
-    return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
+    return this.driveFileSearchQuery.execute(environment.database, DriveMimeTypes.Spreadsheet, true).pipe(
       switchMap(searchResult => this.sheetId === null
         ? this.getSheetId(searchResult[0].id, amt)
         : this.updateSpreadsheet(searchResult[0].id, amt))

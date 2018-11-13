@@ -13,7 +13,7 @@ export class GapiModule {
     }
   }
 
-  static forRoot(serviceAccount: ServiceAccount) {
+  static forRoot(serviceAccount?: ServiceAccount) {
     return <ModuleWithProviders>{
       ngModule: GapiModule,
       providers: [

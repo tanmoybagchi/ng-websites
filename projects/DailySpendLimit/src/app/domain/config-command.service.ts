@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
+import { SessionStorageService } from 'core';
 import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetCreateCommand, SheetReadQuery } from 'gapi';
 import { switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 import { Config } from './config';
-import { SessionStorageService } from 'core';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigCommand {
@@ -18,7 +18,7 @@ export class ConfigCommand {
   ) { }
 
   execute(model: Config) {
-    return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
+    return this.driveFileSearchQuery.execute(environment.database, DriveMimeTypes.Spreadsheet, true).pipe(
       switchMap(searchResult => searchResult.length === 0
         ? this.createSpreadsheet(model)
         : this.sheetId === null

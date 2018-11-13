@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '@env/environment';
 
 @Component({
   // tslint:disable-next-line:max-line-length

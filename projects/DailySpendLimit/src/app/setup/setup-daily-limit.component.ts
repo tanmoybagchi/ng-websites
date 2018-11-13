@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Config } from '@app/domain/config';
+import { ConfigCommand } from '@app/domain/config-command.service';
+import { ConfigQuery } from '@app/domain/config-query.service';
+import { ConfigRules } from '@app/domain/config-rules';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
-import { Config } from '../domain/config';
-import { ConfigCommand } from '../domain/config-command.service';
-import { ConfigQuery } from '../domain/config-query.service';
-import { ConfigRules } from '../domain/config-rules';
 
 @Component({
   templateUrl: './setup-daily-limit.component.html'

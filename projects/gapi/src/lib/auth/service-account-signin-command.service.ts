@@ -18,7 +18,7 @@ export class ServiceAccountSigninCommand {
   ) { }
 
   execute() {
-    if (String.hasData(this.authTokenService.getAuthToken())) {
+    if (!this.serviceAccount || String.hasData(this.authTokenService.getAuthToken())) {
       return of(noop());
     }
 

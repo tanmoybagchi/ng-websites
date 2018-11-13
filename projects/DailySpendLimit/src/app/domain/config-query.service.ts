@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
 import { DomainHelper, SessionStorageService } from 'core';
 import { DriveFileSearchQuery, DriveMimeTypes, SheetReadQuery } from 'gapi';
 import { of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 import { Config } from './config';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class ConfigQuery {
       return of(DomainHelper.adapt(Config, config));
     }
 
-    return this.driveFileSearchQuery.execute(environment.database, undefined, DriveMimeTypes.Spreadsheet, true).pipe(
+    return this.driveFileSearchQuery.execute(environment.database, DriveMimeTypes.Spreadsheet, true).pipe(
       switchMap(searchResult => {
         if (searchResult.length === 0) { return of(new Config()); }
 
