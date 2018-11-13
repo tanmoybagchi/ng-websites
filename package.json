@@ -7,20 +7,25 @@
   "scripts": {
     "build-lib": "node_modules\\.bin\\ng build core && node_modules\\.bin\\ng build gapi && node_modules\\.bin\\ng build material-helpers",
     "ngc": "node_modules\\.bin\\ng g component --project=%npm_package_config_app%",
-    "ngc-dsl": "npm run ngm --repo:app=DailySpendLimit",
-    "ngm": "node_modules\\.bin\\ng g module --project=%npm_package_config_app%",
+    "ngc-dsl": "npm run ngc --repo:app=DailySpendLimit",
+    "ngc-vtw": "npm run ngc --repo:app=VinesToWinesDM",
+    "ngm": "node_modules\\.bin\\ng g module --project=%npm_package_config_app% --module=App",
     "ngm-dsl": "npm run ngm --repo:app=DailySpendLimit",
+    "ngm-vtw": "npm run ngm --repo:app=VinesToWinesDM",
     "ngs": "node_modules\\.bin\\ng g service --project=%npm_package_config_app%",
     "ngs-dsl": "npm run ngs --repo:app=DailySpendLimit",
     "ngs-sc": "npm run ngs --repo:app=StavesChurch",
+    "ngs-vtw": "npm run ngs --repo:app=VinesToWinesDM",
     "serve": "node_modules\\.bin\\ng serve %npm_package_config_app% --aot=true --progress=false --base-href=/",
     "serve-dsl": "npm run serve --repo:app=DailySpendLimit",
     "serve-sc": "npm run serve --repo:app=StavesChurch",
     "serve-tk": "npm run serve --repo:app=TiffanysKitchen",
+    "serve-vtw": "npm run serve --repo:app=VinesToWinesDM",
     "build-app": "node_modules\\.bin\\ng build %npm_package_config_app% --prod --noprogress --output-path=../%npm_package_config_app%/docs/ --base-href=/%npm_package_config_app%/ && copy ..\\%npm_package_config_app%\\docs\\index.html ..\\%npm_package_config_app%\\docs\\404.html",
     "build-dsl": "npm run build-app --repo:app=DailySpendLimit",
     "build-sc": "npm run build-app --repo:app=StavesChurch",
-    "build-tk": "npm run build-app --repo:app=TiffanysKitchen"
+    "build-tk": "npm run build-app --repo:app=TiffanysKitchen",
+    "build-vtw": "npm run build-app --repo:app=VinesToWinesDM"
   },
   "private": true,
   "dependencies": {

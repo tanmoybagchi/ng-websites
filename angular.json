@@ -456,15 +456,19 @@
             "index": "projects/VinesToWinesDM/src/index.html",
             "main": "projects/VinesToWinesDM/src/main.ts",
             "polyfills": "projects/VinesToWinesDM/src/polyfills.ts",
-            "tsConfig": "projects/VinesToWinesDM/tsconfig.app.json",
+            "tsConfig": "projects/VinesToWinesDM/tsconfig.json",
             "assets": [
-              "projects/VinesToWinesDM/src/favicon.ico",
               "projects/VinesToWinesDM/src/assets"
             ],
             "styles": [
+              "./node_modules/typeface-great-vibes/index.css",
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
               "projects/VinesToWinesDM/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
+            ],
           },
           "configurations": {
             "production": {
@@ -518,11 +522,14 @@
             "tsConfig": "projects/VinesToWinesDM/tsconfig.spec.json",
             "karmaConfig": "projects/VinesToWinesDM/karma.conf.js",
             "styles": [
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
               "projects/VinesToWinesDM/src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
+            ],
             "assets": [
-              "projects/VinesToWinesDM/src/favicon.ico",
               "projects/VinesToWinesDM/src/assets"
             ]
           }
@@ -531,7 +538,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/VinesToWinesDM/tsconfig.app.json",
+              "projects/VinesToWinesDM/tsconfig.json",
               "projects/VinesToWinesDM/tsconfig.spec.json"
             ],
             "exclude": [

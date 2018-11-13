@@ -1,14 +1,40 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="utf-8">
-  <title>VinesToWinesDM</title>
-  <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Vines to Wines DM</title>
+  <meta name="theme-color" content="#8D6E63">
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Vines To Wines is the place for you if you enjoy going to wine tastings, if you belong to a wine tasting club and you're looking for some place to visit, if you're looking for gifts for wine lovers, if you're planning a wedding, or if you're planning a girls night out. Vines To Wines is a unique Iowa wine experience, right here in Des Moines." />
+  <meta name="author" content="Tanmoy Bagchi" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no">
+  <base href="/VinesToWinesDM/">
+  <!--Frame busting. https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet#Best-for-now_Legacy_Browser_Frame_Breaking_Script-->
+  <style id="antiClickjack">
+    body {
+      display: none !important;
+    }
+  </style>
+  <script type="text/javascript">
+    if (self === top) {
+      var antiClickjack = document.getElementById("antiClickjack");
+      antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <!--End Frame busting.-->
 </head>
-<body>
+<body class="mat-app-background mat-typography">
+  <noscript>
+    <h1>Vines to Wines</h1>
+    <h4 style="color: red">
+      For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.
+    </h4>
+  </noscript>
+
   <app-root></app-root>
 </body>
 </html>

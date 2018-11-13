@@ -1,0 +1,13 @@
+.photo-viewport {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+
+  .photo {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+  }
+}

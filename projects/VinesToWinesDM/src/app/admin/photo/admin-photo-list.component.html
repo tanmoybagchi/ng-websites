@@ -1,0 +1,28 @@
+<mat-card *ngIf="!addingNew" (window:resize)="onResize($event)">
+  <mat-toolbar>
+    <span fxFlex="1 1 auto">{{title}}</span>
+    <a style="margin-right: 1em" mat-raised-button (click)="onDoneClick()" *ngIf="showDone">Done</a>
+    <a mat-raised-button color="accent" *ngIf="!disabled" (click)="onAddNewClick()">Add new</a>
+  </mat-toolbar>
+
+  <section #photos>
+    <div *ngFor="let photo_row of dataSource">
+      <div class="photo-viewport" *ngFor="let photo of photo_row" [style.width.px]="photo.viewportWidth"
+        [style.height.px]="photo.viewportHeight" [style.margin-right.px]="photo.viewportRightMargin">
+
+        <i class="photo" [style.background-image]="photo.url" [style.width.px]="photo.width" [style.left.px]="photo.left"
+          [style.height.px]="photo.height" [style.top.px]="photo.top" [title]="photo.name" (click)="onPhotoClick(photo)"
+          [ngStyle]="{'cursor': allowSelection?'pointer':'default'}"></i>
+
+        <div class="overlay" [style.width.px]="photo.viewportWidth" [style.height.px]="photo.viewportHeight" *ngIf="!disabled && photo.selected"
+          (click)="onPhotoOverlayClick(photo)" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>check</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <h2 *ngIf="dataSource?.length === 0">Nothing to see!</h2>
+  </section>
+</mat-card>
+
+<admin-photo-upload *ngIf="addingNew" (done)="onAddingNewDone()"></admin-photo-upload>

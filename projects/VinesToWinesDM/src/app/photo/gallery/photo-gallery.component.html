@@ -1,0 +1,25 @@
+<mat-list *ngIf="errors?.general?.default">
+  <mat-list-item *ngFor="let item of errors.general.default">{{item}}</mat-list-item>
+</mat-list>
+
+<mat-toolbar>
+  <div>Photos</div>
+</mat-toolbar>
+
+<mat-card (window:resize)="onResize($event)">
+  <section #photos>
+    <div *ngFor="let photo_row of dataSource">
+      <div class="photo-viewport" *ngFor="let photo of photo_row" [style.width.px]="photo.viewportWidth" [style.height.px]="photo.viewportHeight"
+        [style.margin-right.px]="photo.viewportRightMargin">
+
+        <i class="photo" [style.background-image]="photo.url" [style.width.px]="photo.width" [style.left.px]="photo.left" [style.height.px]="photo.height"
+          [style.top.px]="photo.top" [title]="photo.altText || photo.name" (click)="onPhotoClick(photo)"></i>
+      </div>
+    </div>
+
+    <h2 *ngIf="dataSource?.length === 0">Nothing to see!</h2>
+  </section>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>
