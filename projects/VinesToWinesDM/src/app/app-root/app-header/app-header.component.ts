@@ -13,6 +13,6 @@ export class AppHeaderComponent implements OnInit {
 
   ngOnInit() {
     const pages = new Pages();
-    this.menu = pages.list.slice(1);
+    this.menu = pages.list;
   }
 }

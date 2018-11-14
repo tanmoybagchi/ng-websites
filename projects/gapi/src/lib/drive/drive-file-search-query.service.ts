@@ -37,10 +37,11 @@ export class DriveFileSearchQuery {
 
     for (let index = 1; index < pathParts.length - 1; index++) {
       const element = pathParts[index];
-      pathToFile$.push(switchMap(qr => this.searchDrive(element, qr[0].id, DriveMimeTypes.Folder, true)));
+      pathToFile$.push(switchMap(qr => qr.length === 0 ? of([]) : this.searchDrive(element, qr[0].id, DriveMimeTypes.Folder, true)));
     }
 
-    pathToFile$.push(switchMap(qr => this.searchDrive(pathParts[pathParts.length - 1], qr[0].id, mimeType, cacheResults)));
+    // tslint:disable-next-line:max-line-length
+    pathToFile$.push(switchMap(qr => qr.length === 0 ? of([]) : this.searchDrive(pathParts[pathParts.length - 1], qr[0].id, mimeType, cacheResults)));
 
     return (rootFolder$.pipe.call(rootFolder$, ...pathToFile$) as Observable<DriveFile[]>);
   }
@@ -67,12 +68,19 @@ export class DriveFileSearchQuery {
       .append('fields', `files(${DriveFile.fields})`);
 
     return this.http.get(DriveFile.metadataURI, { params: httpParams }).pipe(
-      map((x: { files: any[]; }) => x.files.map(f => DomainHelper.adapt(DriveFile, f))),
-      tap(qr => {
+      map((x: { files: any[]; }) => {
+        if (x.files.length === 0) {
+          return [];
+        }
+
+        const qr = x.files.map(f => DomainHelper.adapt(DriveFile, f));
+
         if (String.hasData(name) && cacheResults && qr.length > 0) {
           this.data.push({ name, parents, result: qr });
           this.storage.set(this.storageKey, this.data);
         }
+
+        return qr;
       })
     );
   }

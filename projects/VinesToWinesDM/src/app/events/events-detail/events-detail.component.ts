@@ -6,10 +6,10 @@ import { EventList } from '../events-models';
 import { EventsQuery } from '../events-query.service';
 
 @Component({
-  templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
+  templateUrl: './events-detail.component.html',
+  styleUrls: ['./events-detail.component.scss']
 })
-export class EventsComponent implements OnInit {
+export class EventsDetailComponent implements OnInit {
   errors: any;
   model: EventList;
   itemIndex = 0;

@@ -1,13 +1,22 @@
 <mat-toolbar>
   <div>Events</div>
   <button mat-button (click)="onTodayClick()">Today</button>
-  <button mat-icon-button (click)="onLeftClick()"><mat-icon>chevron_left</mat-icon></button>
-  <button mat-icon-button (click)="onRightClick()"><mat-icon>chevron_right</mat-icon></button>
+  <button mat-icon-button (click)="onLeftClick()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <button mat-icon-button (click)="onRightClick()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-card>
   <mat-card-content>
     <mat-list style="padding:0">
+      <p>
+        The cost for all sessions is $45 per person. During the first session you’ll get to sample some of the
+        wines you’ll be making, and then you’ll actually help make the wines with your fellow attendees. Come back in
+        two months to bottle, cork, and label your wine, and take three bottles home with you to age, and later enjoy.
+      </p>
       <mat-list-item *ngFor="let item of model?.items.slice(itemIndex, itemIndex+10)" style="height: 7em;">
         <p matListAvatar style="height: 5em; width: 4em">
           <time class="icon">
@@ -23,8 +32,10 @@
           <a href="https://www.google.com/maps?q={{item.location}}" target="_blank" rel="noopener">{{item.location.split(',')[0]}}</a>
         </p>
         <p mat-line *ngIf="!item.end"> &nbsp; </p>
-        <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end | date:'MMM dd'}}</p>
-        <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end | date:'shortTime'}}</p>
+        <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end |
+          date:'MMM dd'}}</p>
+        <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end |
+          date:'shortTime'}}</p>
       </mat-list-item>
     </mat-list>
   </mat-card-content>

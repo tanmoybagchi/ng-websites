@@ -6,11 +6,11 @@ import { EventList } from '../events-models';
 import { EventsQuery } from '../events-query.service';
 
 @Component({
-  selector: 'app-event-summary',
-  templateUrl: './event-summary.component.html',
-  styleUrls: ['./event-summary.component.scss']
+  selector: 'vtw-events-summary',
+  templateUrl: './events-summary.component.html',
+  styleUrls: ['./events-summary.component.scss']
 })
-export class EventSummaryComponent implements OnInit {
+export class EventsSummaryComponent implements OnInit {
   errors: any;
   model: EventList;
 
