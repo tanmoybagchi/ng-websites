@@ -83,7 +83,7 @@
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/TiffanysKitchen/src/styles.scss"
             ],
             "scripts": []
@@ -207,7 +207,7 @@
             ],
             "styles": [
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/StavesChurch/src/styles/styles.scss"
             ],
             "scripts": [
@@ -267,7 +267,7 @@
             "karmaConfig": "projects/StavesChurch/karma.conf.js",
             "styles": [
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/StavesChurch/src/styles/styles.scss"
             ],
             "scripts": [
@@ -337,7 +337,7 @@
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/DailySpendLimit/src/styles.scss"
             ],
             "scripts": []
@@ -463,7 +463,7 @@
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/VinesToWinesDM/src/styles.scss"
             ],
             "scripts": [
@@ -523,7 +523,7 @@
             "karmaConfig": "projects/VinesToWinesDM/karma.conf.js",
             "styles": [
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/VinesToWinesDM/src/styles.scss"
             ],
             "scripts": [
