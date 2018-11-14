@@ -6,6 +6,7 @@ import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { ChooseExternalLinkComponent } from './editor/choose-external-link.component';
 import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
 import { EditorComponent } from './editor/editor.component';
+import { AdminEventsComponent } from './events/admin-events.component';
 import { PageCommandButtonsComponent } from './page/command-buttons/page-command-buttons.component';
 import { PageEditComponent } from './page/page-edit/page-edit.component';
 import { PageListComponent } from './page/page-list/page-list.component';
@@ -21,6 +22,7 @@ import { AdminPhotoUploadComponent } from './photo/admin-photo-upload.component'
   ],
   declarations: [
     AdminDashboardComponent,
+    AdminEventsComponent,
     AdminPhotoListComponent,
     AdminPhotoUploadComponent,
     ChooseExternalLinkComponent,

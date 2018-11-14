@@ -42,7 +42,7 @@
       "root": "projects/TiffanysKitchen/",
       "sourceRoot": "projects/TiffanysKitchen/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "tf",
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss",
@@ -168,7 +168,7 @@
       "root": "projects/StavesChurch/",
       "sourceRoot": "projects/StavesChurch/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "sc",
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss",
@@ -296,7 +296,7 @@
       "root": "projects/DailySpendLimit/",
       "sourceRoot": "projects/DailySpendLimit/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "dsl",
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss",
@@ -423,7 +423,7 @@
       "root": "projects/VinesToWinesDM/",
       "sourceRoot": "projects/VinesToWinesDM/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "vwt",
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss",

@@ -4,6 +4,7 @@ import { PageEditComponent } from '@app/admin/page/page-edit/page-edit.component
 import { PageListComponent } from '@app/admin/page/page-list/page-list.component';
 import { AdminGuard } from '@app/security/admin.guard';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
+import { AdminEventsComponent } from './events/admin-events.component';
 import { AdminPhotoListComponent } from './photo/admin-photo-list.component';
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
         canActivateChild: [AdminGuard],
         children: [
           { path: 'dashboard', component: AdminDashboardComponent },
+          { path: 'events', component: AdminEventsComponent },
           { path: 'photos', component: AdminPhotoListComponent },
           { path: ':kind', component: PageListComponent },
           { path: ':kind/:id', component: PageEditComponent },

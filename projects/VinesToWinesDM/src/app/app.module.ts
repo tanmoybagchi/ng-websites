@@ -8,6 +8,7 @@ import { GapiModule } from 'gapi';
 import { AboutUsModule } from './about-us/about-us.module';
 import { AppRootComponent } from './app-root/app-root.component';
 import { AppRootModule } from './app-root/app-root.module';
+import { EventsModule } from './events/events.module';
 import { HomepageModule } from './homepage/homepage.module';
 import { PageModule } from './page/page.module';
 import { PhotoModule } from './photo/photo.module';
@@ -23,6 +24,7 @@ import { SharedModule } from './shared/shared.module';
     AboutUsModule,
     AppRootModule,
     CoreModule.forRoot({ keyPrefix: 'VinesToWinesDM' }, { logLevel: LogLevel.Warn }),
+    EventsModule,
     GapiModule.forRoot({ id: env.g_serviceaccount_id, password: env.g_serviceaccount_key, scope: env.g_serviceaccount_scope }),
     HomepageModule,
     PageModule,
