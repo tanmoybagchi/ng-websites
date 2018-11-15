@@ -13,6 +13,7 @@ import { EventsQuery } from '../events-query.service';
 export class EventsSummaryComponent implements OnInit {
   errors: any;
   model: EventList;
+  waiting = true;
 
   constructor(
     private eventsQuery: EventsQuery
@@ -26,6 +27,7 @@ export class EventsSummaryComponent implements OnInit {
 
   onEventsQuery(value: EventList) {
     this.model = value;
+    this.waiting = false;
   }
 
   private onError(result: Result) {

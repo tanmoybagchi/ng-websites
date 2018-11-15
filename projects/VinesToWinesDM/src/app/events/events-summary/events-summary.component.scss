@@ -4,6 +4,10 @@
   padding: 0 !important;
 }
 
+mat-spinner {
+  left: calc(50% - 25px);
+}
+
 time.icon
 {
   // font-size: 1em; /* change icon size */

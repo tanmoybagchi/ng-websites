@@ -1,5 +1,5 @@
 <section *ngIf="!choosingPhoto && !choosingInternalLink && !choosingExternalLink">
-  <mat-toolbar *ngIf="!disabled">
+  <mat-toolbar style="position: sticky; top: 0;" *ngIf="!disabled">
     <button mat-icon-button matTooltip="Bold" matTooltipShowDelay="500" (click)="execCommand('bold')">
       <mat-icon>format_bold</mat-icon>
     </button>
@@ -87,8 +87,8 @@
   <mat-slider *ngIf="photo" class="photoSlider" min="0" max="100" step="1" [value]="photoSliderValue" [style.top.px]="photoSliderTop"
     [style.width.px]="photoSliderWidth" (input)="onPhotoSliderInput($event)" (document:click)="onBodyClick($event)"></mat-slider>
 
-  <div #editor id="{{editorId}}" class="editor" [attr.contenteditable]="!disabled" tabindex="0" [innerHTML]="safeContent" (paste)="onPaste($event)"
-    (input)="onBlur()"></div>
+  <div #editor id="{{editorId}}" class="editor" [attr.contenteditable]="!disabled" tabindex="0" [innerHTML]="safeContent"
+    (paste)="onPaste($event)" (input)="onBlur()"></div>
 </section>
 
 <admin-photo-list *ngIf="choosingPhoto" [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></admin-photo-list>
