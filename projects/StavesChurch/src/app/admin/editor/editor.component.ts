@@ -3,6 +3,8 @@ import { MatSliderChange } from '@angular/material';
 import { Photo } from '@app/photo/photo';
 import { PhotoQuery } from '@app/photo/photo-query.service';
 import { UniqueIdService } from 'core';
+import { of, timer } from 'rxjs';
+import { tap, filter, switchMap, delay, take } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -171,32 +173,29 @@ export class EditorComponent implements OnInit {
   }
 
   onInternalLinkChosen($event: { link: string, name: string }) {
-    this.choosingInternalLink = false;
+    timer(0, 50).pipe(
+      tap(_ => this.choosingInternalLink = false),
+      filter(() => !this.linkOpen),
+      switchMap(_ => this.restoreSelection()),
+      filter(() => $event !== undefined && $event !== null),
+      tap(_ => {
+        const range = this.getRange();
+        if (range.collapsed) {
+          this.execCommand('insertHTML', `<a href="" routerLink="/${$event.link}">${$event.name}</a>`);
+        } else {
+          const anchor = document.createElement('a');
+          anchor.href = '';
+          anchor.setAttribute('routerLink', `/${$event.link}`);
 
-    const intervalHandle = window.setInterval(_ => {
-      if (this.linkOpen) { return; }
+          range.surroundContents(anchor);
 
-      window.clearInterval(intervalHandle);
-
-      this.restoreSelection();
-
-      if ($event === undefined || $event === null) { return; }
-
-      const range = this.getRange();
-      if (range.collapsed) {
-        this.execCommand('insertHTML', `<a href="" routerLink="/${$event.link}">${$event.name}</a>`);
-      } else {
-        const anchor = document.createElement('a');
-        anchor.href = '';
-        anchor.setAttribute('routerLink', `/${$event.link}`);
-
-        range.surroundContents(anchor);
-
-        setTimeout(() => {
-          this.onBlur();
-        }, 0);
-      }
-    }, 50);
+          setTimeout(() => {
+            this.onBlur();
+          }, 0);
+        }
+      }),
+      take(1)
+    ).subscribe();
   }
 
   onExternalLink() {
@@ -206,33 +205,30 @@ export class EditorComponent implements OnInit {
   }
 
   onExternalLinkChosen($event: string) {
-    this.choosingExternalLink = false;
+    timer(0, 50).pipe(
+      tap(_ => this.choosingExternalLink = false),
+      filter(() => !this.linkOpen),
+      switchMap(_ => this.restoreSelection()),
+      filter(() => String.hasData($event)),
+      tap(_ => {
+        const range = this.getRange();
+        if (range.collapsed) {
+          this.execCommand('insertHTML', `<a href="${$event}" target="_blank" rel="noopener">${$event}</a>`);
+        } else {
+          const anchor = document.createElement('a');
+          anchor.href = $event;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener';
 
-    const intervalHandle = window.setInterval(_ => {
-      if (this.linkOpen) { return; }
+          range.surroundContents(anchor);
 
-      window.clearInterval(intervalHandle);
-
-      this.restoreSelection();
-
-      if (String.isNullOrWhitespace($event)) { return; }
-
-      const range = this.getRange();
-      if (range.collapsed) {
-        this.execCommand('insertHTML', `<a href="${$event}" target="_blank" rel="noopener">${$event}</a>`);
-      } else {
-        const anchor = document.createElement('a');
-        anchor.href = $event;
-        anchor.target = '_blank';
-        anchor.rel = 'noopener';
-
-        range.surroundContents(anchor);
-
-        setTimeout(() => {
-          this.onBlur();
-        }, 0);
-      }
-    }, 50);
+          setTimeout(() => {
+            this.onBlur();
+          }, 0);
+        }
+      }),
+      take(1)
+    ).subscribe();
   }
 
   onAddPhoto() {
@@ -242,15 +238,15 @@ export class EditorComponent implements OnInit {
   }
 
   onPhotoListDone(photoIdentifier: string) {
-    this.choosingPhoto = false;
-
-    window.setTimeout(_ => {
-      this.restoreSelection();
-
-      if (String.isNullOrWhitespace(photoIdentifier)) { return; }
-
-      this.photoCurrentQuery.execute().subscribe(sizes => this.insertImgElement(sizes, photoIdentifier));
-    }, 0);
+    of(true).pipe(
+      tap(_ => this.choosingPhoto = false),
+      delay(0),
+      switchMap(_ => this.restoreSelection()),
+      filter(() => String.hasData(photoIdentifier)),
+      switchMap(() => this.photoCurrentQuery.execute()),
+      tap(sizes => this.insertImgElement(sizes, photoIdentifier)),
+      take(1)
+    ).subscribe();
   }
 
   insertImgElement(photos: Photo[], identifier: string) {
@@ -259,24 +255,15 @@ export class EditorComponent implements OnInit {
 
     const currentPhoto = photos.filter(p => p.identifier === identifier)[0];
 
-    const largest_photo = currentPhoto.sizeLG.width > currentPhoto.original.width ? currentPhoto.sizeLG : currentPhoto.original;
+    const photoSizes = currentPhoto.photos();
 
-    imgEl.src = largest_photo.location;
+    const widestDimension = Math.max(...photoSizes.map(x => x.width));
+    const widestPhoto = currentPhoto.photos().find(x => x.width === widestDimension);
+
+    imgEl.src = widestPhoto.location;
     imgEl.style.width = '100%';
-
-    const photoSizes = [
-      currentPhoto.smallThumbnail,
-      currentPhoto.bigThumbnail,
-      currentPhoto.sizeXS,
-      currentPhoto.sizeSM,
-      currentPhoto.sizeMD,
-      currentPhoto.sizeLG,
-      currentPhoto.original
-    ].sort((a, b) => a.width - b.width);
-
     imgEl.srcset = photoSizes.map(x => `${x.location} ${x.width}w`).join(',');
-
-    imgEl.sizes = '(max-width: 768px) 100vw, (max-width: 992px) 750px, (max-width: 1200px) 970px, 1170px';
+    imgEl.sizes = '100vw';
 
     this.execCommand('insertHTML', imgEl.outerHTML);
 
@@ -367,16 +354,20 @@ export class EditorComponent implements OnInit {
   }
 
   private restoreSelection() {
-    this.content = this.savedContent;
+    return of(true).pipe(
+      tap(_ => this.content = this.savedContent),
+      delay(0),
+      tap(_ => {
+        const startContainer = this.findNode(this.rangeStartContainer);
+        const endContainer = this.findNode(this.rangeEndContainer);
 
-    const startContainer = this.findNode(this.rangeStartContainer);
-    const endContainer = this.findNode(this.rangeEndContainer);
+        const range = new Range();
+        range.setStart(startContainer, this.rangeStartOffset);
+        range.setEnd(endContainer, this.rangeEndOffset);
 
-    const range = new Range();
-    range.setStart(startContainer, this.rangeStartOffset);
-    range.setEnd(endContainer, this.rangeEndOffset);
-
-    this.setRange(range);
+        this.setRange(range);
+      })
+    );
   }
 
   private findNode(nodeToFind: Node) {

@@ -1,7 +1,6 @@
 export class Pages {
   // This order is important.
-  readonly list = [
-    { link: 'homepage', name: 'Homepage' },
+  readonly list: { link: string, name: string, xs?: boolean, sm?: boolean, md?: boolean, lg?: boolean }[] = [
     { link: 'events', name: 'Events', xs: true },
     { link: 'services', name: 'Services', xs: true },
     { link: 'ministries', name: 'Ministries', xs: true },

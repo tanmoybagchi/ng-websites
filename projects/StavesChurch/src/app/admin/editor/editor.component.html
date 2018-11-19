@@ -1,5 +1,5 @@
 <section *ngIf="!choosingPhoto && !choosingInternalLink && !choosingExternalLink">
-  <mat-toolbar *ngIf="!disabled">
+  <mat-toolbar *ngIf="!disabled" style="position: sticky; top: 0">
     <button mat-icon-button matTooltip="Bold" matTooltipShowDelay="500" (click)="execCommand('bold')">
       <mat-icon>format_bold</mat-icon>
     </button>

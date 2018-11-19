@@ -1,5 +1,11 @@
+@import '../../../styles/theme';
+
 :host ::ng-deep .mat-list-item-content {
   padding: 0 !important;
+}
+
+mat-spinner {
+  left: calc(50% - 25px);
 }
 
 time.icon
@@ -36,9 +42,9 @@ time.icon strong
   top: 0;
   // padding: 0.4em 0;
   color: #fff;
-  background-color: #3f51b5; //#fd9f1b;
-  border-bottom: 1px dashed indigo;
-  box-shadow: 0 2px 0 #3f51b5; //#fd9f1b;
+  background-color: mat-color($my-app-primary);
+  border-bottom: 1px dashed mat-color($my-app-primary, 'lighter');
+  box-shadow: 0 2px 0 mat-color($my-app-primary, 'darker');
 }
 
 time.icon span
@@ -54,5 +60,5 @@ time.icon em
 {
   position: absolute;
   // bottom: 0.3em;
-  color: #3f51b5; //#fd9f1b;
+  color: mat-color($my-app-primary);
 }

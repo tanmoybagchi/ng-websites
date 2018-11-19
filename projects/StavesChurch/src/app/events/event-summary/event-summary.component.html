@@ -1,4 +1,6 @@
-<mat-list style="padding:0">
+<mat-spinner strokeWidth="4" diameter="50" *ngIf="waiting"></mat-spinner>
+
+<mat-list style="padding:0" *ngIf="!waiting">
   <mat-list-item *ngFor="let item of model?.items">
     <p matListAvatar>
       <time class="icon">

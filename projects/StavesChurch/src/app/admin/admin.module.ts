@@ -11,8 +11,6 @@ import { ChooseExternalLinkComponent } from './editor/choose-external-link.compo
 import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
 import { EditorComponent } from './editor/editor.component';
 import { AdminEventsComponent } from './events/admin-events.component';
-import { AdminHomepageEditComponent } from './homepage/admin-homepage-edit.component';
-import { AdminHomepageListComponent } from './homepage/admin-homepage-list.component';
 import { AdminMinistriesEditComponent } from './ministries/admin-ministries-edit.component';
 import { PageCommandButtonsComponent } from './page/command-buttons/page-command-buttons.component';
 import { PageEditComponent } from './page/page-edit/page-edit.component';
@@ -36,8 +34,6 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     AdminCallerListComponent,
     AdminDashboardComponent,
     AdminEventsComponent,
-    AdminHomepageEditComponent,
-    AdminHomepageListComponent,
     AdminMinistriesEditComponent,
     AdminPhotoListComponent,
     AdminPhotoUploadComponent,

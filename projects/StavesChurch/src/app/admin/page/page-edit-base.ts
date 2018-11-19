@@ -40,7 +40,7 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
     this.model = new this.modelCreator();
 
     this.saveStream.pipe(
-      debounceTime(750)
+      debounceTime(1500)
     ).subscribe(() => this.update());
 
     this.route.paramMap.subscribe((params) => this.onIdParam(params));
@@ -64,9 +64,6 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
     this.model = model;
 
     this.readOnly = model.status !== 'Draft';
-
-    // tslint:disable-next-line:no-unused-expression
-    !this.readOnly && this.autoFocusService.focusFirst();
   }
 
   createCanApprove() {

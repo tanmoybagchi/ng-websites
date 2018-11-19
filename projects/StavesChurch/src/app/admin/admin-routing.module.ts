@@ -10,8 +10,6 @@ import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';
 import { AdminCallerListComponent } from './caller/admin-caller-list.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
-import { AdminHomepageEditComponent } from './homepage/admin-homepage-edit.component';
-import { AdminHomepageListComponent } from './homepage/admin-homepage-list.component';
 import { AdminPhotoListComponent } from './photo/admin-photo-list.component';
 import { AdminSermonEditComponent } from './sermon/admin-sermon-edit.component';
 import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
@@ -31,8 +29,6 @@ const routes: Routes = [
           { path: 'caller/:id', component: AdminCallerEditComponent },
           { path: 'dashboard', component: AdminDashboardComponent },
           { path: 'events', component: AdminEventsComponent },
-          { path: 'homepage', component: AdminHomepageListComponent },
-          { path: 'homepage/:id', component: AdminHomepageEditComponent },
           { path: 'ministries/:id', component: AdminMinistriesEditComponent },
           { path: 'photos', component: AdminPhotoListComponent },
           { path: 'sermon', component: AdminSermonListComponent },
