@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Config } from '@app/domain/config';
 import { ConfigQuery } from '@app/domain/config-query.service';
 import { ExpenseCommand } from '@app/domain/expense-command.service';
 import { MonthlyExpenseQuery } from '@app/domain/monthly-expense-query.service';
-import { EventManagerService, Result } from 'core';
+import { EventManagerService, Result, AuthTokenService } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   private model: Config;
 
   constructor(
+    private authTokenService: AuthTokenService,
     private configQuery: ConfigQuery,
     private eventManagerService: EventManagerService,
     private expenseCommand: ExpenseCommand,
@@ -35,6 +36,19 @@ export class DashboardComponent implements OnInit {
       catchError(_ => this.onError(_)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe();
+  }
+
+  @HostListener('document:visibilitychange')
+  onVisibilitychange() {
+    if (document.hidden) {
+      return;
+    }
+
+    if (String.isNullOrWhitespace(this.authTokenService.getAuthToken())) {
+      this.router.navigate(['sign-in'], { replaceUrl: true });
+    } else {
+      this.ngOnInit();
+    }
   }
 
   private onConfigQuery(configQueryResult: Config) {
