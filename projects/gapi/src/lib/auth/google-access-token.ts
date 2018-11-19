@@ -3,12 +3,13 @@ export class GoogleAccessToken {
   expires_in = 3600;
   state = '';
   token_type = 'Bearer';
+  error = '';
 
   static convertFromFragment(fragment: string) {
     const item = new GoogleAccessToken();
 
-    // tslint:disable-next-line:prefer-const
-    let regex = /([^&=]+)=([^&]*)/g, m;
+    const regex = /([^&=]+)=([^&]*)/g;
+    let m;
     while (m = regex.exec(fragment)) {
       switch (m) {
         case 'access_token':
@@ -25,6 +26,10 @@ export class GoogleAccessToken {
 
         case 'state':
           item.state = decodeURIComponent(m[2]);
+          break;
+
+        case 'error':
+          item.error = decodeURIComponent(m[2]);
           break;
 
         default:
