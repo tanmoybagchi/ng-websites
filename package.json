@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build-lib": "ng build core && ng build gapi && ng build material-helpers",
-    "ngc-dsl": "ng g component --project=DailySpendLimit --",
-    "ngc-vtw": "ng g component --project=VinesToWinesDM --",
+    "ngc-dsl": "ng g component --project=DailySpendLimit --spec=false --styleext=scss --",
+    "ngc-vtw": "ng g component --project=VinesToWinesDM --spec=false --styleext=scss --",
     "ngm-dsl": "ng g module --project=DailySpendLimit --",
     "ngm-vtw": "ng g module --project=VinesToWinesDM --",
     "ngs-dsl": "ng g service --project=DailySpendLimit --",
