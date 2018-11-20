@@ -62,14 +62,14 @@
       <mat-icon>format_indent_increase</mat-icon>
     </button>
 
-    <button mat-button [matMenuTriggerFor]="linkMenu" (menuOpened)="onLinkOpen()" (menuClosed)="onLinkClose()">
+    <button mat-button [matMenuTriggerFor]="linkMenu">
       Link
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
     <mat-menu #linkMenu>
       <button mat-menu-item (click)="onInternalLink()">Internal</button>
       <button mat-menu-item (click)="onExternalLink()">External</button>
-      <button mat-menu-item (click)="execCommand('unlink')">Remove</button>
+      <button mat-menu-item (click)="onUnlink()">Remove</button>
     </mat-menu>
 
     <button mat-icon-button matTooltip="Add photo" matTooltipShowDelay="500" (click)="onAddPhoto()">
@@ -87,8 +87,8 @@
   <mat-slider *ngIf="photo" class="photoSlider" min="0" max="100" step="1" [value]="photoSliderValue" [style.top.px]="photoSliderTop"
     [style.width.px]="photoSliderWidth" (input)="onPhotoSliderInput($event)" (document:click)="onBodyClick($event)"></mat-slider>
 
-  <div #editor id="{{editorId}}" class="editor" [attr.contenteditable]="!disabled" tabindex="0" [innerHTML]="safeContent" (paste)="onPaste($event)"
-    (input)="onBlur()"></div>
+  <div #editor id="{{editorId}}" class="editor" [attr.contenteditable]="!disabled" tabindex="0" [innerHTML]="safeContent"
+    (paste)="onPaste($event)" (input)="onBlur()"></div>
 </section>
 
 <admin-photo-list *ngIf="choosingPhoto" [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></admin-photo-list>

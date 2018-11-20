@@ -20,7 +20,7 @@ export class ChooseInternalLinkComponent implements OnInit {
     this.done.emit(item);
   }
 
-  onOKClick() {
+  onCancelClick() {
     this.done.emit();
   }
 }

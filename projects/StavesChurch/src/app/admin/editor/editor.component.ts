@@ -3,8 +3,8 @@ import { MatSliderChange } from '@angular/material';
 import { Photo } from '@app/photo/photo';
 import { PhotoQuery } from '@app/photo/photo-query.service';
 import { UniqueIdService } from 'core';
-import { of, timer } from 'rxjs';
-import { tap, filter, switchMap, delay, take } from 'rxjs/operators';
+import { from, of, timer } from 'rxjs';
+import { delay, filter, switchMap, take, tap, first, map } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -13,32 +13,16 @@ import { tap, filter, switchMap, delay, take } from 'rxjs/operators';
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
-  private rangeStartContainer: Node;
-  private rangeStartOffset: number;
+  @Input() disabled = false;
+  private lastContentEmitted = '';
   private rangeEndContainer: Node;
   private rangeEndOffset: number;
+  private rangeStartContainer: Node;
+  private rangeStartOffset: number;
   private savedContent = '';
+  private editorVisible$ = timer(0, 50).pipe(filter(() => this._editor !== null), take(1));
 
-  private lastContentEmitted = '';
-
-  @Input() disabled = false;
-
-  @Input()
-  public set content(v: string) {
-    setTimeout(() => {
-      if (String.isNullOrWhitespace(v) || this._editor.innerHTML.length > 0 || v === this._editor.innerHTML) {
-        return;
-      }
-
-      this.lastContentEmitted = v;
-      this._editor.innerHTML = v;
-      Array.from(this._editor.querySelectorAll('img')).forEach(img => this.photo_click_register(img));
-    }, 0);
-  }
-
-  @Output() changed = new EventEmitter<string>(true);
-
-  private _editor: HTMLElement;
+  private _editor: HTMLElement = null;
   @ViewChild('editor')
   public set editor(v: ElementRef) {
     if (v === undefined || v === null) {
@@ -47,6 +31,24 @@ export class EditorComponent implements OnInit {
       this._editor = v.nativeElement;
     }
   }
+
+  @Input()
+  public set content(v: string) {
+    if (String.isNullOrWhitespace(v)) {
+      return;
+    }
+
+    this.editorVisible$.pipe(
+      filter(_ => this._editor.innerHTML.length === 0),
+      filter(_ => v !== this._editor.innerHTML),
+      tap(_ => this.lastContentEmitted = v),
+      tap(_ => this._editor.innerHTML = v),
+      switchMap(_ => from(this._editor.querySelectorAll('img'))),
+      tap(img => this.photo_click_register(img))
+    ).subscribe();
+  }
+
+  @Output() changed = new EventEmitter<string>(true);
 
   private specialOpen = false;
   // tslint:disable-next-line:max-line-length
@@ -61,7 +63,6 @@ export class EditorComponent implements OnInit {
     { class: 'mat-caption', title: 'Caption' },
   ];
 
-  private linkOpen = false;
   choosingExternalLink: boolean;
   choosingInternalLink = false;
 
@@ -102,13 +103,11 @@ export class EditorComponent implements OnInit {
   }
 
   special(value: string) {
-    const intervalHandle = window.setInterval(_ => {
-      if (this.specialOpen) { return; }
-
-      window.clearInterval(intervalHandle);
-
-      this.execCommand('insertHTML', value);
-    }, 50);
+    timer(0, 50).pipe(
+      filter(_ => !this.specialOpen),
+      tap(_ => this.execCommand('insertHTML', value)),
+      take(1)
+    ).subscribe();
   }
 
   onSizeOpen() {
@@ -120,50 +119,36 @@ export class EditorComponent implements OnInit {
   }
 
   size(value: string) {
-    const intervalHandle = window.setInterval(_ => {
-      if (this.sizeOpen) { return; }
+    timer(0, 50).pipe(
+      filter(_ => !this.sizeOpen),
+      tap(_ => {
+        const range = this.getRange();
 
-      window.clearInterval(intervalHandle);
+        const parentSPAN = this.getParentSPAN(range);
 
-      const range = this.getRange();
+        if (parentSPAN && parentSPAN.hasAttribute('class')) {
+          parentSPAN.classList.remove(...this.sizes.map(x => x.class));
+          // tslint:disable-next-line:no-unused-expression
+          parentSPAN.classList.length === 0 && parentSPAN.removeAttribute('class');
+        }
 
-      const parentSPAN = this.getParentSPAN(range);
+        if (value === 'normal') {
+          return;
+        }
 
-      if (parentSPAN && parentSPAN.hasAttribute('class')) {
-        parentSPAN.classList.remove(...this.sizes.map(x => x.class));
-        // tslint:disable-next-line:no-unused-expression
-        parentSPAN.classList.length === 0 && parentSPAN.removeAttribute('class');
-      }
+        if (parentSPAN) {
+          parentSPAN.classList.add(value);
+        } else {
+          const span = document.createElement('span');
+          span.classList.add(value);
 
-      if (value === 'normal') {
-        setTimeout(() => {
-          this.onBlur();
-        }, 0);
-
-        return;
-      }
-
-      if (parentSPAN) {
-        parentSPAN.classList.add(value);
-      } else {
-        const span = document.createElement('span');
-        span.classList.add(value);
-
-        range.surroundContents(span);
-      }
-
-      setTimeout(() => {
-        this.onBlur();
-      }, 0);
-    }, 50);
-  }
-
-  onLinkOpen() {
-    this.linkOpen = true;
-  }
-
-  onLinkClose() {
-    this.linkOpen = false;
+          range.surroundContents(span);
+        }
+      }),
+      delay(0),
+      tap(_ => this.onBlur()),
+      take(1)
+    ).subscribe();
   }
 
   onInternalLink() {
@@ -173,11 +158,12 @@ export class EditorComponent implements OnInit {
   }
 
   onInternalLinkChosen($event: { link: string, name: string }) {
-    timer(0, 50).pipe(
-      tap(_ => this.choosingInternalLink = false),
-      filter(() => !this.linkOpen),
+    this.choosingInternalLink = false;
+
+    this.editorVisible$.pipe(
       switchMap(_ => this.restoreSelection()),
-      filter(() => $event !== undefined && $event !== null),
+      filter(_ => $event !== undefined && $event !== null),
+      tap(_ => this.execCommand('unlink')),
       tap(_ => {
         const range = this.getRange();
         if (range.collapsed) {
@@ -188,13 +174,13 @@ export class EditorComponent implements OnInit {
           anchor.setAttribute('routerLink', `/${$event.link}`);
 
           range.surroundContents(anchor);
+          range.collapse();
 
           setTimeout(() => {
             this.onBlur();
           }, 0);
         }
-      }),
-      take(1)
+      })
     ).subscribe();
   }
 
@@ -205,11 +191,12 @@ export class EditorComponent implements OnInit {
   }
 
   onExternalLinkChosen($event: string) {
-    timer(0, 50).pipe(
-      tap(_ => this.choosingExternalLink = false),
-      filter(() => !this.linkOpen),
+    this.choosingExternalLink = false;
+
+    this.editorVisible$.pipe(
       switchMap(_ => this.restoreSelection()),
-      filter(() => String.hasData($event)),
+      filter(_ => String.hasData($event)),
+      tap(_ => this.execCommand('unlink')),
       tap(_ => {
         const range = this.getRange();
         if (range.collapsed) {
@@ -221,14 +208,21 @@ export class EditorComponent implements OnInit {
           anchor.rel = 'noopener';
 
           range.surroundContents(anchor);
+          range.collapse();
 
           setTimeout(() => {
             this.onBlur();
           }, 0);
         }
-      }),
-      take(1)
+      })
     ).subscribe();
+  }
+
+  onUnlink() {
+    this.execCommand('unlink');
+    // Unlink can sometimes leave the innerHTML in a fragmented state.
+    // This will fix it.
+    this._editor.innerHTML = this._editor.innerHTML;
   }
 
   onAddPhoto() {
@@ -238,40 +232,38 @@ export class EditorComponent implements OnInit {
   }
 
   onPhotoListDone(photoIdentifier: string) {
-    of(true).pipe(
-      tap(_ => this.choosingPhoto = false),
-      delay(0),
+    this.choosingPhoto = false;
+
+    this.editorVisible$.pipe(
       switchMap(_ => this.restoreSelection()),
-      filter(() => String.hasData(photoIdentifier)),
+      filter(_ => String.hasData(photoIdentifier)),
       switchMap(() => this.photoCurrentQuery.execute()),
-      tap(sizes => this.insertImgElement(sizes, photoIdentifier)),
-      take(1)
+      switchMap(photos => from(photos)),
+      first(photo => photo.identifier === photoIdentifier),
+      map(photo => this.convertToImgElement(photo)),
+      tap(imgEl => this.execCommand('insertHTML', imgEl.outerHTML)),
+      delay(0),
+      map(imgEl => document.getElementById(imgEl.id)),
+      tap(imgEl => imgEl.id = ''),
+      tap(imgEl => this.photo_click_register(imgEl))
     ).subscribe();
   }
 
-  insertImgElement(photos: Photo[], identifier: string) {
+  convertToImgElement(currentPhoto: Photo) {
     const imgEl = document.createElement('img');
     imgEl.id = this.uniqueIdService.getUniqueId().toString();
-
-    const currentPhoto = photos.filter(p => p.identifier === identifier)[0];
 
     const photoSizes = currentPhoto.photos();
 
     const widestDimension = Math.max(...photoSizes.map(x => x.width));
-    const widestPhoto = currentPhoto.photos().find(x => x.width === widestDimension);
+    const widestPhoto = photoSizes.find(x => x.width === widestDimension);
 
     imgEl.src = widestPhoto.location;
-    imgEl.style.width = '100%';
+    imgEl.style.width = '25%';
     imgEl.srcset = photoSizes.map(x => `${x.location} ${x.width}w`).join(',');
     imgEl.sizes = '100vw';
 
-    this.execCommand('insertHTML', imgEl.outerHTML);
-
-    window.setTimeout(_ => {
-      const img = document.getElementById(imgEl.id);
-      img.id = '';
-      this.photo_click_register(img);
-    }, 0);
+    return imgEl;
   }
 
   private photo_click_register(elm: HTMLElement) {
@@ -354,9 +346,11 @@ export class EditorComponent implements OnInit {
   }
 
   private restoreSelection() {
-    return of(true).pipe(
-      tap(_ => this.content = this.savedContent),
-      delay(0),
+    this.content = this.savedContent;
+
+    return timer(0, 50).pipe(
+      filter(_ => String.hasData(this._editor.innerHTML)),
+      take(1),
       tap(_ => {
         const startContainer = this.findNode(this.rangeStartContainer);
         const endContainer = this.findNode(this.rangeEndContainer);

@@ -28,6 +28,10 @@ export class ChooseExternalLinkComponent implements OnInit {
     this.done.emit(this.extUrl);
   }
 
+  onCancelClick() {
+    this.done.emit();
+  }
+
   private isValidUrl(value: string) {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
