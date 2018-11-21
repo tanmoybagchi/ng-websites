@@ -1,0 +1,16 @@
+<section fxLayout="row" fxLayoutGap="1em">
+  <button mat-raised-button *ngIf="canApprove" (click)="onApproveClick()" color="primary">Approve</button>
+  <button mat-raised-button *ngIf="canChange" (click)="onChangeClick()" color="primary">Make Changes</button>
+  <button mat-raised-button *ngIf="canDelete" (click)="onDeleteClick()" color="warn">Delete</button>
+  <button mat-raised-button *ngIf="canRecall" (click)="onRecallClick()" color="warn">Recall</button>
+  <button mat-raised-button *ngIf="canRecover" (click)="onRecoverClick()" color="primary">Recover</button>
+</section>
+
+<ng-template #recallWarning>
+  <h2 mat-dialog-title>Recall Warning</h2>
+  <mat-dialog-content>If you recall this there will be nothing left to show the user.</mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Don't recall</button>
+    <button mat-button [mat-dialog-close]="true">Recall anyways</button>
+  </mat-dialog-actions>
+</ng-template>

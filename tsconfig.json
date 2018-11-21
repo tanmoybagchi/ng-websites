@@ -35,6 +35,12 @@
       ],
       "gapi/*": [
         "dist/gapi/*"
+      ],
+      "material-cms": [
+        "dist/material-cms"
+      ],
+      "material-cms/*": [
+        "dist/material-cms/*"
       ]
     }
   }

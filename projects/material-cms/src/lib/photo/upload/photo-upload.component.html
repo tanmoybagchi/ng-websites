@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-toolbar>
+    <span>Add new photos</span>
+  </mat-toolbar>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="mat-subheading-2">You can add photos one of two ways - using the Choose file(s) button or dragging the photos onto the dotted box below.</div>
+      <p class="mat-body-2">
+        TIP: You can add more than photo at the same time with either method.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="onAddNewClick()">
+        Choose file(s)
+        <input type="file" accept="image/*" multiple style="display: none" #newFile (change)="onNewFileChange($event)">
+      </button>
+
+      <a mat-raised-button (click)="onDoneClick()">Done</a>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card style="border-style: dotted; border-width: 3px; min-height: 40vh; margin-top: 1em" (dragenter)="onDragEnter($event)"
+    (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+    <section fxLayout="row wrap">
+      <section class="img-container" *ngFor="let f of files">
+        <img style="height: 256px" [src]="f.previewUrl" (load)="cleanUp(f)" *ngIf="f.previewUrl">
+        <div class="spinner-container" *ngIf="f.isUploading">
+          <mat-spinner strokeWidth="2" diameter="25"></mat-spinner>
+        </div>
+
+        <p *ngIf="!f.previewUrl">{{f.name}}</p>
+        <mat-list *ngIf="f.errors?.general?.default">
+          <mat-list-item *ngFor="let item of f.errors.general.default">{{item}}</mat-list-item>
+        </mat-list>
+      </section>
+    </section>
+  </mat-card>
+
+</mat-card>
