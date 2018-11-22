@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AnnouncementModule } from '@app/announcement/announcement.module';
-import { PagesCurrentQuery } from '@app/page/pages-current-query.service';
 import { DomainHelper } from 'core';
 import { map } from 'rxjs/operators';
 import { Announcement } from './announcement';
+import { PagesCurrentQuery } from 'material-cms';
 
 @Injectable({ providedIn: AnnouncementModule })
 export class AnnouncementCurrentQuery {

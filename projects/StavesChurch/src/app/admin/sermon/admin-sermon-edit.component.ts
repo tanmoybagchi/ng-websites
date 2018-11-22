@@ -58,7 +58,7 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveUploadCommand.execute(this.file, `${env.rootFolder}\\${env.assetFolder}`).pipe(
+    this.driveUploadCommand.execute(this.file, env.audioFolder).pipe(
       map(x => this.onUpload(x)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))

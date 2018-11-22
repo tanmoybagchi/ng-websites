@@ -77,7 +77,7 @@ export class AdminPhotoUploadComponent implements OnInit {
 
     const photos: AdminPhoto[] = [];
 
-    this.driveFileSearchQuery.execute(`${env.rootFolder}\\${env.assetFolder}`, undefined, true).pipe(
+    this.driveFileSearchQuery.execute(env.photoFolder, undefined, true).pipe(
       switchMap(_ => concat(...photoProcessors$)),
       tap(x => photos.push(x)),
       filter(x => photos.length >= photoProcessors$.length),
@@ -144,7 +144,7 @@ export class AdminPhotoUploadComponent implements OnInit {
       return res;
     });
 
-    const uploaders$ = photos.map(photo => this.driveUploadCommand.execute(photo.file, `${env.rootFolder}\\${env.assetFolder}`));
+    const uploaders$ = photos.map(photo => this.driveUploadCommand.execute(photo.file, env.photoFolder));
 
     return zip(...uploaders$).pipe(
       map(_ => this.onDriveUploads(_, model))

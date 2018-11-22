@@ -36,7 +36,7 @@ export class PageDatabase {
       this.pages = (cachedItem.pages || []).map(page => DomainHelper.adapt(Page, page));
     }
 
-    this.observable = this.driveFileSearchQuery.execute(`${env.rootFolder}\\${env.database}`).pipe(
+    this.observable = this.driveFileSearchQuery.execute(env.database).pipe(
       switchMap(files => this.onDriveFileSearch(files)),
       share()
     );

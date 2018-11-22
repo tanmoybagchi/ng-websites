@@ -5,7 +5,11 @@ import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
 import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { MaterialCmsModule, CanvasPhotoCompressor, CanvasPhotoResizer } from 'material-cms';
 import { MaterialHelpersModule } from 'material-helpers';
+import { MySitePages } from './my-site-pages';
+import { GDrivePageDatabase } from './gdrive-page-database.service';
+import { GDriveAssetUploader } from './gdrive-asset-uploader.service';
 
 @NgModule({
   imports: [
@@ -17,6 +21,7 @@ import { MaterialHelpersModule } from 'material-helpers';
     MatCardModule,
     MatDatepickerModule,
     MatDialogModule,
+    MaterialCmsModule.forRoot(MySitePages, GDrivePageDatabase, CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -45,6 +50,7 @@ import { MaterialHelpersModule } from 'material-helpers';
     MatCardModule,
     MatDatepickerModule,
     MatDialogModule,
+    MaterialCmsModule,
     MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,

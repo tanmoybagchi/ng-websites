@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf, Type } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
 import { MatButtonModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
@@ -15,7 +15,8 @@ import { PageStatusComponent } from './page/status/page-status.component';
 import { PageViewComponent } from './page/view/page-view.component';
 import { PhotoGalleryComponent } from './photo/gallery/photo-gallery.component';
 import { PhotoListComponent } from './photo/list/photo-list.component';
-import { PhotoProcessor, PHOTO_PROCESSOR } from './photo/upload/photo-processor';
+import { PhotoCompressor, PHOTO_COMPRESSOR } from './photo/upload/photo-compressor';
+import { PhotoResizer, PHOTO_RESIZER } from './photo/upload/photo-resizer';
 import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
 import { PhotoViewerComponent } from './photo/viewer/photo-viewer.component';
 import { SitePages, SITE_PAGES } from './site-pages';
@@ -79,14 +80,16 @@ export class MaterialCmsModule {
     }
   }
 
-  static forRoot(sitePages: SitePages, pageDatabase: PageDatabase, photoProcessor: PhotoProcessor, assetUploader: AssetUploader) {
+  // tslint:disable-next-line:max-line-length
+  static forRoot(sitePages: Type<SitePages>, pageDatabase: Type<PageDatabase>, photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {
     return <ModuleWithProviders<MaterialCmsModule>>{
       ngModule: MaterialCmsModule,
       providers: [
         { provide: ASSET_UPLOADER, useClass: assetUploader },
         { provide: PAGE_DATABASE, useClass: pageDatabase },
-        { provide: PHOTO_PROCESSOR, useClass: photoProcessor },
-        { provide: SITE_PAGES, useValue: sitePages },
+        { provide: PHOTO_COMPRESSOR, useClass: photoCompressor },
+        { provide: PHOTO_RESIZER, useClass: photoResizer },
+        { provide: SITE_PAGES, useClass: sitePages },
       ]
     };
   }

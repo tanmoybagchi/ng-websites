@@ -26,6 +26,12 @@
       "material-helpers/*": [
         "dist/material-helpers/*"
       ],
+      "material-cms": [
+        "dist/material-cms"
+      ],
+      "material-cms/*": [
+        "dist/material-cms/*"
+      ]
     },
     "outDir": "../../out-tsc/app",
     "types": []

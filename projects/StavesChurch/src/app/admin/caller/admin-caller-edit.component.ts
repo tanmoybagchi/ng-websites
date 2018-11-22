@@ -68,7 +68,7 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveUploadCommand.execute(this.file, `${env.rootFolder}\\${env.assetFolder}`).pipe(
+    this.driveUploadCommand.execute(this.file, env.docFolder).pipe(
       tap(x => this.onUpload(x)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))

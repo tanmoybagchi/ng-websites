@@ -1,4 +1,4 @@
-import { RuleBuilder, RulesEngine } from 'core';
+import { RuleBuilder, RulesEngine, Result } from 'core';
 import { Page } from '../../page';
 
 export class PageApprovalRules {
@@ -20,6 +20,12 @@ export class PageApprovalRules {
   }
 
   check(model: Page) {
-    return this.rulesEngine.check(model);
+    // I should be able to just do 'return this.rulesEngine.check(model);'
+    // However the compiler can't handle it as it can't find the definition for Result.
+    // If I just add Result to the imports, VSCode might remove it trying to optimize.
+    // So this workaround.
+    let res: Result;
+    res = this.rulesEngine.check(model);
+    return res;
   }
 }
