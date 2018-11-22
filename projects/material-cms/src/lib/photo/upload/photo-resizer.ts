@@ -2,7 +2,8 @@ import { Observable } from 'rxjs';
 import { InjectionToken } from '@angular/core';
 
 export interface PhotoResizer {
-  resize(photo: { width: number; height: number; file: File; }, newSize: { name: string, size: number }): Observable<PhotoResizer.Result>;
+  // tslint:disable-next-line:max-line-length
+  resize(photo: { width: number; height: number; file: File; }, newSize: { name: string, dimension: number }): Observable<PhotoResizer.Result>;
 }
 
 export namespace PhotoResizer {

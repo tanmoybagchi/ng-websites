@@ -2,13 +2,13 @@ import { ValueObject } from 'core';
 
 export class Photo {
   static readonly SIZES = [
-    { name: 'Original', size: -1 },
-    { name: 'Thumbnail_Small', size: 128 },
-    { name: 'Thumbnail_Big', size: 256 },
-    { name: 'Size_XS', size: 599 },
-    { name: 'Size_SM', size: 959 },
-    { name: 'Size_MD', size: 1279 },
-    { name: 'Size_LG', size: 1919 },
+    { name: 'Original', dimension: -1 },
+    { name: 'Thumbnail_Small', dimension: 128 },
+    { name: 'Thumbnail_Big', dimension: 256 },
+    { name: 'Size_XS', dimension: 599 },
+    { name: 'Size_SM', dimension: 959 },
+    { name: 'Size_MD', dimension: 1279 },
+    { name: 'Size_LG', dimension: 1919 },
   ];
 
   identifier = '';
@@ -30,7 +30,7 @@ export class Photo {
         encodeURI(pc.location) :
         encodeURIComponent(pc.location);
 
-      const size = Photo.SIZES.find(x => x.size === pc.height || x.size === pc.width);
+      const size = Photo.SIZES.find(x => x.dimension === pc.height || x.dimension === pc.width);
 
       if (size === null || size === undefined) {
         this.original = pc;

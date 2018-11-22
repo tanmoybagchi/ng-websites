@@ -32,6 +32,8 @@ export * from './lib/photo/list/photo-list.component';
 export * from './lib/photo/photo';
 export * from './lib/photo/photo-added.event';
 export * from './lib/photo/photo-query.service';
+export * from './lib/photo/upload/canvas-photo-compressor.service';
+export * from './lib/photo/upload/canvas-photo-resizer.service';
 export * from './lib/photo/upload/photo-compressor';
 export * from './lib/photo/upload/photo-resizer';
 export * from './lib/photo/upload/photo-upload.component';

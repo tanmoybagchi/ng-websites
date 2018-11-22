@@ -23,15 +23,15 @@ export class CanvasPhotoProcessor implements PhotoProcessor {
           let width = 0;
           let height = 0;
 
-          if (item.size === -1) {
+          if (item.dimension === -1) {
             width = img.width;
             height = img.height;
           } else {
             if (img.height > img.width) {
-              width = item.size;
+              width = item.dimension;
               height = Math.round(width / aspect_ratio);
             } else {
-              height = item.size;
+              height = item.dimension;
               width = Math.round(height * aspect_ratio);
             }
           }
