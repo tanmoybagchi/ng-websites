@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class PageTitleComponent implements OnInit {
   @Input() name = '';
-  @Input() canAddNew = true;
+  @Input() canAddNew = false;
   @Output() addNew = new EventEmitter<{}>(true);
 
   constructor() { }
