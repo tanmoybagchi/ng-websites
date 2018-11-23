@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DomainHelper } from 'core';
-import { Ministries, Ministry } from '@app/ministries/ministries';
-import { MinistriesModule } from '@app/ministries/ministries.module';
-import { PageCurrentQuery } from '@app/page/page-current-query.service';
+import { PageCurrentQuery } from 'material-cms';
 import { map } from 'rxjs/operators';
+import { Ministries } from './ministries';
 
-@Injectable({ providedIn: MinistriesModule })
+@Injectable({ providedIn: 'root' })
 export class MinistriesCurrentQuery {
   constructor(
     private pageCurrentQuery: PageCurrentQuery,

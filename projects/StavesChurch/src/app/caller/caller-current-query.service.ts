@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CallerModule } from '@app/caller/caller.module';
-import { PagesCurrentQuery } from '@app/page/pages-current-query.service';
 import { DomainHelper } from 'core';
+import { PagesCurrentQuery } from 'material-cms';
 import { map } from 'rxjs/operators';
 import { Caller } from './caller';
 
-@Injectable({ providedIn: CallerModule })
+@Injectable({ providedIn: 'root' })
 export class CallerCurrentQuery {
   constructor(
     private pagesCurrentQuery: PagesCurrentQuery,

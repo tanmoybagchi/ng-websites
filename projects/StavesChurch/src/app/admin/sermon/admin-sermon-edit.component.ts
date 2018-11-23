@@ -1,13 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PageEditBase } from '@app/admin/page/page-edit-base';
-import { environment as env } from '@env/environment';
-import { AutoFocusService, ErrorFocusService, EventManagerService, Result } from 'core';
-import { DriveFile, DriveUploadCommand } from 'gapi';
+import { ErrorFocusService, EventManagerService, Result } from 'core';
+import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand, SitePages, SITE_PAGES } from 'material-cms';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { PageUpdateCommand } from '../page/commands/page-update-command.service';
-import { PageIdQuery } from '../page/queries/page-id-query.service';
 import { AdminSermon } from './admin-sermon';
 import { AdminSermonApprovalRules } from './admin-sermon-approval-rules';
 
@@ -22,16 +18,16 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
   protected approvalRules = new AdminSermonApprovalRules();
 
   constructor(
-    autoFocusService: AutoFocusService,
+    @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
+    @Inject(SITE_PAGES) sitePages: SitePages,
     errorFocusService: ErrorFocusService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
-    private driveUploadCommand: DriveUploadCommand,
     private eventManagerService: EventManagerService,
     route: ActivatedRoute,
     router: Router,
   ) {
-    super(autoFocusService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
   }
 
   onAddNewClick() {
@@ -58,16 +54,16 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveUploadCommand.execute(this.file, env.audioFolder).pipe(
+    this.assetUploader.uploadAudio(this.file).pipe(
       map(x => this.onUpload(x)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe();
   }
 
-  private onUpload(x: DriveFile) {
+  private onUpload(x: AssetUploader.Result) {
     this.model.content.title = this.file.name;
-    this.model.content.location = x.webContentLink.replace('&export=download', '');
+    this.model.content.location = x.location.replace('&export=download', '');
     this.saveStream.next();
   }
 

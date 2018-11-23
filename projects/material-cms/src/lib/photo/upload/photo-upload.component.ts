@@ -1,15 +1,14 @@
 import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Result } from 'core';
-import { concat, EMPTY, Observable, zip, from } from 'rxjs';
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
-import { PageDatabase, PAGE_DATABASE } from '../../page-database';
-import { PhotoProcessor, PHOTO_PROCESSOR } from './photo-processor';
+import { EMPTY, from, zip } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { AssetUploader, ASSET_UPLOADER } from '../../asset-uploader';
+import { Page } from '../../page';
+import { PageDatabase, PAGE_DATABASE } from '../../page-database';
+import { Photo, PhotoContent } from '../photo';
 import { PhotoCompressor, PHOTO_COMPRESSOR } from './photo-compressor';
 import { PhotoResizer, PHOTO_RESIZER } from './photo-resizer';
-import { Photo, PhotoContent } from '../photo';
-import { Page } from '../../page';
 
 @Component({
   selector: 'cms-photo-upload',
@@ -23,7 +22,6 @@ export class PhotoUploadComponent {
 
   constructor(
     @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase,
-    @Inject(PHOTO_PROCESSOR) private photoProcessor: PhotoProcessor,
     @Inject(PHOTO_COMPRESSOR) private photoCompressor: PhotoCompressor,
     @Inject(PHOTO_RESIZER) private photoResizer: PhotoResizer,
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,

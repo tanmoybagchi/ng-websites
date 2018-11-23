@@ -1,4 +1,4 @@
-import { Page } from '@app/admin/page/page';
+import { Page } from 'material-cms';
 import { SermonContent } from '@app/sermon/sermon';
 
 export class AdminSermon extends Page<SermonContent> {

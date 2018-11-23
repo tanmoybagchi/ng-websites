@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageEditBase } from '@app/admin/page/page-edit-base';
+import { PageEditBase } from 'material-cms';
 import { AdminAnnouncement } from './admin-announcement';
 import { AdminAnnouncementApprovalRules } from './admin-announcement-approval-rules';
 

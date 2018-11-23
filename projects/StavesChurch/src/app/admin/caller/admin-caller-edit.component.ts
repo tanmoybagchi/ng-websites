@@ -1,14 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment as env } from '@env/environment';
-import { AutoFocusService, ErrorFocusService, EventManagerService, Result } from 'core';
-import { DriveFile, DriveUploadCommand } from 'gapi';
+import { ErrorFocusService, EventManagerService, Result } from 'core';
+import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand, SitePages, SITE_PAGES } from 'material-cms';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { PageUpdateCommand } from '../page/commands/page-update-command.service';
-import { PageEditBase } from '../page/page-edit-base';
-import { PageIdQuery } from '../page/queries/page-id-query.service';
 import { AdminCaller } from './admin-caller';
 import { AdminCallerApprovalRules } from './admin-caller-approval-rules';
 
@@ -24,17 +20,17 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
   protected approvalRules = new AdminCallerApprovalRules();
 
   constructor(
-    autoFocusService: AutoFocusService,
+    @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
+    @Inject(SITE_PAGES) sitePages: SitePages,
     errorFocusService: ErrorFocusService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
-    private driveUploadCommand: DriveUploadCommand,
     private eventManagerService: EventManagerService,
     private sanitizer: DomSanitizer,
     route: ActivatedRoute,
     router: Router,
   ) {
-    super(autoFocusService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
   }
 
   onPage(model: AdminCaller) {
@@ -68,16 +64,16 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.driveUploadCommand.execute(this.file, env.docFolder).pipe(
+    this.assetUploader.uploadDocument(this.file).pipe(
       tap(x => this.onUpload(x)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe();
   }
 
-  private onUpload(x: DriveFile) {
+  private onUpload(x: AssetUploader.Result) {
     this.model.content.title = this.file.name;
-    this.model.content.location = x.webContentLink.replace('&export=download', '');
+    this.model.content.location = x.location.replace('&export=download', '');
     this.sanitizedLocation = this.sanitizer.bypassSecurityTrustResourceUrl(this.model.content.location);
     this.saveStream.next();
   }

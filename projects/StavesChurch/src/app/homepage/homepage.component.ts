@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Homepage } from '@app/homepage/homepage';
-import { Page } from '@app/page/page';
-import { PageCurrentQuery } from '@app/page/page-current-query.service';
 import { DomainHelper, Result } from 'core';
+import { PageCurrentQuery } from 'material-cms';
 import { EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -23,7 +22,7 @@ export class HomepageComponent implements OnInit {
     ).subscribe(_ => this.onQuery(_));
   }
 
-  onQuery(page: Page) {
+  onQuery(page) {
     // tslint:disable-next-line:no-unused-expression
     page && (this.model = DomainHelper.adapt(Homepage, page.content));
   }

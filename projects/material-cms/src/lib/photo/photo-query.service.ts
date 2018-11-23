@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DomainHelper } from 'core';
 import { map } from 'rxjs/operators';
-import { PagesCurrentQuery } from '../page/queries/pages-current-query.service';
+import { PageDatabase, PAGE_DATABASE } from '../page-database';
 import { Photo } from './photo';
 
 @Injectable({ providedIn: 'root' })
 export class PhotoQuery {
   constructor(
-    private pagesCurrentQuery: PagesCurrentQuery
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
   execute() {
-    return this.pagesCurrentQuery.execute('photo').pipe(
+    return this.pageDatabase.get('photo').pipe(
       map(pages => pages.map(item => {
         const photo = DomainHelper.adapt(Photo, item);
         photo.setSizes(JSON.parse(<string>item.content));

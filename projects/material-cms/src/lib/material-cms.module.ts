@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule, Optional, SkipSelf, Type } from '@angular/core';
+import { ModuleWithProviders, NgModule, Type } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
 import { MatButtonModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
@@ -24,6 +25,7 @@ import { SitePages, SITE_PAGES } from './site-pages';
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     MatButtonModule,
     MatCardModule,
@@ -74,11 +76,11 @@ import { SitePages, SITE_PAGES } from './site-pages';
   ]
 })
 export class MaterialCmsModule {
-  constructor(@Optional() @SkipSelf() parentModule: MaterialCmsModule) {
+  /* constructor(@Optional() @SkipSelf() parentModule: MaterialCmsModule) {
     if (parentModule) {
       throw new Error('MaterialCmsModule is already loaded. Import it in the AppModule only');
     }
-  }
+  } */
 
   // tslint:disable-next-line:max-line-length
   static forRoot(sitePages: Type<SitePages>, pageDatabase: Type<PageDatabase>, photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {

@@ -12,8 +12,6 @@ import { CallerModule } from './caller/caller.module';
 import { EventsModule } from './events/events.module';
 import { HomepageModule } from './homepage/homepage.module';
 import { MinistriesModule } from './ministries/ministries.module';
-import { PageModule } from './page/page.module';
-import { PhotoModule } from './photo/photo.module';
 import { SecurityModule } from './security/security.module';
 import { SermonModule } from './sermon/sermon.module';
 import { SharedModule } from './shared/shared.module';
@@ -32,8 +30,6 @@ import { SharedModule } from './shared/shared.module';
     GapiModule.forRoot({ id: env.g_serviceaccount_id, password: env.g_serviceaccount_key, scope: env.g_serviceaccount_scope }),
     HomepageModule,
     MinistriesModule,
-    PageModule,
-    PhotoModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,
     SermonModule,

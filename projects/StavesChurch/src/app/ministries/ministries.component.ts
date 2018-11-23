@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Ministries } from '@app/ministries/ministries';
-import { MinistriesCurrentQuery } from '@app/ministries/ministries-current-query.service';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { MinistriesCurrentQuery } from './ministries-current-query.service';
 
 @Component({
   templateUrl: './ministries.component.html'

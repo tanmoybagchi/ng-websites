@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Ministry } from '@app/ministries/ministries';
-import { PageEditBase } from '../page/page-edit-base';
+import { PageEditBase } from 'material-cms';
 import { AdminMinistries } from './admin-ministries';
 import { AdminMinistriesApprovalRules } from './admin-ministries-approval-rules';
 

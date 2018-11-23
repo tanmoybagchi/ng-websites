@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { PagesCurrentQuery } from '@app/page/pages-current-query.service';
 import { DomainHelper } from 'core';
+import { PagesCurrentQuery } from 'material-cms';
 import { map } from 'rxjs/operators';
 import { Sermon } from './sermon';
 import { SermonModule } from './sermon.module';

@@ -1,27 +1,21 @@
-<mat-toolbar class="generalError" color="warn" *ngIf="errors?.general?.default">
-  <mat-toolbar-row *ngFor="let item of errors.general.default">
-    <span>{{item}}</span>
-  </mat-toolbar-row>
-</mat-toolbar>
+<page-title name="Announcement Edit"></page-title>
 
-<mat-toolbar>
-  <span>Announcement edit</span>
-</mat-toolbar>
+<general-error [errors]="errors"></general-error>
 
 <mat-card>
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="start baseline" fxLayoutGap="2em">
       <mat-form-field style="height: 6em; width: 9em">
-        <input matInput [matDatepicker]="fromPicker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom" (dateChange)="saveStream.next()"
-          [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
+        <input matInput [matDatepicker]="fromPicker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom"
+          (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
         <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
         <mat-datepicker #fromPicker></mat-datepicker>
         <mat-error>{{errors?.effectiveFrom}}</mat-error>
       </mat-form-field>
 
       <mat-form-field style="height: 6em; width: 9em">
-        <input matInput [matDatepicker]="toPicker" placeholder="Effective to" [(ngModel)]="model.effectiveTo" (dateChange)="saveStream.next()"
-          [errorStateMatcher]="createErrorStateMatcher('effectiveTo')" [disabled]="readOnly">
+        <input matInput [matDatepicker]="toPicker" placeholder="Effective to" [(ngModel)]="model.effectiveTo"
+          (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveTo')" [disabled]="readOnly">
         <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
         <mat-datepicker #toPicker></mat-datepicker>
         <mat-error>{{errors?.effectiveTo}}</mat-error>
@@ -31,18 +25,19 @@
     </div>
 
     <mat-form-field style="width: 100%; margin-top: 1em;">
-      <input matInput placeholder="Title" maxlength="128" [(ngModel)]="model.content.title" (change)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('content.title')"
-        [disabled]="readOnly">
+      <input matInput placeholder="Title" maxlength="128" [(ngModel)]="model.content.title" (change)="saveStream.next()"
+        [errorStateMatcher]="createErrorStateMatcher('content.title')" [disabled]="readOnly">
       <mat-error>{{errors?.content?.title}}</mat-error>
     </mat-form-field>
 
-    <editor [content]="model.content.description" (changed)="onContentChange($event)" [disabled]="readOnly"></editor>
+    <cms-editor [content]="model.content.description" (changed)="onContentChange($event)" [disabled]="readOnly"></cms-editor>
   </mat-card-content>
 
   <mat-card-actions>
-    <page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)" (change)="onChange($event)"
-      (delete)="onDelete($event)" (recall)="onRecall($event)" (recover)="onRecover($event)" (error)="onError($event)"></page-command-buttons>
+    <cms-page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)"
+      (change)="onChange($event)" (delete)="onDelete($event)" (recall)="onRecall($event)" (recover)="onRecover($event)"
+      (error)="onError($event)"></cms-page-command-buttons>
     <br>
-    <page-status [model]="model"></page-status>
+    <cms-page-status [model]="model"></cms-page-status>
   </mat-card-actions>
 </mat-card>
