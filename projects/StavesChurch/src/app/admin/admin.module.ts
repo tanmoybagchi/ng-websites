@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HomepageModule } from '@app/homepage/homepage.module';
 import { SharedModule } from '@app/shared/shared.module';
+import { MaterialCmsModule } from 'material-cms';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
@@ -17,6 +18,7 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     AdminRoutingModule,
     SharedModule,
     HomepageModule,
+    MaterialCmsModule,
   ],
   declarations: [
     AdminAnnouncementEditComponent,

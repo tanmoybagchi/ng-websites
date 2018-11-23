@@ -76,12 +76,6 @@ import { SitePages, SITE_PAGES } from './site-pages';
   ]
 })
 export class MaterialCmsModule {
-  /* constructor(@Optional() @SkipSelf() parentModule: MaterialCmsModule) {
-    if (parentModule) {
-      throw new Error('MaterialCmsModule is already loaded. Import it in the AppModule only');
-    }
-  } */
-
   // tslint:disable-next-line:max-line-length
   static forRoot(sitePages: Type<SitePages>, pageDatabase: Type<PageDatabase>, photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {
     return <ModuleWithProviders<MaterialCmsModule>>{
