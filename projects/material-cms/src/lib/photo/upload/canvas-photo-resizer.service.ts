@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Observable, EMPTY } from 'rxjs';
+import { fromEvent, Observable, EMPTY, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PhotoResizer } from './photo-resizer';
 
@@ -10,7 +10,7 @@ export class CanvasPhotoResizer implements PhotoResizer {
   resize(photo: { width: number; height: number; file: File; }, newSize: { name: string, dimension: number }) {
     const img = new Image();
 
-    const res$ = fromEvent(img, 'load').pipe(
+    const resizer$ = fromEvent(img, 'load').pipe(
       switchMap(_ => {
         window.URL.revokeObjectURL(img.src);
 
@@ -33,7 +33,7 @@ export class CanvasPhotoResizer implements PhotoResizer {
         }
 
         if (height > img.naturalHeight || width > img.naturalWidth) {
-          return EMPTY;
+          return of(result);
         }
 
         const canvas = document.createElement('canvas');
@@ -69,6 +69,6 @@ export class CanvasPhotoResizer implements PhotoResizer {
 
     img.src = window.URL.createObjectURL(photo.file);
 
-    return res$;
+    return resizer$;
   }
 }

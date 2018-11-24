@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
 import { MatButtonModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MaterialHelpersModule } from 'material-helpers';
 import { AssetUploader, ASSET_UPLOADER } from './asset-uploader';
 import { ChooseExternalLinkComponent } from './editor/choose-external-link.component';
 import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
@@ -31,6 +32,7 @@ import { SitePages, SITE_PAGES } from './site-pages';
     MatCardModule,
     MatDatepickerModule,
     MatDialogModule,
+    MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

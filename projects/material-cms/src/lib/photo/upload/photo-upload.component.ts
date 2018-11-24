@@ -74,8 +74,9 @@ export class PhotoUploadComponent {
       tap(file => this.previewPhoto(file)),
       switchMap(file => this.photoCompressor.compress(file)),
       map(photo => Photo.SIZES.map(size => ({ photo, size }))),
-      switchMap(photos => zip(photos.map(x => this.photoResizer.resize(x.photo, x.size)))),
-      switchMap(photos => zip(photos.map(x => this.assetUploader.uploadPhoto(x.file).pipe(
+      switchMap(photos => zip(...photos.map(x => this.photoResizer.resize(x.photo, x.size)))),
+      map(photos => photos.filter(p => p.width || p.height)),
+      switchMap(photos => zip(...photos.map(x => this.assetUploader.uploadPhoto(x.file).pipe(
         map(_ => ({ height: x.height, width: x.width, fileName: x.file.name, location: _.location, lastModified: x.file.lastModified }))
       )))),
       map(photos => {
@@ -109,7 +110,7 @@ export class PhotoUploadComponent {
 
   private isPhoto(file: File) {
     if (!file.type.startsWith('image')) {
-      file['errors'] = Result.CreateErrorResult('This is not a photo.');
+      this.onError(Result.CreateErrorResult('This is not a photo.'), file);
       return false;
     }
 
