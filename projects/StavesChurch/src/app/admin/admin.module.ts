@@ -1,8 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+// tslint:disable-next-line:max-line-length
+import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { HomepageModule } from '@app/homepage/homepage.module';
-import { SharedModule } from '@app/shared/shared.module';
 import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
 import { MaterialCmsViewModule } from 'material-cms-view';
+import { MaterialHelpersModule } from 'material-helpers';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
@@ -18,10 +23,34 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
 @NgModule({
   imports: [
     AdminRoutingModule,
-    SharedModule,
+    CommonModule,
+    FlexLayoutModule,
+    FormsModule,
     HomepageModule,
-    MaterialCmsViewModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatDialogModule,
     MaterialCmsAdminModule.forRoot(CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
+    MaterialCmsViewModule,
+    MaterialHelpersModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSortModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatTooltipModule,
   ],
   declarations: [
     AdminAnnouncementEditComponent,
