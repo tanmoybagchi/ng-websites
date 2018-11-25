@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Result } from 'core';
-import { EMPTY, from, zip } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, from, zip, of, concat } from 'rxjs';
+import { filter, map, switchMap, tap, take } from 'rxjs/operators';
 import { AssetUploader, ASSET_UPLOADER } from '../../asset-uploader';
 import { Page } from '../../page';
 import { PageDatabase, PAGE_DATABASE } from '../../page-database';
@@ -69,43 +69,12 @@ export class PhotoUploadComponent {
   }
 
   private handleFiles() {
-    from(this.files).pipe(
-      filter(file => this.isPhoto(file)),
-      tap(file => this.previewPhoto(file)),
-      switchMap(file => this.photoCompressor.compress(file)),
-      map(photo => Photo.SIZES.map(size => ({ photo, size }))),
-      switchMap(photos => zip(...photos.map(x => this.photoResizer.resize(x.photo, x.size)))),
-      map(photos => photos.filter(p => p.width || p.height)),
-      switchMap(photos => zip(...photos.map(x => this.assetUploader.uploadPhoto(x.file).pipe(
-        map(_ => ({ height: x.height, width: x.width, fileName: x.file.name, location: _.location, lastModified: x.file.lastModified }))
-      )))),
-      map(photos => {
-        const model = new Page<PhotoContent[]>();
+    const fileHandlers = Array.from(this.files)
+      .filter(file => this.isPhoto(file))
+      .map(photo => this.previewPhoto(photo))
+      .map(photo => this.processAndUpload(photo));
 
-        model.kind = 'photo';
-        model.status = 'Approved';
-        model.effectiveFrom = new Date();
-        model.content = photos.map(photo => {
-          const res = new PhotoContent();
-
-          res.fileName = photo.fileName;
-          res.height = photo.height;
-          res.location = photo.location;
-          res.width = photo.width;
-
-          return res;
-        });
-
-        return { model, lastModified: photos[0].lastModified };
-      }),
-      switchMap(x => this.pageDatabase.add(x.model).pipe(map(_ => ({ ..._, lastModified: x.lastModified })))),
-      tap(x => {
-        const file = Array.from(this.files).find(f => f.lastModified === x.lastModified);
-        if (file) {
-          file['isUploading'] = false;
-        }
-      })
-    ).subscribe();
+    concat(...fileHandlers).subscribe();
   }
 
   private isPhoto(file: File) {
@@ -121,6 +90,61 @@ export class PhotoUploadComponent {
     file['isUploading'] = true;
     file['objectUrl'] = window.URL.createObjectURL(file);
     file['previewUrl'] = this.sanitizer.bypassSecurityTrustUrl(file['objectUrl']);
+
+    return file;
+  }
+
+  private processAndUpload(photoToUpload: File) {
+    return of(photoToUpload).pipe(
+      switchMap(p => this.compress(p)),
+      switchMap(p => this.resize(p)),
+      switchMap(p => this.upload(p)),
+      switchMap(p => this.saveMetadata(p)),
+      tap(_ => photoToUpload['isUploading'] = false),
+      take(1)
+    );
+  }
+
+  private compress(photo: File) {
+    return this.photoCompressor.compress(photo);
+  }
+
+  private resize(compressedPhoto: PhotoCompressor.Result) {
+    const resizers$ = Photo.SIZES.map(size => this.photoResizer.resize(compressedPhoto, size));
+
+    return zip(...resizers$).pipe(
+      map(resizedPhotos => resizedPhotos.filter(p => p.width || p.height)),
+    );
+  }
+
+  private upload(photos: PhotoResizer.Result[]) {
+    const upload$ = photos.map(photo => this.assetUploader.uploadPhoto(photo.file).pipe(
+      map(uploadResult => ({
+        height: photo.height,
+        width: photo.width,
+        fileName: photo.file.name,
+        location: uploadResult.location
+      }))
+    ));
+
+    return zip(...upload$);
+  }
+
+  private saveMetadata(photos: { height: number; width: number; fileName: string; location: string; }[]) {
+    const page = new Page<PhotoContent[]>();
+    page.kind = 'photo';
+    page.status = 'Approved';
+    page.effectiveFrom = new Date();
+    page.content = photos.map(photo => {
+      const res = new PhotoContent();
+      res.fileName = photo.fileName;
+      res.height = photo.height;
+      res.location = photo.location;
+      res.width = photo.width;
+      return res;
+    });
+
+    return this.pageDatabase.add(page);
   }
 
   cleanUp(f: File) {
