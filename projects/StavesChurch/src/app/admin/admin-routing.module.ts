@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from '@app/security/admin.guard';
-import { PageEditComponent, PageListComponent, PhotoListComponent } from 'material-cms';
+import { PageEditComponent, PageListComponent, PhotoListComponent } from 'material-cms-admin';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
 import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';

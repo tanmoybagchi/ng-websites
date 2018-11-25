@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { environment } from '@env/environment';
-import { SITE_PAGES, SitePages } from 'material-cms';
+import { SITE_PAGES, SitePages } from 'material-cms-view';
 
 @Component({
   templateUrl: './admin-dashboard.component.html'

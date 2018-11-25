@@ -7,8 +7,7 @@ import { SermonCurrentQuery } from '../sermon-current-query.service';
 
 @Component({
   selector: 'app-sermon-summary',
-  templateUrl: './sermon-summary.component.html',
-  styleUrls: ['./sermon-summary.component.scss']
+  templateUrl: './sermon-summary.component.html'
 })
 export class SermonSummaryComponent implements OnInit {
   errors: any;

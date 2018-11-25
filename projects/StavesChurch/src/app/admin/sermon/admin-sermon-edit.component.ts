@@ -1,7 +1,8 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
-import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand, SitePages, SITE_PAGES } from 'material-cms';
+import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
+import { SitePages, SITE_PAGES } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { AdminSermon } from './admin-sermon';

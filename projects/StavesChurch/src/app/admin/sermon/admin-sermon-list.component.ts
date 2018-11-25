@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { convertToParamMap } from '@angular/router';
-import { PageListBase, PageListItem } from 'material-cms';
+import { PageListBase, PageListItem } from 'material-cms-admin';
 import { AdminSermon } from './admin-sermon';
 
 @Component({

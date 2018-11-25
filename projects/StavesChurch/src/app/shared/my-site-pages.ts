@@ -1,4 +1,4 @@
-import { SitePages } from 'material-cms';
+import { SitePages } from 'material-cms-view';
 
 export class MySitePages implements SitePages {
   // This order is important.

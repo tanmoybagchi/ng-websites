@@ -1,0 +1,7 @@
+<div class="photoBackdrop">
+  <div>
+    <img class="photo" #photo (swipeleft)="onSwipeLeft()" (swiperight)="onSwipeRight()">
+    <mat-icon class="prev" (click)="onSwipeRight()">chevron_left</mat-icon>
+    <mat-icon class="next" (click)="onSwipeLeft()">chevron_right</mat-icon>
+  </div>
+</div>

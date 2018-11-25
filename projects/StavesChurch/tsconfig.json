@@ -20,18 +20,24 @@
       "gapi/*": [
         "dist/gapi/*"
       ],
+      "material-cms-view": [
+        "dist/material-cms-view"
+      ],
+      "material-cms-view/*": [
+        "dist/material-cms-view/*"
+      ],
+      "material-cms-admin": [
+        "dist/material-cms-admin"
+      ],
+      "material-cms-admin/*": [
+        "dist/material-cms-admin/*"
+      ],
       "material-helpers": [
         "dist/material-helpers"
       ],
       "material-helpers/*": [
         "dist/material-helpers/*"
       ],
-      "material-cms": [
-        "dist/material-cms"
-      ],
-      "material-cms/*": [
-        "dist/material-cms/*"
-      ]
     },
     "outDir": "../../out-tsc/app",
     "types": []

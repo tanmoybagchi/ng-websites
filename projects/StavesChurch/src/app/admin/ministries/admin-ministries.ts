@@ -1,5 +1,5 @@
 import { Ministries, Ministry } from '@app/ministries/ministries';
-import { Page } from 'material-cms';
+import { Page } from 'material-cms-view';
 
 export class AdminMinistries extends Page<Ministries> {
   kind = 'ministries';

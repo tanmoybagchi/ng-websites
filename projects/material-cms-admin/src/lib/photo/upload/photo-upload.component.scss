@@ -1,0 +1,24 @@
+.img-container {
+  margin-right: .5em;
+
+  img {
+    height: 72px;
+  }
+
+  .spinner-container {
+    background-color: #fff;
+    position: relative;
+    margin: auto;
+    top: -50%;
+    height: 35px;
+    width: 35px;
+    border-radius: 17.5px;
+    z-index: 32767;
+
+    mat-spinner {
+      top: 5px;
+      left: 5px;
+      border-radius: 12.5px;
+    }
+  }
+}

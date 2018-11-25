@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment as env } from '@env/environment';
 import { DriveFile, DriveUploadCommand } from 'gapi';
-import { AssetUploader } from 'material-cms';
+import { AssetUploader } from 'material-cms-admin';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })

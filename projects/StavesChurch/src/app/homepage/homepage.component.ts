@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Homepage } from '@app/homepage/homepage';
 import { DomainHelper, Result } from 'core';
-import { PageCurrentQuery } from 'material-cms';
+import { PageCurrentQuery } from 'material-cms-view';
 import { EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
