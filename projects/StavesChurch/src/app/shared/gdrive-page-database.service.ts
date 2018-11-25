@@ -24,7 +24,7 @@ export class GDrivePageDatabase implements PageDatabase {
     this.initialize();
   }
 
-  initialize(): any {
+  private initialize(): any {
     this.initialising = true;
 
     const cachedItem = this.storage.get('database');
