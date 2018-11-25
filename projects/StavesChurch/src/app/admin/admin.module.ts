@@ -10,7 +10,6 @@ import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';
 import { AdminCallerListComponent } from './caller/admin-caller-list.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
-import { GDriveAdminPageDatabase } from './gdrive-admin-page-database.service';
 import { GDriveAssetUploader } from './gdrive-asset-uploader.service';
 import { AdminMinistriesEditComponent } from './ministries/admin-ministries-edit.component';
 import { AdminSermonEditComponent } from './sermon/admin-sermon-edit.component';
@@ -22,7 +21,7 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     SharedModule,
     HomepageModule,
     MaterialCmsViewModule,
-    MaterialCmsAdminModule.forRoot(GDriveAdminPageDatabase, CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
+    MaterialCmsAdminModule.forRoot(CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
   ],
   declarations: [
     AdminAnnouncementEditComponent,

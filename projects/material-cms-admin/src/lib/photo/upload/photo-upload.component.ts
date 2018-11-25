@@ -1,11 +1,10 @@
 import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Result } from 'core';
-import { Page, Photo, PhotoContent } from 'material-cms-view';
+import { Page, PageDatabase, PAGE_DATABASE, Photo, PhotoContent } from 'material-cms-view';
 import { concat, EMPTY, of, zip } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AssetUploader, ASSET_UPLOADER } from '../../asset-uploader';
-import { AdminPageDatabase, ADMIN_PAGE_DATABASE } from '../../admin-page-database';
 import { PhotoCompressor, PHOTO_COMPRESSOR } from './photo-compressor';
 import { PhotoResizer, PHOTO_RESIZER } from './photo-resizer';
 
@@ -20,7 +19,7 @@ export class PhotoUploadComponent {
   files: FileList;
 
   constructor(
-    @Inject(ADMIN_PAGE_DATABASE) private pageDatabase: AdminPageDatabase,
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase,
     @Inject(PHOTO_COMPRESSOR) private photoCompressor: PhotoCompressor,
     @Inject(PHOTO_RESIZER) private photoResizer: PhotoResizer,
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,

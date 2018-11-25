@@ -2,7 +2,6 @@
  * Public API Surface of material-cms-admin
  */
 
-export * from './lib/admin-page-database';
 export * from './lib/asset-uploader';
 export * from './lib/editor/choose-external-link.component';
 export * from './lib/editor/choose-internal-link.component';

@@ -1,12 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import { Page } from 'material-cms-view';
+import { Page, PAGE_DATABASE, PageDatabase } from 'material-cms-view';
 import { Observable } from 'rxjs';
-import { AdminPageDatabase, ADMIN_PAGE_DATABASE } from '../../admin-page-database';
 
 @Injectable({ providedIn: 'root' })
 export class PageListQuery {
   constructor(
-    @Inject(ADMIN_PAGE_DATABASE) private pageDatabase: AdminPageDatabase
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
   execute(kind: string): Observable<Page[]> {

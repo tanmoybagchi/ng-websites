@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import { DomainHelper, Result } from 'core';
-import { Page } from 'material-cms-view';
+import { Page, PAGE_DATABASE, PageDatabase } from 'material-cms-view';
 import { throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { AdminPageDatabase, ADMIN_PAGE_DATABASE } from '../../admin-page-database';
 
 @Injectable({ providedIn: 'root' })
 export class PageApproveCommand {
   constructor(
-    @Inject(ADMIN_PAGE_DATABASE) private pageDatabase: AdminPageDatabase
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
   execute(model: Page, allowMultipleActivePages = false) {

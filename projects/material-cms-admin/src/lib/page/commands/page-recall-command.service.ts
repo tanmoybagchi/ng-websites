@@ -1,13 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { DomainHelper } from 'core';
-import { Page } from 'material-cms-view';
+import { Page, PAGE_DATABASE, PageDatabase } from 'material-cms-view';
 import { map } from 'rxjs/operators';
-import { AdminPageDatabase, ADMIN_PAGE_DATABASE } from '../../admin-page-database';
 
 @Injectable({ providedIn: 'root' })
 export class PageRecallCommand {
   constructor(
-    @Inject(ADMIN_PAGE_DATABASE) private pageDatabase: AdminPageDatabase
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
   execute(model: Page, forceRecall: boolean) {

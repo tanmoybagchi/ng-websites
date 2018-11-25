@@ -10,7 +10,6 @@ import { AssetUploader, ASSET_UPLOADER } from './asset-uploader';
 import { ChooseExternalLinkComponent } from './editor/choose-external-link.component';
 import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
 import { EditorComponent } from './editor/editor.component';
-import { AdminPageDatabase, ADMIN_PAGE_DATABASE } from './admin-page-database';
 import { PageCommandButtonsComponent } from './page/command-buttons/page-command-buttons.component';
 import { PageEditComponent } from './page/edit/page-edit.component';
 import { PageListComponent } from './page/list/page-list.component';
@@ -71,12 +70,11 @@ import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
 })
 export class MaterialCmsAdminModule {
   // tslint:disable-next-line:max-line-length
-  static forRoot(adminPageDatabase: Type<AdminPageDatabase>, photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {
+  static forRoot(photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {
     return <ModuleWithProviders<MaterialCmsAdminModule>>{
       ngModule: MaterialCmsAdminModule,
       providers: [
         { provide: ASSET_UPLOADER, useClass: assetUploader },
-        { provide: ADMIN_PAGE_DATABASE, useClass: adminPageDatabase },
         { provide: PHOTO_COMPRESSOR, useClass: photoCompressor },
         { provide: PHOTO_RESIZER, useClass: photoResizer },
       ]
