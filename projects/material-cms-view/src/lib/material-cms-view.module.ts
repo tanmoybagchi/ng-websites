@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Type } from '@angular/core';
 import { MatButtonModule, MatCardModule, MatIconModule } from '@angular/material';
-import { MaterialHelpersModule } from 'material-helpers';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhPageTitleModule } from 'mh-page-title';
 import { PageDatabase, PAGE_DATABASE } from './page-database';
 import { PageViewComponent } from './page/view/page-view.component';
 import { PhotoGalleryComponent } from './photo/gallery/photo-gallery.component';
@@ -13,8 +14,9 @@ import { SitePages, SITE_PAGES } from './site-pages';
     CommonModule,
     MatButtonModule,
     MatCardModule,
-    MaterialHelpersModule,
     MatIconModule,
+    MhGeneralErrorModule,
+    MhPageTitleModule,
   ],
   declarations: [
     PageViewComponent,

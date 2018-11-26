@@ -2,9 +2,13 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatListModule, MatMenuModule, MatProgressSpinnerModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatListModule, MatMenuModule, MatProgressSpinnerModule, MatToolbarModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { MaterialHelpersModule } from 'material-helpers';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhGoogleSignInModule } from 'mh-google-sign-in';
+import { MhPageTitleModule } from 'mh-page-title';
+import { MhServerErrorModule } from 'mh-server-error';
+import { MhThrobberModule } from 'mh-throbber';
 
 @NgModule({
   imports: [],
@@ -16,13 +20,16 @@ import { MaterialHelpersModule } from 'material-helpers';
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
-    MaterialHelpersModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MhGeneralErrorModule,
+    MhGoogleSignInModule,
+    MhPageTitleModule,
+    MhServerErrorModule,
+    MhThrobberModule,
     RouterModule,
   ]
 })

@@ -3,7 +3,7 @@ import { HomepageComponent } from '@app/homepage/homepage.component';
 import { MinistriesComponent } from '@app/ministries/ministries.component';
 import { AdminGuard } from '@app/security/admin.guard';
 import { PageViewComponent, PhotoGalleryComponent, PhotoViewerComponent } from 'material-cms-view';
-import { ServerErrorComponent } from 'material-helpers';
+import { ServerErrorComponent } from 'mh-server-error';
 import { AnnouncementsComponent } from './announcement/announcements/announcements.component';
 import { CallerComponent } from './caller/caller.component';
 import { EventsComponent } from './events/events/events.component';
