@@ -4,19 +4,11 @@
 
 <mat-card>
   <mat-card-content>
-    <mat-form-field style="height: 6em; width: 9em">
-      <input matInput [matDatepicker]="picker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom"
-        (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error>{{errors?.effectiveFrom}}</mat-error>
-    </mat-form-field>
+    <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
+      placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
 
-    <mat-form-field style="width: 100%;">
-      <input matInput placeholder="Title" [(ngModel)]="model.content.title" (change)="saveStream.next()"
-        [errorStateMatcher]="createErrorStateMatcher('content.title')" [disabled]="readOnly">
-      <mat-error>{{errors?.content?.title}}</mat-error>
-    </mat-form-field>
+    <input-text label="Title" maxlength="128" [model]="model.content.title" (modelChange)="onTitleChange($event)"
+      [errMsg]="errors?.content?.title"></input-text>
 
     <mat-form-field floatLabel="always" class="mat-form-field--no-underline" style="width: 100%;">
       <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->

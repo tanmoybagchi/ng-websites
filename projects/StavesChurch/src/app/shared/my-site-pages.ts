@@ -3,6 +3,7 @@ import { SitePages } from 'material-cms-view';
 export class MySitePages implements SitePages {
   // This order is important.
   readonly list: { link: string, name: string, xs?: boolean, sm?: boolean, md?: boolean, lg?: boolean }[] = [
+    { link: 'announcement', name: 'Announcements' },
     { link: 'events', name: 'Events', xs: true },
     { link: 'services', name: 'Services', xs: true },
     { link: 'ministries', name: 'Ministries', xs: true },

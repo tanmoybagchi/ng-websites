@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
 import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
 import { SitePages, SITE_PAGES } from 'material-cms-view';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { AdminCaller } from './admin-caller';
 import { AdminCallerApprovalRules } from './admin-caller-approval-rules';
@@ -39,6 +39,16 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
     if (String.hasData(this.model.content.location)) {
       this.sanitizedLocation = this.sanitizer.bypassSecurityTrustResourceUrl(this.model.content.location);
     }
+  }
+
+  onEffectiveFromChange($event) {
+    this.model.effectiveFrom = $event;
+    this.saveStream.next();
+  }
+
+  onTitleChange($event) {
+    this.model.content.title = $event;
+    this.saveStream.next();
   }
 
   onAddNewClick() {

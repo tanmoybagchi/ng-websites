@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
 import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
 import { SitePages, SITE_PAGES } from 'material-cms-view';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { AdminSermon } from './admin-sermon';
 import { AdminSermonApprovalRules } from './admin-sermon-approval-rules';
@@ -29,6 +29,16 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
     router: Router,
   ) {
     super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+  }
+
+  onEffectiveFromChange($event) {
+    this.model.effectiveFrom = $event;
+    this.saveStream.next();
+  }
+
+  onTitleChange($event) {
+    this.model.content.title = $event;
+    this.saveStream.next();
   }
 
   onAddNewClick() {

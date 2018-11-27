@@ -10,6 +10,21 @@ export class AdminAnnouncementEditComponent extends PageEditBase<AdminAnnounceme
   modelCreator = AdminAnnouncement;
   protected approvalRules = new AdminAnnouncementApprovalRules();
 
+  onEffectiveFromChange($event) {
+    this.model.effectiveFrom = $event;
+    this.saveStream.next();
+  }
+
+  onEffectiveToChange($event) {
+    this.model.effectiveTo = $event;
+    this.saveStream.next();
+  }
+
+  onTitleChange($event) {
+    this.model.content.title = $event;
+    this.saveStream.next();
+  }
+
   onContentChange(content) {
     this.model.content.description = content;
     this.saveStream.next();

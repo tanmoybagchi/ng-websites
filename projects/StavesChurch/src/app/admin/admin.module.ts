@@ -6,8 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { HomepageModule } from '@app/homepage/homepage.module';
 import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
-import { MaterialCmsViewModule } from 'material-cms-view';
-import { MaterialHelpersModule } from 'material-helpers';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhInputDateModule } from 'mh-input-date';
+import { MhInputTextModule } from 'mh-input-text';
+import { MhPageTitleModule } from 'mh-page-title';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
@@ -33,8 +35,6 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     MatDatepickerModule,
     MatDialogModule,
     MaterialCmsAdminModule.forRoot(CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
-    MaterialCmsViewModule,
-    MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -51,6 +51,10 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    MhGeneralErrorModule,
+    MhInputDateModule,
+    MhInputTextModule,
+    MhPageTitleModule,
   ],
   declarations: [
     AdminAnnouncementEditComponent,

@@ -3,7 +3,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { EventManagerService, LocalStorageService, Result } from 'core';
 import { Page, SitePages, SITE_PAGES } from 'material-cms-view';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { PageCreateCommand } from '../commands/page-create-command.service';

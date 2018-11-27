@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { MatDialog } from '@angular/material';
 import { EventManagerService, Result } from 'core';
 import { Page } from 'material-cms-view';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { PageApproveCommand, PageApproveResult } from '../commands/page-approve-command.service';

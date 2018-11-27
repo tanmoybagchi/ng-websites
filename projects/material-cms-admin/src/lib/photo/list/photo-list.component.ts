@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { EventManagerService, Result, ScrollbarDimensionService } from 'core';
 import { Photo, PhotoQuery } from 'material-cms-view';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 

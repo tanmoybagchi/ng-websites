@@ -11,6 +11,11 @@ export class PageEditComponent extends PageEditBase<Page> {
   modelCreator = Page;
   protected approvalRules = new PageApprovalRules();
 
+  onEffectiveFromChange(content) {
+    this.model.effectiveFrom = content;
+    this.saveStream.next();
+  }
+
   onContentChange(content) {
     this.model.content = content;
     this.saveStream.next();

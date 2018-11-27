@@ -12,11 +12,7 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     @Inject(SITE_PAGES) sitePages: SitePages,
   ) {
-    this.adminPages = sitePages.list
-      .concat([
-        { link: 'announcement', name: 'Announcements' }
-      ])
-      .sort((a, b) => a.name.localeCompare(b.name));
+    this.adminPages = sitePages.list.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   ngOnInit() {

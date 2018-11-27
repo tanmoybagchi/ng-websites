@@ -3,9 +3,12 @@ import { ModuleWithProviders, NgModule, Type } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { MaterialCmsViewModule } from 'material-cms-view';
-import { MaterialHelpersModule } from 'material-helpers';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhInputDateModule } from 'mh-input-date';
+import { MhInputTextModule } from 'mh-input-text';
+import { MhPageTitleModule } from 'mh-page-title';
 import { AssetUploader, ASSET_UPLOADER } from './asset-uploader';
 import { ChooseExternalLinkComponent } from './editor/choose-external-link.component';
 import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
@@ -26,16 +29,11 @@ import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
     FormsModule,
     MatButtonModule,
     MatCardModule,
-    MatDatepickerModule,
     MatDialogModule,
     MaterialCmsViewModule,
-    MaterialHelpersModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSliderModule,
@@ -44,6 +42,10 @@ import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    MhGeneralErrorModule,
+    MhInputDateModule,
+    MhInputTextModule,
+    MhPageTitleModule,
   ],
   declarations: [
     ChooseExternalLinkComponent,
