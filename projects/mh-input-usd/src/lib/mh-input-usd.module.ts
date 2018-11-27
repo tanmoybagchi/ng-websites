@@ -1,11 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MhInputUsdComponent } from './mh-input-usd.component';
-import { InputUsdComponent } from './input-usd.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { InputUSDComponent } from './input-usd.component';
 
 @NgModule({
-  declarations: [MhInputUsdComponent, InputUsdComponent],
+  declarations: [InputUSDComponent],
   imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
-  exports: [MhInputUsdComponent]
+  exports: [
+    InputUSDComponent
+  ]
 })
 export class MhInputUsdModule { }

@@ -1,11 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MhInputTextComponent } from './mh-input-text.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { InputTextComponent } from './input-text.component';
 
 @NgModule({
-  declarations: [MhInputTextComponent, InputTextComponent],
-  imports: [
+  declarations: [
+    InputTextComponent
   ],
-  exports: [MhInputTextComponent]
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  exports: [
+    InputTextComponent
+  ]
 })
 export class MhInputTextModule { }

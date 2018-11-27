@@ -1,21 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
-import { InputEmailComponent } from './input-email.component';
+import { MatFormFieldModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { InputSelectComponent } from './input-select.component';
 
 @NgModule({
   declarations: [
-    InputEmailComponent
+    InputSelectComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
   ],
   exports: [
-    InputEmailComponent
+    InputSelectComponent
   ]
 })
-export class MhInputEmailModule { }
+export class MhInputSelectModule { }

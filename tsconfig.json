@@ -113,6 +113,12 @@
       ],
       "mh-throbber/*": [
         "dist/mh-throbber/*"
+      ],
+      "mh-input-select": [
+        "dist/mh-input-select"
+      ],
+      "mh-input-select/*": [
+        "dist/mh-input-select/*"
       ]
     }
   }
