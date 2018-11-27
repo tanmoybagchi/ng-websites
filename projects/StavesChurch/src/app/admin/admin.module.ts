@@ -3,8 +3,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
-import { HomepageModule } from '@app/homepage/homepage.module';
+import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
 import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
 import { MhGeneralErrorModule } from 'mh-general-error';
 import { MhInputDateModule } from 'mh-input-date';
@@ -28,19 +27,15 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     CommonModule,
     FlexLayoutModule,
     FormsModule,
-    HomepageModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
     MaterialCmsAdminModule.forRoot(CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,
@@ -50,7 +45,6 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
     MhGeneralErrorModule,
     MhInputDateModule,
     MhInputTextModule,

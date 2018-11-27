@@ -14,6 +14,7 @@ export class GoogleSignInComponent implements OnInit {
   @HostBinding('style.flex') sf = '1 1 auto';
   @Input() client_id = '';
   @Input() scope = '';
+  @Input() login_hint = '';
   @Output() signedIn = new EventEmitter();
   errors: any;
   private endPoint = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -63,12 +64,16 @@ export class GoogleSignInComponent implements OnInit {
   }
 
   private sendToGoogle() {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .append('client_id', this.client_id)
       .append('redirect_uri', window.location.href)
       .append('response_type', 'token')
       .append('include_granted_scopes', 'true')
       .append('scope', this.scope);
+
+    if (String.hasData(this.login_hint)) {
+      params = params.append('login_hint', this.login_hint);
+    }
 
     window.location.replace(`${this.endPoint}?${params.toString()}`);
   }
