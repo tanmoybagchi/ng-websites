@@ -572,65 +572,6 @@
         }
       }
     },
-    "material-helpers": {
-      "root": "projects/material-helpers",
-      "sourceRoot": "projects/material-helpers/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
-        },
-        "@schematics/angular:class": {
-          "spec": false
-        },
-        "@schematics/angular:directive": {
-          "spec": false
-        },
-        "@schematics/angular:guard": {
-          "spec": false
-        },
-        "@schematics/angular:module": {
-          "spec": false
-        },
-        "@schematics/angular:pipe": {
-          "spec": false
-        },
-        "@schematics/angular:service": {
-          "spec": false
-        }
-      },
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/material-helpers/tsconfig.lib.json",
-            "project": "projects/material-helpers/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/material-helpers/src/test.ts",
-            "tsConfig": "projects/material-helpers/tsconfig.spec.json",
-            "karmaConfig": "projects/material-helpers/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/material-helpers/tsconfig.lib.json",
-              "projects/material-helpers/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "gapi": {
       "root": "projects/gapi",
       "sourceRoot": "projects/gapi/src",
@@ -682,65 +623,6 @@
             "tsConfig": [
               "projects/gapi/tsconfig.lib.json",
               "projects/gapi/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "material-cms": {
-      "root": "projects/material-cms",
-      "sourceRoot": "projects/material-cms/src",
-      "projectType": "library",
-      "prefix": "cms",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
-        },
-        "@schematics/angular:class": {
-          "spec": false
-        },
-        "@schematics/angular:directive": {
-          "spec": false
-        },
-        "@schematics/angular:guard": {
-          "spec": false
-        },
-        "@schematics/angular:module": {
-          "spec": false
-        },
-        "@schematics/angular:pipe": {
-          "spec": false
-        },
-        "@schematics/angular:service": {
-          "spec": false
-        }
-      },
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/material-cms/tsconfig.lib.json",
-            "project": "projects/material-cms/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/material-cms/src/test.ts",
-            "tsConfig": "projects/material-cms/tsconfig.spec.json",
-            "karmaConfig": "projects/material-cms/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/material-cms/tsconfig.lib.json",
-              "projects/material-cms/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
