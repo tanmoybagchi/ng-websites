@@ -750,8 +750,8 @@
       }
     },
     "mh-general-error": {
-      "root": "projects/mh-general-error",
-      "sourceRoot": "projects/mh-general-error/src",
+      "root": "projects/material-helpers/mh-general-error",
+      "sourceRoot": "projects/material-helpers/mh-general-error/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -782,24 +782,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-general-error/tsconfig.lib.json",
-            "project": "projects/mh-general-error/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-general-error/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-general-error/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-general-error/src/test.ts",
-            "tsConfig": "projects/mh-general-error/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-general-error/karma.conf.js"
+            "main": "projects/material-helpers/mh-general-error/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-general-error/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-general-error/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-general-error/tsconfig.lib.json",
-              "projects/mh-general-error/tsconfig.spec.json"
+              "projects/material-helpers/mh-general-error/tsconfig.lib.json",
+              "projects/material-helpers/mh-general-error/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -809,8 +809,8 @@
       }
     },
     "mh-google-sign-in": {
-      "root": "projects/mh-google-sign-in",
-      "sourceRoot": "projects/mh-google-sign-in/src",
+      "root": "projects/material-helpers/mh-google-sign-in",
+      "sourceRoot": "projects/material-helpers/mh-google-sign-in/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -841,24 +841,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-google-sign-in/tsconfig.lib.json",
-            "project": "projects/mh-google-sign-in/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-google-sign-in/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-google-sign-in/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-google-sign-in/src/test.ts",
-            "tsConfig": "projects/mh-google-sign-in/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-google-sign-in/karma.conf.js"
+            "main": "projects/material-helpers/mh-google-sign-in/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-google-sign-in/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-google-sign-in/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-google-sign-in/tsconfig.lib.json",
-              "projects/mh-google-sign-in/tsconfig.spec.json"
+              "projects/material-helpers/mh-google-sign-in/tsconfig.lib.json",
+              "projects/material-helpers/mh-google-sign-in/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -868,8 +868,8 @@
       }
     },
     "mh-input-date": {
-      "root": "projects/mh-input-date",
-      "sourceRoot": "projects/mh-input-date/src",
+      "root": "projects/material-helpers/mh-input-date",
+      "sourceRoot": "projects/material-helpers/mh-input-date/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -900,24 +900,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-date/tsconfig.lib.json",
-            "project": "projects/mh-input-date/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-date/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-date/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-date/src/test.ts",
-            "tsConfig": "projects/mh-input-date/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-date/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-date/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-date/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-date/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-date/tsconfig.lib.json",
-              "projects/mh-input-date/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-date/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-date/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -927,8 +927,8 @@
       }
     },
     "mh-input-email": {
-      "root": "projects/mh-input-email",
-      "sourceRoot": "projects/mh-input-email/src",
+      "root": "projects/material-helpers/mh-input-email",
+      "sourceRoot": "projects/material-helpers/mh-input-email/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -959,24 +959,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-email/tsconfig.lib.json",
-            "project": "projects/mh-input-email/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-email/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-email/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-email/src/test.ts",
-            "tsConfig": "projects/mh-input-email/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-email/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-email/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-email/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-email/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-email/tsconfig.lib.json",
-              "projects/mh-input-email/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-email/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-email/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -986,8 +986,8 @@
       }
     },
     "mh-input-integer": {
-      "root": "projects/mh-input-integer",
-      "sourceRoot": "projects/mh-input-integer/src",
+      "root": "projects/material-helpers/mh-input-integer",
+      "sourceRoot": "projects/material-helpers/mh-input-integer/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1018,24 +1018,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-integer/tsconfig.lib.json",
-            "project": "projects/mh-input-integer/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-integer/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-integer/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-integer/src/test.ts",
-            "tsConfig": "projects/mh-input-integer/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-integer/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-integer/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-integer/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-integer/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-integer/tsconfig.lib.json",
-              "projects/mh-input-integer/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-integer/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-integer/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1045,8 +1045,8 @@
       }
     },
     "mh-input-search": {
-      "root": "projects/mh-input-search",
-      "sourceRoot": "projects/mh-input-search/src",
+      "root": "projects/material-helpers/mh-input-search",
+      "sourceRoot": "projects/material-helpers/mh-input-search/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1077,24 +1077,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-search/tsconfig.lib.json",
-            "project": "projects/mh-input-search/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-search/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-search/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-search/src/test.ts",
-            "tsConfig": "projects/mh-input-search/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-search/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-search/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-search/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-search/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-search/tsconfig.lib.json",
-              "projects/mh-input-search/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-search/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-search/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1104,8 +1104,8 @@
       }
     },
     "mh-input-text": {
-      "root": "projects/mh-input-text",
-      "sourceRoot": "projects/mh-input-text/src",
+      "root": "projects/material-helpers/mh-input-text",
+      "sourceRoot": "projects/material-helpers/mh-input-text/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1136,24 +1136,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-text/tsconfig.lib.json",
-            "project": "projects/mh-input-text/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-text/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-text/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-text/src/test.ts",
-            "tsConfig": "projects/mh-input-text/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-text/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-text/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-text/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-text/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-text/tsconfig.lib.json",
-              "projects/mh-input-text/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-text/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-text/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1163,8 +1163,8 @@
       }
     },
     "mh-input-usd": {
-      "root": "projects/mh-input-usd",
-      "sourceRoot": "projects/mh-input-usd/src",
+      "root": "projects/material-helpers/mh-input-usd",
+      "sourceRoot": "projects/material-helpers/mh-input-usd/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1195,24 +1195,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-usd/tsconfig.lib.json",
-            "project": "projects/mh-input-usd/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-usd/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-usd/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-usd/src/test.ts",
-            "tsConfig": "projects/mh-input-usd/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-usd/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-usd/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-usd/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-usd/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-usd/tsconfig.lib.json",
-              "projects/mh-input-usd/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-usd/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-usd/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1222,8 +1222,8 @@
       }
     },
     "mh-page-title": {
-      "root": "projects/mh-page-title",
-      "sourceRoot": "projects/mh-page-title/src",
+      "root": "projects/material-helpers/mh-page-title",
+      "sourceRoot": "projects/material-helpers/mh-page-title/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1254,24 +1254,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-page-title/tsconfig.lib.json",
-            "project": "projects/mh-page-title/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-page-title/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-page-title/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-page-title/src/test.ts",
-            "tsConfig": "projects/mh-page-title/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-page-title/karma.conf.js"
+            "main": "projects/material-helpers/mh-page-title/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-page-title/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-page-title/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-page-title/tsconfig.lib.json",
-              "projects/mh-page-title/tsconfig.spec.json"
+              "projects/material-helpers/mh-page-title/tsconfig.lib.json",
+              "projects/material-helpers/mh-page-title/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1281,8 +1281,8 @@
       }
     },
     "mh-server-error": {
-      "root": "projects/mh-server-error",
-      "sourceRoot": "projects/mh-server-error/src",
+      "root": "projects/material-helpers/mh-server-error",
+      "sourceRoot": "projects/material-helpers/mh-server-error/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1313,24 +1313,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-server-error/tsconfig.lib.json",
-            "project": "projects/mh-server-error/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-server-error/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-server-error/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-server-error/src/test.ts",
-            "tsConfig": "projects/mh-server-error/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-server-error/karma.conf.js"
+            "main": "projects/material-helpers/mh-server-error/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-server-error/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-server-error/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-server-error/tsconfig.lib.json",
-              "projects/mh-server-error/tsconfig.spec.json"
+              "projects/material-helpers/mh-server-error/tsconfig.lib.json",
+              "projects/material-helpers/mh-server-error/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1340,8 +1340,8 @@
       }
     },
     "mh-throbber": {
-      "root": "projects/mh-throbber",
-      "sourceRoot": "projects/mh-throbber/src",
+      "root": "projects/material-helpers/mh-throbber",
+      "sourceRoot": "projects/material-helpers/mh-throbber/src",
       "projectType": "library",
       "prefix": "mh",
       "schematics": {
@@ -1372,24 +1372,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-throbber/tsconfig.lib.json",
-            "project": "projects/mh-throbber/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-throbber/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-throbber/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-throbber/src/test.ts",
-            "tsConfig": "projects/mh-throbber/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-throbber/karma.conf.js"
+            "main": "projects/material-helpers/mh-throbber/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-throbber/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-throbber/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-throbber/tsconfig.lib.json",
-              "projects/mh-throbber/tsconfig.spec.json"
+              "projects/material-helpers/mh-throbber/tsconfig.lib.json",
+              "projects/material-helpers/mh-throbber/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -1399,32 +1399,32 @@
       }
     },
     "mh-input-select": {
-      "root": "projects/mh-input-select",
-      "sourceRoot": "projects/mh-input-select/src",
+      "root": "projects/material-helpers/mh-input-select",
+      "sourceRoot": "projects/material-helpers/mh-input-select/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/mh-input-select/tsconfig.lib.json",
-            "project": "projects/mh-input-select/ng-package.json"
+            "tsConfig": "projects/material-helpers/mh-input-select/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-select/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/mh-input-select/src/test.ts",
-            "tsConfig": "projects/mh-input-select/tsconfig.spec.json",
-            "karmaConfig": "projects/mh-input-select/karma.conf.js"
+            "main": "projects/material-helpers/mh-input-select/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-select/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-select/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/mh-input-select/tsconfig.lib.json",
-              "projects/mh-input-select/tsconfig.spec.json"
+              "projects/material-helpers/mh-input-select/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-select/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
