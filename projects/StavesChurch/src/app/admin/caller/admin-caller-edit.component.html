@@ -10,16 +10,9 @@
     <input-text label="Title" maxlength="128" [model]="model.content.title" (modelChange)="onTitleChange($event)"
       [errMsg]="errors?.content?.title"></input-text>
 
-    <mat-form-field floatLabel="always" class="mat-form-field--no-underline" style="width: 100%;">
-      <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
-      <input matInput placeholder="File" style="display: none">
-      <button mat-raised-button color="accent" style="margin-top: 0.25em" (click)="onAddNewClick()">
-        Choose file
-        <input type="file" #newFile accept="application/pdf" style="display: none" (change)="onNewFileChange($event)">
-      </button>
-    </mat-form-field>
+    <input-file accept="application/pdf" (change)="onFiles($event)"></input-file>
 
-    <section style="height: 100vh" *ngIf="sanitizedLocation">
+    <section style="height: 100vh; margin-top: 1em" *ngIf="sanitizedLocation">
       <object type="application/pdf" [data]="sanitizedLocation" height="100%" width="100%"></object>
     </section>
   </mat-card-content>

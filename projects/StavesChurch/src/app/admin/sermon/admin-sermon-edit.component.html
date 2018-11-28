@@ -10,15 +10,9 @@
     <input-text label="Title" maxlength="128" [model]="model.content.title" (modelChange)="onTitleChange($event)"
       [errMsg]="errors?.content?.title"></input-text>
 
-    <mat-form-field floatLabel="always" class="mat-form-field--no-underline" style="width: 100%;">
-      <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
-      <input matInput placeholder="File" style="display: none">
-      <audio controls preload="metadata" volume="1.0" [src]="model.content.location" style="width: 100%"></audio>
-      <button mat-raised-button color="accent" style="margin-top: 0.25em" (click)="onAddNewClick()">
-        Choose file
-        <input type="file" #newFile accept="audio/*" style="display: none" (change)="onNewFileChange($event)">
-      </button>
-    </mat-form-field>
+    <audio controls preload="metadata" volume="1.0" [src]="model.content.location" style="width: 100%"></audio>
+
+    <input-file accept="audio/*" (change)="onFiles($event)"></input-file>
   </mat-card-content>
 
   <mat-card-actions>

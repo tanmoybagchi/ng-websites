@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
 import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
@@ -9,12 +9,10 @@ import { AdminSermon } from './admin-sermon';
 import { AdminSermonApprovalRules } from './admin-sermon-approval-rules';
 
 @Component({
-  templateUrl: './admin-sermon-edit.component.html',
-  styleUrls: ['./admin-sermon-edit.component.scss']
+  templateUrl: './admin-sermon-edit.component.html'
 })
 export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
   file: File;
-  @ViewChild('newFile') private newFileElRef: ElementRef;
   modelCreator = AdminSermon;
   protected approvalRules = new AdminSermonApprovalRules();
 
@@ -41,15 +39,7 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
     this.saveStream.next();
   }
 
-  onAddNewClick() {
-    this.newFileElRef.nativeElement.click();
-  }
-
-  onNewFileChange($event: Event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-
-    const files = (<HTMLInputElement>this.newFileElRef.nativeElement).files;
+  onFiles(files: FileList) {
     if (!files.length) {
       return;
     }

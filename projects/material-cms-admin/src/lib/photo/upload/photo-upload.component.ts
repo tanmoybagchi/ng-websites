@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Result } from 'core';
 import { Page, PageDatabase, PAGE_DATABASE, Photo, PhotoContent } from 'material-cms-view';
@@ -15,7 +15,6 @@ import { PhotoResizer, PHOTO_RESIZER } from './photo-resizer';
 })
 export class PhotoUploadComponent {
   @Output() done = new EventEmitter();
-  @ViewChild('newFile') private newFileElRef: ElementRef;
   files: FileList;
 
   constructor(
@@ -25,10 +24,6 @@ export class PhotoUploadComponent {
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
     private sanitizer: DomSanitizer,
   ) { }
-
-  onAddNewClick() {
-    this.newFileElRef.nativeElement.click();
-  }
 
   onDoneClick() {
     this.done.emit();
@@ -54,11 +49,8 @@ export class PhotoUploadComponent {
     this.handleFiles();
   }
 
-  onNewFileChange($event: Event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-
-    this.files = (<HTMLInputElement>this.newFileElRef.nativeElement).files;
+  onFiles($event: FileList) {
+    this.files = $event;
     if (!this.files.length) {
       return;
     }

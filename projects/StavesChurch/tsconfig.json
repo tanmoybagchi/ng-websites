@@ -62,6 +62,12 @@
       "mh-input-email/*": [
         "dist/mh-input-email/*"
       ],
+      "mh-input-file": [
+        "dist/mh-input-file"
+      ],
+      "mh-input-file/*": [
+        "dist/mh-input-file/*"
+      ],
       "mh-input-integer": [
         "dist/mh-input-integer"
       ],

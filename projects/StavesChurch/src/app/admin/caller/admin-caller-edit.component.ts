@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
@@ -10,13 +10,11 @@ import { AdminCaller } from './admin-caller';
 import { AdminCallerApprovalRules } from './admin-caller-approval-rules';
 
 @Component({
-  templateUrl: './admin-caller-edit.component.html',
-  styleUrls: ['./admin-caller-edit.component.scss']
+  templateUrl: './admin-caller-edit.component.html'
 })
 export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
   sanitizedLocation: SafeResourceUrl;
   file: File;
-  @ViewChild('newFile') private newFileElRef: ElementRef;
   modelCreator = AdminCaller;
   protected approvalRules = new AdminCallerApprovalRules();
 
@@ -51,15 +49,7 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
     this.saveStream.next();
   }
 
-  onAddNewClick() {
-    this.newFileElRef.nativeElement.click();
-  }
-
-  onNewFileChange($event: Event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-
-    const files = (<HTMLInputElement>this.newFileElRef.nativeElement).files;
+  onFiles(files: FileList) {
     if (!files.length) {
       return;
     }

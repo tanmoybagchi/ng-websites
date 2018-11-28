@@ -7,6 +7,7 @@ import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatFormFieldModu
 import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
 import { MhGeneralErrorModule } from 'mh-general-error';
 import { MhInputDateModule } from 'mh-input-date';
+import { MhInputFileModule } from 'mh-input-file';
 import { MhInputTextModule } from 'mh-input-text';
 import { MhPageTitleModule } from 'mh-page-title';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -47,6 +48,7 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
     MatToolbarModule,
     MhGeneralErrorModule,
     MhInputDateModule,
+    MhInputFileModule,
     MhInputTextModule,
     MhPageTitleModule,
   ],

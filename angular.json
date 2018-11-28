@@ -1432,6 +1432,65 @@
           }
         }
       }
+    },
+    "mh-input-file": {
+      "root": "projects/material-helpers/mh-input-file",
+      "sourceRoot": "projects/material-helpers/mh-input-file/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss",
+          "spec": false
+        },
+        "@schematics/angular:class": {
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false
+        },
+        "@schematics/angular:guard": {
+          "spec": false
+        },
+        "@schematics/angular:module": {
+          "spec": false
+        },
+        "@schematics/angular:pipe": {
+          "spec": false
+        },
+        "@schematics/angular:service": {
+          "spec": false
+        }
+      },
+     "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/material-helpers/mh-input-file/tsconfig.lib.json",
+            "project": "projects/material-helpers/mh-input-file/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/material-helpers/mh-input-file/src/test.ts",
+            "tsConfig": "projects/material-helpers/mh-input-file/tsconfig.spec.json",
+            "karmaConfig": "projects/material-helpers/mh-input-file/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/material-helpers/mh-input-file/tsconfig.lib.json",
+              "projects/material-helpers/mh-input-file/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "core"

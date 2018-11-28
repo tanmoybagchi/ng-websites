@@ -36,8 +36,7 @@ export class InputDateComponent {
     this._style = this.sanitizer.bypassSecurityTrustStyle(value);
   }
 
-  @Output()
-  modelChange: EventEmitter<Date>;
+  @Output() modelChange: EventEmitter<Date>;
 
   inputName: string;
   errorStateMatcher: ErrorStateMatcher;

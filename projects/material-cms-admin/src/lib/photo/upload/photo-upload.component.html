@@ -9,10 +9,7 @@
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="accent" (click)="onAddNewClick()">
-      Choose file(s)
-      <input type="file" accept="image/*" multiple style="display: none" #newFile (change)="onNewFileChange($event)">
-    </button>
+    <input-file accept="image/*" [multiple]="true" label="Choose file(s)" (change)="onFiles($event)"></input-file>
 
     <a mat-raised-button (click)="onDoneClick()">Done</a>
   </mat-card-actions>

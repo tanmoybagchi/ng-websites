@@ -2,7 +2,7 @@
   "name": "repo",
   "version": "1.0.0",
   "scripts": {
-    "build-lib": "run-s clean-lib build-core build-gapi build-mh build-material-cms-view build-material-cms-admin",
+    "build-lib": "run-s -c clean-lib build-core build-gapi build-mh build-material-cms-view build-material-cms-admin",
     "clean-lib": "rmdir /s/q dist",
     "build-core": "ng build core",
     "build-gapi": "ng build gapi",
@@ -11,6 +11,7 @@
     "build-mh-google-sign-in": "ng build mh-google-sign-in",
     "build-mh-input-date": "ng build mh-input-date",
     "build-mh-input-email": "ng build mh-input-email",
+    "build-mh-input-file": "ng build mh-input-file",
     "build-mh-input-integer": "ng build mh-input-integer",
     "build-mh-input-search": "ng build mh-input-search",
     "build-mh-input-select": "ng build mh-input-select",

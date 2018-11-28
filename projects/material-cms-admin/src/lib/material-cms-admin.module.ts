@@ -7,6 +7,7 @@ import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatList
 import { MaterialCmsViewModule } from 'material-cms-view';
 import { MhGeneralErrorModule } from 'mh-general-error';
 import { MhInputDateModule } from 'mh-input-date';
+import { MhInputFileModule } from 'mh-input-file';
 import { MhInputTextModule } from 'mh-input-text';
 import { MhPageTitleModule } from 'mh-page-title';
 import { AssetUploader, ASSET_UPLOADER } from './asset-uploader';
@@ -44,6 +45,7 @@ import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
     MatTooltipModule,
     MhGeneralErrorModule,
     MhInputDateModule,
+    MhInputFileModule,
     MhInputTextModule,
     MhPageTitleModule,
   ],

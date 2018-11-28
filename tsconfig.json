@@ -25,12 +25,6 @@
       "core/*": [
         "dist/core/*"
       ],
-      "material-helpers": [
-        "dist/material-helpers"
-      ],
-      "material-helpers/*": [
-        "dist/material-helpers/*"
-      ],
       "gapi": [
         "dist/gapi"
       ],
@@ -120,6 +114,12 @@
       ],
       "mh-input-select/*": [
         "dist/mh-input-select/*"
+      ],
+      "mh-input-file": [
+        "dist/mh-input-file"
+      ],
+      "mh-input-file/*": [
+        "dist/mh-input-file/*"
       ]
     }
   }
