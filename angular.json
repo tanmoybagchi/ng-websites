@@ -488,7 +488,7 @@
               "./node_modules/typeface-great-vibes/index.css",
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
               "./node_modules/material-icon-font/iconfont/material-icons.css",
-              "projects/VinesToWinesDM/src/styles.scss"
+              "projects/VinesToWinesDM/src/styles/styles.scss"
             ],
             "scripts": [
               "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
@@ -548,7 +548,7 @@
             "styles": [
               "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
               "./node_modules/material-icon-font/iconfont/material-icons.css",
-              "projects/VinesToWinesDM/src/styles.scss"
+              "projects/VinesToWinesDM/src/styles/styles.scss"
             ],
             "scripts": [
               "./node_modules/jsrsasign/lib/jsrsasign-all-min.js"
