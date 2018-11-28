@@ -4,16 +4,8 @@
 
 <mat-card>
   <mat-card-content>
-    <input-date style="height: 6em; width: 9em" placeholder="Effective from" [model]="model.effectiveFrom" [disabled]="readOnly"
-      [errMsg]="errors?.effectiveFrom" (modelChange)="onEffectiveFromChange($event)"></input-date>
-
-    <!-- <mat-form-field style="height: 6em; width: 9em">
-      <input matInput [matDatepicker]="picker" placeholder="Effective from" [(ngModel)]="model.effectiveFrom"
-        (dateChange)="saveStream.next()" [errorStateMatcher]="createErrorStateMatcher('effectiveFrom')" [disabled]="readOnly">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error>{{errors?.effectiveFrom}}</mat-error>
-    </mat-form-field> -->
+    <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
+      placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
   </mat-card-content>
 
   <cms-editor [content]="model.content" (changed)="onContentChange($event)" [disabled]="readOnly"></cms-editor>
