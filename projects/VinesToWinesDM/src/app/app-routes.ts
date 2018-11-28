@@ -1,12 +1,10 @@
 import { Routes } from '@angular/router';
 import { HomepageComponent } from '@app/homepage/homepage.component';
-import { PageComponent } from '@app/page/page.component';
 import { AdminGuard } from '@app/security/admin.guard';
-import { ServerErrorComponent } from 'material-helpers';
+import { PageViewComponent, PhotoGalleryComponent, PhotoViewerComponent } from 'material-cms-view';
+import { ServerErrorComponent } from 'mh-server-error';
 import { AboutUsDetailComponent } from './about-us/about-us-detail.component';
 import { EventsDetailComponent } from './events/events-detail/events-detail.component';
-import { PhotoGalleryComponent } from './photo/gallery/photo-gallery.component';
-import { PhotoViewerComponent } from './photo/viewer/photo-viewer.component';
 import { SignInComponent } from './security/sign-in.component';
 
 export const routes: Routes = [
@@ -17,6 +15,6 @@ export const routes: Routes = [
   { path: 'photos', component: PhotoGalleryComponent },
   { path: 'photos/:identifier', component: PhotoViewerComponent },
   { path: 'sign-in', component: SignInComponent },
-  { path: ':kind', component: PageComponent },
+  { path: ':kind', component: PageViewComponent },
   { path: '', component: HomepageComponent, pathMatch: 'full' },
 ];

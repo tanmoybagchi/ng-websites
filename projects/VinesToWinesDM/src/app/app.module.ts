@@ -5,14 +5,15 @@ import { routes } from '@app/app-routes';
 import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
+import { MaterialCmsViewModule } from 'material-cms-view';
 import { AboutUsModule } from './about-us/about-us.module';
 import { AppRootComponent } from './app-root/app-root.component';
 import { AppRootModule } from './app-root/app-root.module';
 import { EventsModule } from './events/events.module';
 import { HomepageModule } from './homepage/homepage.module';
-import { PageModule } from './page/page.module';
-import { PhotoModule } from './photo/photo.module';
 import { SecurityModule } from './security/security.module';
+import { GDrivePageDatabase } from './shared/gdrive-page-database.service';
+import { MySitePages } from './shared/my-site-pages';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -27,8 +28,7 @@ import { SharedModule } from './shared/shared.module';
     EventsModule,
     GapiModule.forRoot({ id: env.g_serviceaccount_id, password: env.g_serviceaccount_key, scope: env.g_serviceaccount_scope }),
     HomepageModule,
-    PageModule,
-    PhotoModule,
+    MaterialCmsViewModule.forRoot(MySitePages, GDrivePageDatabase),
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,
   ],

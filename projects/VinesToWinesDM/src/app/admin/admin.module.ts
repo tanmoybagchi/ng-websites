@@ -1,37 +1,53 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { HomepageModule } from '@app/homepage/homepage.module';
-import { SharedModule } from '@app/shared/shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+// tslint:disable-next-line:max-line-length
+import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
+import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhInputDateModule } from 'mh-input-date';
+import { MhInputFileModule } from 'mh-input-file';
+import { MhInputTextModule } from 'mh-input-text';
+import { MhPageTitleModule } from 'mh-page-title';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
-import { ChooseExternalLinkComponent } from './editor/choose-external-link.component';
-import { ChooseInternalLinkComponent } from './editor/choose-internal-link.component';
-import { EditorComponent } from './editor/editor.component';
 import { AdminEventsComponent } from './events/admin-events.component';
-import { PageCommandButtonsComponent } from './page/command-buttons/page-command-buttons.component';
-import { PageEditComponent } from './page/page-edit/page-edit.component';
-import { PageListComponent } from './page/page-list/page-list.component';
-import { PageStatusComponent } from './page/status/page-status.component';
-import { AdminPhotoListComponent } from './photo/admin-photo-list.component';
-import { AdminPhotoUploadComponent } from './photo/admin-photo-upload.component';
+import { GDriveAssetUploader } from './gdrive-asset-uploader.service';
 
 @NgModule({
   imports: [
     AdminRoutingModule,
-    SharedModule,
-    HomepageModule,
+    CommonModule,
+    FlexLayoutModule,
+    FormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MaterialCmsAdminModule.forRoot(CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader),
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSortModule,
+    MatTableModule,
+    MatToolbarModule,
+    MhGeneralErrorModule,
+    MhInputDateModule,
+    MhInputFileModule,
+    MhInputTextModule,
+    MhPageTitleModule,
   ],
   declarations: [
     AdminDashboardComponent,
     AdminEventsComponent,
-    AdminPhotoListComponent,
-    AdminPhotoUploadComponent,
-    ChooseExternalLinkComponent,
-    ChooseInternalLinkComponent,
-    EditorComponent,
-    PageCommandButtonsComponent,
-    PageEditComponent,
-    PageListComponent,
-    PageStatusComponent,
   ],
 })
 export class AdminModule { }

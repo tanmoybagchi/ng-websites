@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { environment } from '@env/environment';
-import { AdminPages } from '../admin-pages';
+import { SITE_PAGES, SitePages } from 'material-cms-view';
 
 @Component({
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
   userName = '';
-  pages = new AdminPages();
+  adminPages: { link: string; name: string; }[];
 
-  constructor() { }
+  constructor(
+    @Inject(SITE_PAGES) sitePages: SitePages,
+  ) {
+    this.adminPages = sitePages.list.sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   ngOnInit() {
     this.userName = environment.g_oauth_login_name;

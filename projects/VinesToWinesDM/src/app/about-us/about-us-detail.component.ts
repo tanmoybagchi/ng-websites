@@ -1,15 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   templateUrl: './about-us-detail.component.html'
 })
-export class AboutUsDetailComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class AboutUsDetailComponent {
   onOKClick() {
     window.history.back();
   }

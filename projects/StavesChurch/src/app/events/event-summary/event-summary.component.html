@@ -15,9 +15,7 @@
       <a href="https://www.google.com/maps?q={{item.location}}" target="_blank" rel="noopener">{{item.location.split(',')[0]}}</a>
     </p>
     <p mat-line *ngIf="!item.end"> &nbsp; </p>
-    <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end | date:'MMM
-      dd'}}</p>
-    <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end |
-      date:'shortTime'}}</p>
+    <p mat-line *ngIf="item.end && item.end.getHours() === 23"> {{item.start | date:'MMM dd'}} - {{item.end | date:'MMM dd'}}</p>
+    <p mat-line *ngIf="item.end && item.end.getHours() < 23"> {{item.start | date:'shortTime'}} - {{item.end | date:'shortTime'}}</p>
   </mat-list-item>
 </mat-list>

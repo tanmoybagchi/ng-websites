@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Pages } from '@app/page/pages';
+import { MySitePages } from '@app/shared/my-site-pages';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,7 @@ export class AppHeaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const pages = new Pages();
+    const pages = new MySitePages();
     this.menu = pages.list;
   }
 }
