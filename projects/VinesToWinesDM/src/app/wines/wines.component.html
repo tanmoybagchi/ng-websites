@@ -1,0 +1,35 @@
+<page-title name="Wines"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<mat-card *ngIf="showOverview">
+  <mat-card-header>
+    <mat-card-title>Premium Red Wines</mat-card-title>
+  </mat-card-header>
+  <mat-card-content (click)="onContentClick($event)">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let item of model.reds">
+        <img matListAvatar src="..." alt="...">
+        <a matLine routerLink="{{item.name}}">{{item.name}}</a>
+        <button mat-icon-button (click)="showInfo(link)">
+          <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="!showOverview">
+  <mat-card-header>
+    <mat-card-title>{{wineName}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content (click)="onContentClick($event)">
+    <p [innerHTML]="sanitizedDescription"></p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+  </mat-card-actions>
+</mat-card>

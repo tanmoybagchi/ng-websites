@@ -6,6 +6,7 @@ import { ServerErrorComponent } from 'mh-server-error';
 import { AboutUsDetailComponent } from './about-us/about-us-detail.component';
 import { EventsDetailComponent } from './events/events-detail/events-detail.component';
 import { SignInComponent } from './security/sign-in.component';
+import { WinesComponent } from './wines/wines.component';
 
 export const routes: Routes = [
   { path: 'about-us', component: AboutUsDetailComponent },
@@ -13,6 +14,8 @@ export const routes: Routes = [
   { path: 'error', component: ServerErrorComponent },
   { path: 'events', component: EventsDetailComponent },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'wines', component: WinesComponent },
+  { path: 'wines/:kind', component: WinesComponent },
   { path: ':kind', component: PageViewComponent },
   { path: '', component: HomepageComponent, pathMatch: 'full' },
 ];

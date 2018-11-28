@@ -15,6 +15,7 @@ import { SecurityModule } from './security/security.module';
 import { GDrivePageDatabase } from './shared/gdrive-page-database.service';
 import { MySitePages } from './shared/my-site-pages';
 import { SharedModule } from './shared/shared.module';
+import { WinesModule } from './wines/wines.module';
 
 @NgModule({
   declarations: [],
@@ -31,6 +32,7 @@ import { SharedModule } from './shared/shared.module';
     MaterialCmsViewModule.forRoot(MySitePages, GDrivePageDatabase),
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,
+    WinesModule,
   ],
   bootstrap: [AppRootComponent]
 })
