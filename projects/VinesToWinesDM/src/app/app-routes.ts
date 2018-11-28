@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomepageComponent } from '@app/homepage/homepage.component';
 import { AdminGuard } from '@app/security/admin.guard';
-import { PageViewComponent, PhotoGalleryComponent, PhotoViewerComponent } from 'material-cms-view';
+import { PageViewComponent } from 'material-cms-view';
 import { ServerErrorComponent } from 'mh-server-error';
 import { AboutUsDetailComponent } from './about-us/about-us-detail.component';
 import { EventsDetailComponent } from './events/events-detail/events-detail.component';
@@ -12,8 +12,6 @@ export const routes: Routes = [
   { path: 'admin', loadChildren: '@app/admin/admin.module#AdminModule', canLoad: [AdminGuard] },
   { path: 'error', component: ServerErrorComponent },
   { path: 'events', component: EventsDetailComponent },
-  { path: 'photos', component: PhotoGalleryComponent },
-  { path: 'photos/:identifier', component: PhotoViewerComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: ':kind', component: PageViewComponent },
   { path: '', component: HomepageComponent, pathMatch: 'full' },
