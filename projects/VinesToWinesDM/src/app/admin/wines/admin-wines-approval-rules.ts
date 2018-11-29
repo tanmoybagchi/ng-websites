@@ -1,6 +1,6 @@
-import { AdminWines } from '@app/admin/wines/admin-wines';
-import { Wine, Wines } from '@app/wines/wines';
-import { RuleBuilder, RulesEngine, Result } from 'core';
+import { AdminWines, AdminWinesPage, AdminWineType } from '@app/admin/wines/admin-wines';
+import { Wine } from '@app/wines/wines';
+import { Result, RuleBuilder, RulesEngine } from 'core';
 
 export class AdminWinesApprovalRules {
   private readonly rulesEngine: RulesEngine;
@@ -9,23 +9,26 @@ export class AdminWinesApprovalRules {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const effectiveFromMsg = 'Please enter a valid date today or in the future.';
+
     const wineRules = RuleBuilder.for<Wine>()
       .property(x => x.name).required('Please enter a name')
       .property(x => x.description).required('Please enter a description')
       .build();
 
-    const contentRules = RuleBuilder.for<Wines>()
-      .property(x => x.reds).object(wineRules)
-      .property(x => x.whites).object(wineRules)
-      .property(x => x.speciality).object(wineRules)
+    const wineTypeRules = RuleBuilder.for<AdminWineType>()
+      .property(x => x.name).required('Please enter a name')
+      .property(x => x.wines).object(wineRules)
       .build();
 
-    const effectiveFromMsg = 'Please enter a valid date today or in the future.';
+    const adminWinesRules = RuleBuilder.for<AdminWines>()
+      .property(x => x.wineTypes).object(wineTypeRules)
+      .build();
 
-    const rules = RuleBuilder.for<AdminWines>()
+    const rules = RuleBuilder.for<AdminWinesPage>()
       .property(x => x.effectiveFrom).date(effectiveFromMsg).required(effectiveFromMsg).minDate(today, effectiveFromMsg)
       .property(x => x.content).required('Please enter the wines')
-      .property(x => x.content).object(contentRules)
+      .property(x => x.content).object(adminWinesRules)
       .build();
 
     this.rulesEngine = RulesEngine.create(rules);
@@ -44,20 +47,14 @@ export class AdminWinesApprovalRules {
     }
   }
 
-  check(model: AdminWines) {
+  check(model: AdminWinesPage) {
     let result = this.rulesEngine.check(model);
 
-    if (!result.hasErrors && model.content.reds.length > 0) {
-      result = this.checkForDuplicateWines(model.content.reds);
-    }
-
-    if (!result.hasErrors && model.content.whites.length > 0) {
-      result = this.checkForDuplicateWines(model.content.whites);
-    }
-
-    if (!result.hasErrors && model.content.speciality.length > 0) {
-      result = this.checkForDuplicateWines(model.content.speciality);
-    }
+    model.content.wineTypes.forEach(wt => {
+      if (!result.hasErrors && wt.wines.length > 0) {
+        result = this.checkForDuplicateWines(wt.wines);
+      }
+    });
 
     return result;
   }

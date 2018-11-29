@@ -88,7 +88,7 @@
     [style.width.px]="photoSliderWidth" (input)="onPhotoSliderInput($event)" (document:click)="onBodyClick($event)"></mat-slider>
 
   <div #editor id="{{editorId}}" class="editor" [attr.contenteditable]="!disabled" tabindex="0" (paste)="onPaste($event)"
-    (input)="onBlur()"></div>
+    (blur)="onBlur()"></div>
 </section>
 
 <cms-photo-list *ngIf="choosingPhoto" [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></cms-photo-list>

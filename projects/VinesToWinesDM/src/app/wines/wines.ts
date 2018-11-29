@@ -6,11 +6,14 @@ export class Wine extends ValueObject {
   photoIdentifier = '';
 }
 
+export class WineType extends ValueObject {
+  name = '';
+  description = '';
+  @Reflect.metadata('design:type', Wine)
+  wines: Wine[] = [];
+}
+
 export class Wines extends ValueObject {
-  @Reflect.metadata('design:type', Wine)
-  reds: Wine[] = [];
-  @Reflect.metadata('design:type', Wine)
-  whites: Wine[] = [];
-  @Reflect.metadata('design:type', Wine)
-  speciality: Wine[] = [];
+  @Reflect.metadata('design:type', WineType)
+  wineTypes: WineType[] = [];
 }

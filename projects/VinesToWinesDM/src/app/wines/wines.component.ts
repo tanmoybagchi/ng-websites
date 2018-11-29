@@ -74,12 +74,12 @@ export class WinesComponent implements OnInit {
       return;
     }
 
-    const wines = this.model.reds.concat(this.model.whites).concat(this.model.speciality);
+    // const wines = this.model.reds.concat(this.model.whites).concat(this.model.speciality);
 
-    const wine = wines.find(x => x.name === this.kind);
+    // const wine = wines.find(x => x.name === this.kind);
 
-    this.wineName = wine.name;
-    this.sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(wine.description);
+    // this.wineName = wine.name;
+    // this.sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(wine.description);
   }
 
   private onError(result: Result) {

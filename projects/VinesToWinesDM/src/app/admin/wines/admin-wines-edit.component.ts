@@ -1,17 +1,57 @@
 import { Component } from '@angular/core';
 import { PageEditBase } from 'material-cms-admin';
-import { AdminWines } from './admin-wines';
+import { AdminWinesPage, AdminWines, AdminWineType } from './admin-wines';
 import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
+import { Wine } from '@app/wines/wines';
 
 @Component({
   templateUrl: './admin-wines-edit.component.html'
 })
-export class AdminWinesEditComponent extends PageEditBase<AdminWines> {
-  modelCreator = AdminWines;
+export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
+  modelCreator = AdminWinesPage;
   protected approvalRules = new AdminWinesApprovalRules();
 
   onEffectiveFromChange($event) {
     this.model.effectiveFrom = $event;
+    this.saveStream.next();
+  }
+
+  onPage(model: AdminWinesPage) {
+    if (model.content.wineTypes.length === 0) {
+      model.content.wineTypes.push(new AdminWineType());
+    }
+
+    model.content.wineTypes.forEach(wt => {
+      if (wt.wines.length === 0) {
+        wt.wines.push(new Wine());
+      }
+    });
+
+    super.onPage(model);
+  }
+
+  onItemChange(item, key: string, newValue) {
+    item[key] = newValue;
+    this.saveStream.next();
+  }
+
+  addAfter(list, item) {
+    list.addAfter(item);
+    this.saveStream.next();
+  }
+
+  remove(list, item) {
+    list.remove(item);
+    this.saveStream.next();
+  }
+
+  moveUp(list, item) {
+    list.moveUp(item);
+    this.saveStream.next();
+  }
+
+  moveDown(list, item) {
+    list.moveDown(item);
     this.saveStream.next();
   }
 }
