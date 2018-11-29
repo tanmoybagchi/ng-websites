@@ -1,6 +1,6 @@
 import { AdminWines } from '@app/admin/wines/admin-wines';
-import { Wines, Ministry } from '@app/wines/wines';
-import { RuleBuilder, RulesEngine } from 'core';
+import { Wine, Wines } from '@app/wines/wines';
+import { RuleBuilder, RulesEngine, Result } from 'core';
 
 export class AdminWinesApprovalRules {
   private readonly rulesEngine: RulesEngine;
@@ -9,14 +9,15 @@ export class AdminWinesApprovalRules {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const ministryRules = RuleBuilder.for<Ministry>()
+    const wineRules = RuleBuilder.for<Wine>()
       .property(x => x.name).required('Please enter a name')
-      .property(x => x.purpose).required('Please enter a description')
+      .property(x => x.description).required('Please enter a description')
       .build();
 
     const contentRules = RuleBuilder.for<Wines>()
-      .property(x => x.header).required('Please enter a description')
-      .property(x => x.list).object(ministryRules)
+      .property(x => x.reds).object(wineRules)
+      .property(x => x.whites).object(wineRules)
+      .property(x => x.speciality).object(wineRules)
       .build();
 
     const effectiveFromMsg = 'Please enter a valid date today or in the future.';
@@ -30,21 +31,32 @@ export class AdminWinesApprovalRules {
     this.rulesEngine = RulesEngine.create(rules);
   }
 
-  check(model: AdminWines) {
-    const result = this.rulesEngine.check(model);
+  private checkForDuplicateWines(wines: Wine[]) {
+    const wineNames = wines
+      .filter(x => String.hasData(x.name))
+      .map(x => x.name)
+      .sort();
 
-    if (model.content.list.length > 1) {
-      const ministryNames = model.content.list
-        .filter(x => String.hasData(x.name))
-        .map(x => x.name)
-        .sort();
-
-      for (let index = 0; index < ministryNames.length - 1; index++) {
-        if (ministryNames[index] === ministryNames[index + 1]) {
-          result.addError(`You have ${ministryNames[index]} defined more than once. Please change one of their names.`);
-          break;
-        }
+    for (let index = 0; index < wineNames.length - 1; index++) {
+      if (wineNames[index] === wineNames[index + 1]) {
+        return Result.CreateErrorResult(`You have ${wineNames[index]} defined more than once. Please change one of their names.`);
       }
+    }
+  }
+
+  check(model: AdminWines) {
+    let result = this.rulesEngine.check(model);
+
+    if (!result.hasErrors && model.content.reds.length > 0) {
+      result = this.checkForDuplicateWines(model.content.reds);
+    }
+
+    if (!result.hasErrors && model.content.whites.length > 0) {
+      result = this.checkForDuplicateWines(model.content.whites);
+    }
+
+    if (!result.hasErrors && model.content.speciality.length > 0) {
+      result = this.checkForDuplicateWines(model.content.speciality);
     }
 
     return result;

@@ -16,7 +16,6 @@ export class WinesComponent implements OnInit {
   model: Wines;
   private kind: string;
   sanitizedDescription: SafeHtml;
-  sanitizedHeader: SafeHtml;
   showOverview: boolean;
   wineName: string;
 
@@ -72,7 +71,6 @@ export class WinesComponent implements OnInit {
     this.model = value;
 
     if (this.showOverview) {
-      this.sanitizedHeader = this.sanitizer.bypassSecurityTrustHtml(this.model.header);
       return;
     }
 

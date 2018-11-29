@@ -5,44 +5,16 @@ export class AdminWines extends Page<Wines> {
   kind = 'wines';
   content = new Wines();
 
-  addRedAfter(item: Wine) {
-    this.addAfter(item, this.content.reds);
-  }
+  addAfter(item: Wine, kind: 'reds' | 'whites' | 'speciality') {
+    const list = this.content[kind];
 
-  removeRed(item: Wine) {
-    this.remove(item, this.content.reds);
-  }
-
-  moveRedUp(item: Wine) {
-    this.moveUp(item, this.content.reds);
-  }
-
-  moveRedDown(item: Wine) {
-    this.moveDown(item, this.content.reds);
-  }
-
-  addWhiteAfter(item: Wine) {
-    this.addAfter(item, this.content.whites);
-  }
-
-  removeWhite(item: Wine) {
-    this.remove(item, this.content.whites);
-  }
-
-  moveWhiteUp(item: Wine) {
-    this.moveUp(item, this.content.whites);
-  }
-
-  moveWhiteDown(item: Wine) {
-    this.moveDown(item, this.content.whites);
-  }
-
-  private addAfter(item: Wine, list: Wine[]) {
     const idx = list.indexOf(item, 0);
     list.splice(idx + 1, 0, new Wine());
   }
 
-  private remove(item: Wine, list: Wine[]) {
+  remove(item: Wine, kind: 'reds' | 'whites' | 'speciality') {
+    const list = this.content[kind];
+
     const idx = list.indexOf(item, 0);
     list.splice(idx, 1);
 
@@ -50,7 +22,9 @@ export class AdminWines extends Page<Wines> {
     list.length === 0 && list.push(new Wine());
   }
 
-  private moveUp(item: Wine, list: Wine[]) {
+  moveUp(item: Wine, kind: 'reds' | 'whites' | 'speciality') {
+    const list = this.content[kind];
+
     const idx = list.indexOf(item, 0);
     if (idx <= 0) { return; }
 
@@ -58,7 +32,9 @@ export class AdminWines extends Page<Wines> {
     list.splice(idx - 1, 0, item);
   }
 
-  private moveDown(item: Wine, list: Wine[]) {
+  moveDown(item: Wine, kind: 'reds' | 'whites' | 'speciality') {
+    const list = this.content[kind];
+
     const idx = list.indexOf(item, 0);
     if (idx === list.length - 1) { return; }
 

@@ -1,0 +1,22 @@
+<h2>{{name}}</h2>
+<section style="margin-bottom: 1em" *ngFor="let item of model.content[kind]; let i=index">
+  <section fxLayout="row">
+    <input-text fxFlex="grow" [model]="item.name" (modelChange)="onNameChange(item, $event)" label="Name" [disabled]="readOnly"
+      [errMsg]="errors?.content[kind][i]?.name"></input-text>
+
+    <button mat-icon-button matTooltip="Add wine" matTooltipShowDelay="500" (click)="addAfter(item)" [disabled]="readOnly">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Remove wine" matTooltipShowDelay="500" (click)="remove(item)" [disabled]="readOnly">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(item)" [disabled]="readOnly || i === 0">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(item)" [disabled]="readOnly || i === model.content[kind].length-1">
+      <mat-icon>arrow_downward</mat-icon>
+    </button>
+  </section>
+
+  <cms-editor [content]="item.description" (changed)="onDescriptionChange(item, $event)" [disabled]="readOnly"></cms-editor>
+</section>

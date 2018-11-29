@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { WinesComponent } from './Wines.component';
+import { WinesComponent } from './wines.component';
 
 @NgModule({
   imports: [
