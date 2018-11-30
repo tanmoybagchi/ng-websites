@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fromEvent, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { PhotoCompressor } from './photo-compressor';
+import { PhotoCompressor } from 'material-cms-admin';
 
 @Injectable({ providedIn: 'root' })
 export class CanvasPhotoCompressor implements PhotoCompressor {

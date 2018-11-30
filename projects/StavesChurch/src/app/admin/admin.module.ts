@@ -4,7 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
 import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
-import { CanvasPhotoCompressor, CanvasPhotoResizer, MaterialCmsAdminModule } from 'material-cms-admin';
+import { MaterialCmsAdminModule } from 'material-cms-admin';
+import { CanvasPhotoCompressor, CanvasPhotoResizer, GDriveAssetUploader } from 'material-cms-providers';
 import { MhGeneralErrorModule } from 'mh-general-error';
 import { MhInputDateModule } from 'mh-input-date';
 import { MhInputFileModule } from 'mh-input-file';
@@ -17,7 +18,6 @@ import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';
 import { AdminCallerListComponent } from './caller/admin-caller-list.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
-import { GDriveAssetUploader } from './gdrive-asset-uploader.service';
 import { AdminMinistriesEditComponent } from './ministries/admin-ministries-edit.component';
 import { AdminSermonEditComponent } from './sermon/admin-sermon-edit.component';
 import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';

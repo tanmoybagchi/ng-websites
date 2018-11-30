@@ -120,6 +120,12 @@
       ],
       "mh-input-file/*": [
         "dist/mh-input-file/*"
+      ],
+      "material-cms-providers": [
+        "dist/material-cms-providers"
+      ],
+      "material-cms-providers/*": [
+        "dist/material-cms-providers/*"
       ]
     }
   }

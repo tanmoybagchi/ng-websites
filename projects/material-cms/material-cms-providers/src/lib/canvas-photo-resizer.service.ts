@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fromEvent, Observable, EMPTY, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { PhotoResizer } from './photo-resizer';
+import { PhotoResizer } from 'material-cms-admin';
 
 @Injectable({ providedIn: 'root' })
 export class CanvasPhotoResizer implements PhotoResizer {

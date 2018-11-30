@@ -73,7 +73,6 @@ import { PhotoUploadComponent } from './photo/upload/photo-upload.component';
   ]
 })
 export class MaterialCmsAdminModule {
-  // tslint:disable-next-line:max-line-length
   static forRoot(photoCompressor: Type<PhotoCompressor>, photoResizer: Type<PhotoResizer>, assetUploader: Type<AssetUploader>) {
     return <ModuleWithProviders<MaterialCmsAdminModule>>{
       ngModule: MaterialCmsAdminModule,

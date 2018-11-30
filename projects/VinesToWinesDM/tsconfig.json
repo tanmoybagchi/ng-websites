@@ -109,6 +109,12 @@
       ],
       "mh-throbber/*": [
         "dist/mh-throbber/*"
+      ],
+      "material-cms-providers": [
+        "dist/material-cms-providers"
+      ],
+      "material-cms-providers/*": [
+        "dist/material-cms-providers/*"
       ]
     },
     "outDir": "../../out-tsc/app",

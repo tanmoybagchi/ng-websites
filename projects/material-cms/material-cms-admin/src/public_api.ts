@@ -23,8 +23,6 @@ export * from './lib/page/queries/page-id-query.service';
 export * from './lib/page/queries/page-list-query.service';
 export * from './lib/page/status/page-status.component';
 export * from './lib/photo/list/photo-list.component';
-export * from './lib/photo/upload/canvas-photo-compressor.service';
-export * from './lib/photo/upload/canvas-photo-resizer.service';
 export * from './lib/photo/upload/photo-compressor';
 export * from './lib/photo/upload/photo-resizer';
 export * from './lib/photo/upload/photo-upload.component';

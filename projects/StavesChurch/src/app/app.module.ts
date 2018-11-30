@@ -5,6 +5,7 @@ import { routes } from '@app/app-routes';
 import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
+import { GDrivePageDatabase, MaterialCmsProvidersModule } from 'material-cms-providers';
 import { MaterialCmsViewModule } from 'material-cms-view';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { AppRootComponent } from './app-root/app-root.component';
@@ -15,7 +16,6 @@ import { HomepageModule } from './homepage/homepage.module';
 import { MinistriesModule } from './ministries/ministries.module';
 import { SecurityModule } from './security/security.module';
 import { SermonModule } from './sermon/sermon.module';
-import { GDrivePageDatabase } from './shared/gdrive-page-database.service';
 import { MySitePages } from './shared/my-site-pages';
 import { SharedModule } from './shared/shared.module';
 
@@ -32,6 +32,14 @@ import { SharedModule } from './shared/shared.module';
     EventsModule,
     GapiModule.forRoot({ id: env.g_serviceaccount_id, password: env.g_serviceaccount_key, scope: env.g_serviceaccount_scope }),
     HomepageModule,
+    // MaterialCmsProvidersModule MUST come before MaterialCmsViewModule.
+    MaterialCmsProvidersModule.forRoot({
+      audioFolder: env.audioFolder,
+      docFolder: env.docFolder,
+      g_drive_database: env.database,
+      g_oauth_login_name: env.g_oauth_login_name,
+      photoFolder: env.photoFolder,
+    }),
     MaterialCmsViewModule.forRoot(MySitePages, GDrivePageDatabase),
     MinistriesModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),

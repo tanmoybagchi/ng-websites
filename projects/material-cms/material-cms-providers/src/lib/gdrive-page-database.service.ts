@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment as env } from '@env/environment';
+import { Inject, Injectable } from '@angular/core';
 import { DomainHelper, LocalStorageService, Result } from 'core';
 import { DriveFile, DriveFileReadQuery, DriveFileSaveCommand, DriveFileSearchQuery } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { map, share, switchMap } from 'rxjs/operators';
+import { ProviderConfig, PROVIDER_CONFIG } from './provider-config';
 
 @Injectable({ providedIn: 'root' })
 export class GDrivePageDatabase implements PageDatabase {
@@ -15,6 +15,7 @@ export class GDrivePageDatabase implements PageDatabase {
   private initialising = true;
 
   constructor(
+    @Inject(PROVIDER_CONFIG) private env: ProviderConfig,
     private driveFileReadQuery: DriveFileReadQuery,
     private driveFileSaveCommand: DriveFileSaveCommand,
     private driveFileSearchQuery: DriveFileSearchQuery,
@@ -34,7 +35,7 @@ export class GDrivePageDatabase implements PageDatabase {
       this.pages = (cachedItem.pages || []).map(page => DomainHelper.adapt(Page, page));
     }
 
-    this.observable = this.driveFileSearchQuery.execute(env.database).pipe(
+    this.observable = this.driveFileSearchQuery.execute(this.env.g_drive_database).pipe(
       switchMap(files => this.onDriveFileSearch(files)),
       share()
     );
@@ -90,7 +91,7 @@ export class GDrivePageDatabase implements PageDatabase {
         newPage.id = this.pages.length === 0 ? 1 : Math.max(...this.pages.map(x => x.id)) + 1;
         newPage.identifier = this.uid();
         newPage.version = 1;
-        newPage.savedBy = env.g_oauth_login_name;
+        newPage.savedBy = this.env.g_oauth_login_name;
         newPage.savedOn = new Date();
         // tslint:disable-next-line:no-unused-expression
         typeof pageToAdd.content === 'object' && (newPage.content = JSON.stringify(pageToAdd.content));
@@ -119,7 +120,7 @@ export class GDrivePageDatabase implements PageDatabase {
           newPage.id = Math.max(...this.pages.map(x => x.id)) + 1;
           newPage.identifier = this.uid();
           newPage.version = 1;
-          newPage.savedBy = env.g_oauth_login_name;
+          newPage.savedBy = this.env.g_oauth_login_name;
           newPage.savedOn = new Date();
           // tslint:disable-next-line:no-unused-expression
           typeof pageToAdd.content === 'object' && (newPage.content = JSON.stringify(pageToAdd.content));
@@ -166,7 +167,7 @@ export class GDrivePageDatabase implements PageDatabase {
         DomainHelper.adapt(savedPage, updatedPage);
 
         savedPage.version++;
-        savedPage.savedBy = env.g_oauth_login_name;
+        savedPage.savedBy = this.env.g_oauth_login_name;
         savedPage.savedOn = new Date();
         // tslint:disable-next-line:no-unused-expression
         typeof updatedPage.content === 'object' && (savedPage.content = JSON.stringify(updatedPage.content));
@@ -206,7 +207,7 @@ export class GDrivePageDatabase implements PageDatabase {
           DomainHelper.adapt(savedPage, updatePage);
 
           savedPage.version++;
-          savedPage.savedBy = env.g_oauth_login_name;
+          savedPage.savedBy = this.env.g_oauth_login_name;
           savedPage.savedOn = new Date();
           // tslint:disable-next-line:no-unused-expression
           typeof updatePage.content === 'object' && (savedPage.content = JSON.stringify(updatePage.content));
