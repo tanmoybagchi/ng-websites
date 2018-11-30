@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { PageEditBase } from 'material-cms-admin';
-import { AdminWinesPage, AdminWines, AdminWineType } from './admin-wines';
-import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 import { Wine } from '@app/wines/wines';
+import { PageEditBase } from 'material-cms-admin';
+import { AdminWinesPage, AdminWineType } from './admin-wines';
+import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 
 @Component({
-  templateUrl: './admin-wines-edit.component.html'
+  templateUrl: './admin-wines-edit.component.html',
+  styleUrls: ['./admin-wines-edit.component.scss']
 })
 export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   modelCreator = AdminWinesPage;

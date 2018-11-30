@@ -2,6 +2,12 @@ import { Wine, Wines, WineType } from '@app/wines/wines';
 import { Page } from 'material-cms-view';
 
 export class AdminWineType extends WineType {
+  static create() {
+    const res = new AdminWineType();
+    res.wines.push(new Wine());
+    return res;
+  }
+
   addAfter(item: Wine) {
     const list = this.wines;
 
@@ -48,7 +54,7 @@ export class AdminWines extends Wines {
     const list = this.wineTypes;
 
     const idx = list.indexOf(item, 0);
-    list.splice(idx + 1, 0, new AdminWineType());
+    list.splice(idx + 1, 0, AdminWineType.create());
   }
 
   remove(item: AdminWineType) {
@@ -58,7 +64,7 @@ export class AdminWines extends Wines {
     list.splice(idx, 1);
 
     // tslint:disable-next-line:no-unused-expression
-    list.length === 0 && list.push(new AdminWineType());
+    list.length === 0 && list.push(AdminWineType.create());
   }
 
   moveUp(item: AdminWineType) {

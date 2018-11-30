@@ -7,43 +7,48 @@
     <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
       placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
 
-    <mat-card *ngFor="let wineType of model.content.wineTypes; let wineTypeIdx=index">
-      <section fxLayout="row">
-        <input-text fxFlex="grow" [model]="wineType.name" (modelChange)="onItemChange(wineType, 'name', $event)" label="Wine Type"
-          [disabled]="readOnly" [errMsg]="errors?.content?.wineTypes[wineTypeIdx]?.name"></input-text>
+    <mat-expansion-panel style="margin-bottom: 1em" *ngFor="let wineType of model.content.wineTypes; let wineTypeIdx=index">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{wineType.name || '(no name)'}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Wine type (red, white, dessert, etc.)
+          <section>
+            <button mat-icon-button matTooltip="Add wine type" matTooltipShowDelay="500" (click)="addAfter(model.content, wineType)"
+              [disabled]="readOnly">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Remove wine type" matTooltipShowDelay="500" (click)="remove(model.content, wineType)"
+              [disabled]="readOnly">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(model.content, wineType)"
+              [disabled]="readOnly || wineTypeIdx === 0">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(model.content, wineType)"
+              [disabled]="readOnly || wineTypeIdx === model.content.wineTypes.length-1">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+          </section>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-        <button mat-icon-button matTooltip="Add wine type" matTooltipShowDelay="500" (click)="addAfter(model.content, wineType)"
-          [disabled]="readOnly">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Remove wine type" matTooltipShowDelay="500" (click)="remove(model.content, wineType)"
-          [disabled]="readOnly">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(model.content, wineType)"
-          [disabled]="readOnly || wineTypeIdx === 0">
-          <mat-icon>arrow_upward</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(model.content, wineType)"
-          [disabled]="readOnly || wineTypeIdx === model.content.wineTypes.length-1">
-          <mat-icon>arrow_downward</mat-icon>
-        </button>
-      </section>
+      <input-text [model]="wineType.name" (modelChange)="onItemChange(wineType, 'name', $event)" label="Wine Type"
+        [disabled]="readOnly" [errMsg]="errors?.content?.wineTypes[wineTypeIdx]?.name"></input-text>
 
       <input-text [model]="wineType.description" (modelChange)="onItemChange(wineType, 'description', $event)" label="Wine Type Description"
         [disabled]="readOnly"></input-text>
 
-      <mat-expansion-panel>
+      <mat-expansion-panel style="margin-bottom: 1em" *ngFor="let wine of wineType.wines; let wineIdx=index">
         <mat-expansion-panel-header>
-          Wines
-        </mat-expansion-panel-header>
-
-        <mat-card style="margin-bottom: 1em" *ngFor="let wine of wineType.wines; let wineIdx=index">
-          <section>
-            <section fxLayout="row">
-              <input-text fxFlex="grow" [model]="wine.name" (modelChange)="onChange(wine, 'name', $event)" label="Wine"
-                [disabled]="readOnly" [errMsg]="errors?.content.wineTypes[wineTypeIdx]?.wines[wineIdx].name"></input-text>
-
+          <mat-panel-title>
+            {{wine.name || '(no name)'}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Wine (name, description, photo)
+            <section>
               <button mat-icon-button matTooltip="Add wine" matTooltipShowDelay="500" (click)="addAfter(wineType, wine)"
                 [disabled]="readOnly">
                 <mat-icon>add</mat-icon>
@@ -61,13 +66,17 @@
                 <mat-icon>arrow_downward</mat-icon>
               </button>
             </section>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
 
-            <cms-editor [content]="wine.description" (changed)="onChange(wine, 'name', $event)" [disabled]="readOnly"></cms-editor>
-          </section>
-        </mat-card>
-      </mat-expansion-panel>
+        <div>
+          <input-text fxFlex="grow" [model]="wine.name" (modelChange)="onItemChange(wine, 'name', $event)" label="Wine"
+            [disabled]="readOnly" [errMsg]="errors?.content.wineTypes[wineTypeIdx]?.wines[wineIdx].name"></input-text>
+        </div>
 
-    </mat-card>
+        <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'name', $event)" [disabled]="readOnly"></cms-editor>
+      </mat-expansion-panel> <!-- wines -->
+    </mat-expansion-panel> <!-- wine types -->
   </mat-card-content>
 
   <mat-card-actions>
