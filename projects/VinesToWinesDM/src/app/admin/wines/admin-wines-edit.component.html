@@ -69,10 +69,8 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <div>
-          <input-text fxFlex="grow" [model]="wine.name" (modelChange)="onItemChange(wine, 'name', $event)" label="Wine"
-            [disabled]="readOnly" [errMsg]="errors?.content.wineTypes[wineTypeIdx]?.wines[wineIdx].name"></input-text>
-        </div>
+        <input-text [model]="wine.name" (modelChange)="onItemChange(wine, 'name', $event)" label="Wine" [disabled]="readOnly"
+          [errMsg]="errors?.content.wineTypes[wineTypeIdx]?.wines[wineIdx].name"></input-text>
 
         <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'name', $event)" [disabled]="readOnly"></cms-editor>
       </mat-expansion-panel> <!-- wines -->
