@@ -16,6 +16,7 @@ import { SecurityModule } from './security/security.module';
 import { MySitePages } from './shared/my-site-pages';
 import { SharedModule } from './shared/shared.module';
 import { WinesModule } from './wines/wines.module';
+import { GSheetsPageDatabase } from './shared/gsheets-page-database.service';
 
 @NgModule({
   declarations: [],
@@ -37,7 +38,7 @@ import { WinesModule } from './wines/wines.module';
       g_oauth_login_name: env.g_oauth_login_name,
       photoFolder: env.photoFolder,
     }),
-    MaterialCmsViewModule.forRoot(MySitePages, GDrivePageDatabase),
+    MaterialCmsViewModule.forRoot(MySitePages, GSheetsPageDatabase),
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,
     WinesModule,
