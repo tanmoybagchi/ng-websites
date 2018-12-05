@@ -5,7 +5,7 @@ import { ConfigCommand } from '@app/domain/config-command.service';
 import { ConfigQuery } from '@app/domain/config-query.service';
 import { ConfigRules } from '@app/domain/config-rules';
 import { EventManagerService, Result } from 'core';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 

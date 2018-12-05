@@ -20,12 +20,102 @@
       "gapi/*": [
         "dist/gapi/*"
       ],
-      "material-helpers": [
-        "dist/material-helpers"
+      "material-cms-view": [
+        "dist/material-cms-view"
       ],
-      "material-helpers/*": [
-        "dist/material-helpers/*"
+      "material-cms-view/*": [
+        "dist/material-cms-view/*"
       ],
+      "material-cms-admin": [
+        "dist/material-cms-admin"
+      ],
+      "material-cms-admin/*": [
+        "dist/material-cms-admin/*"
+      ],
+      "mh-general-error": [
+        "dist/mh-general-error"
+      ],
+      "mh-general-error/*": [
+        "dist/mh-general-error/*"
+      ],
+      "mh-google-sign-in": [
+        "dist/mh-google-sign-in"
+      ],
+      "mh-google-sign-in/*": [
+        "dist/mh-google-sign-in/*"
+      ],
+      "mh-input-date": [
+        "dist/mh-input-date"
+      ],
+      "mh-input-date/*": [
+        "dist/mh-input-date/*"
+      ],
+      "mh-input-email": [
+        "dist/mh-input-email"
+      ],
+      "mh-input-email/*": [
+        "dist/mh-input-email/*"
+      ],
+      "mh-input-integer": [
+        "dist/mh-input-integer"
+      ],
+      "mh-input-integer/*": [
+        "dist/mh-input-integer/*"
+      ],
+      "mh-input-search": [
+        "dist/mh-input-search"
+      ],
+      "mh-input-search/*": [
+        "dist/mh-input-search/*"
+      ],
+      "mh-input-text": [
+        "dist/mh-input-text"
+      ],
+      "mh-input-text/*": [
+        "dist/mh-input-text/*"
+      ],
+      "mh-input-usd": [
+        "dist/mh-input-usd"
+      ],
+      "mh-input-usd/*": [
+        "dist/mh-input-usd/*"
+      ],
+      "mh-page-title": [
+        "dist/mh-page-title"
+      ],
+      "mh-page-title/*": [
+        "dist/mh-page-title/*"
+      ],
+      "mh-server-error": [
+        "dist/mh-server-error"
+      ],
+      "mh-server-error/*": [
+        "dist/mh-server-error/*"
+      ],
+      "mh-throbber": [
+        "dist/mh-throbber"
+      ],
+      "mh-throbber/*": [
+        "dist/mh-throbber/*"
+      ],
+      "mh-input-select": [
+        "dist/mh-input-select"
+      ],
+      "mh-input-select/*": [
+        "dist/mh-input-select/*"
+      ],
+      "mh-input-file": [
+        "dist/mh-input-file"
+      ],
+      "mh-input-file/*": [
+        "dist/mh-input-file/*"
+      ],
+      "material-cms-providers": [
+        "dist/material-cms-providers"
+      ],
+      "material-cms-providers/*": [
+        "dist/material-cms-providers/*"
+      ]
     },
     "outDir": "../../out-tsc/app",
     "types": []

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { EventManagerService, Result } from 'core';
 import { DriveFileSearchQuery, DrivePermission, DrivePermissionsCreateCommand, DrivePermissionsQuery } from 'gapi';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 

@@ -7,7 +7,8 @@ import { UniqueIdService } from 'core';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'input-usd',
-  templateUrl: './input-usd.component.html'
+  templateUrl: './input-usd.component.html',
+  providers: [DecimalPipe]
 })
 export class InputUSDComponent {
   @Input() disabled = false;

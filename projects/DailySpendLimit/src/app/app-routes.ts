@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AdminGuard } from 'core';
-import { ServerErrorComponent } from 'material-helpers';
+import { ServerErrorComponent } from 'mh-server-error';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { SignInComponent } from './security/sign-in.component';

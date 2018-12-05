@@ -6,16 +6,21 @@ export class Config {
   expenses = 0;
 
   currentLimit() {
-    const one_day = 1000 * 60 * 60 * 24;
-
     const from = this.effectiveFrom.valueOf();
-    const now = Date.now();
+    const today = new Date();
+    const now = today.valueOf();
 
     if (from > now) {
       return 0;
     }
 
-    const daysElapsed = Math.ceil((now - from) / one_day);
+    let daysElapsed = 0;
+
+    if (this.effectiveFrom.getFullYear() === today.getFullYear() && this.effectiveFrom.getMonth() === today.getMonth()) {
+      daysElapsed = today.getDate() - this.effectiveFrom.getDate() + 1;
+    } else {
+      daysElapsed = today.getDate();
+    }
 
     return (this.dailyLimit * daysElapsed) - Math.ceil(this.expenses);
   }

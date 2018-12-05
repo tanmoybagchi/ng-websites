@@ -5,7 +5,7 @@ import { ConfigQuery } from '@app/domain/config-query.service';
 import { ExpenseCommand } from '@app/domain/expense-command.service';
 import { MonthlyExpenseQuery } from '@app/domain/monthly-expense-query.service';
 import { EventManagerService, Result, AuthTokenService } from 'core';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 

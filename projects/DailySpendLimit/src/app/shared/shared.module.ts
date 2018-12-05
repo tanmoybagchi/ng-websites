@@ -3,38 +3,19 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatToolbarModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { MaterialHelpersModule } from 'material-helpers';
+import { MhGeneralErrorModule } from 'mh-general-error';
+import { MhGoogleSignInModule } from 'mh-google-sign-in';
+import { MhInputDateModule } from 'mh-input-date';
+import { MhInputEmailModule } from 'mh-input-email';
+import { MhInputUsdModule } from 'mh-input-usd';
+import { MhPageTitleModule } from 'mh-page-title';
+import { MhServerErrorModule } from 'mh-server-error';
+import { MhThrobberModule } from 'mh-throbber';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FlexLayoutModule,
-    FormsModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MaterialHelpersModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSortModule,
-    MatTableModule,
-    MatToolbarModule,
-    MatTooltipModule,
-  ],
+  imports: [],
   declarations: [],
   entryComponents: [],
   exports: [
@@ -42,28 +23,21 @@ import { MaterialHelpersModule } from 'material-helpers';
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,
-    MatButtonModule,
-    MatButtonToggleModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MaterialHelpersModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSortModule,
-    MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MhGeneralErrorModule,
+    MhGoogleSignInModule,
+    MhInputDateModule,
+    MhInputEmailModule,
+    MhInputUsdModule,
+    MhPageTitleModule,
+    MhServerErrorModule,
+    MhThrobberModule,
     RouterModule,
   ]
 })
