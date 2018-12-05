@@ -11,7 +11,7 @@ import { map, share, switchMap, tap } from 'rxjs/operators';
 export class GSheetsPageDatabase implements PageDatabase {
   fileId = '';
   version = 0;
-  pages: Page[];
+  pages: SheetPage[];
   private observable: Observable<any[]>;
   private initialising = true;
   private readonly sheetName = 'Database';
@@ -27,6 +27,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     { id: 'H', name: 'savedOn' },
     { id: 'I', name: 'version' },
     { id: 'J', name: 'content' },
+    { id: 'K', name: 'rowNum' },
   ];
   private sheetId: number;
 
@@ -49,6 +50,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     if (cachedItem) {
       this.fileId = cachedItem.fileId || '';
       this.version = cachedItem.version || 0;
+      this.sheetId = cachedItem.sheetId || 0;
       this.pages = (cachedItem.pages || []).map(page => DomainHelper.adapt(Page, page));
     }
 
@@ -74,33 +76,32 @@ export class GSheetsPageDatabase implements PageDatabase {
     this.version = files[0].version;
 
     // tslint:disable-next-line:max-line-length
-    const query = `select ${this.cols.map(x => x.id).join(', ')} label ${this.cols.map(x => `${x.id} ${x.name}`).join(', ')}`;
+    const query = `select ${this.cols.map(x => x.id).join(', ')} label ${this.cols.map(x => `${x.id} '${x.name}'`).join(', ')}`;
 
     // tslint:disable-next-line:max-line-length
-    return this.sheetReadQuery.execute(this.fileId, this.sheetName, 'spreadsheetUrl,sheets(properties/sheetId,data(rowData(values/effectiveValue,values/formattedValue)))').pipe(
+    return this.sheetReadQuery.execute(this.fileId, this.sheetName, 'spreadsheetUrl,sheets(properties/sheetId)').pipe(
       tap(spreadsheet => this.sheetId = spreadsheet.sheets[0].properties.sheetId),
-      // switchMap(spreadsheet => this.sheetQuery.execute(spreadsheet.spreadsheetUrl.replace('/edit', ''), query)),
-      map(spreadsheet => {
+      switchMap(spreadsheet => this.sheetQuery.execute(spreadsheet.spreadsheetUrl.replace('/edit', ''), query, this.sheetName)),
+      map((qr: any[]) => {
         // when the cached data is available we don't need the 'Observable' reference anymore
         this.observable = null;
 
-        if (spreadsheet.sheets[0].data[0].rowData.length > 1) {
-          this.pages = spreadsheet.sheets[0].data[0].rowData.slice(1).map(row => {
-            const page = new Page();
+        this.pages = qr.map(row => {
+          const page = DomainHelper.adapt(SheetPage, row);
 
-            page.id = row.values[0].effectiveValue.numberValue;
-            page.kind = row.values[1].effectiveValue.stringValue;
-            page.identifier = row.values[2].effectiveValue.stringValue;
+          // tslint:disable-next-line:no-eval no-unused-expression
+          String.hasData(row.effectiveFrom) && (page.effectiveFrom = new Date(eval(row.effectiveFrom)));
 
-            return page;
-          });
-        } else {
-          this.pages = [];
-        }
+          // tslint:disable-next-line:no-eval no-unused-expression
+          String.hasData(row.effectiveTo) && (page.effectiveTo = new Date(eval(row.effectiveTo)));
 
-        // this.pages = qr.map(page => DomainHelper.adapt(Page, page));
+          // tslint:disable-next-line:no-eval no-unused-expression
+          String.hasData(row.savedOn) && (page.savedOn = new Date(eval(row.savedOn)));
 
-        // this.storage.set('database', { fileId: this.fileId, version: this.version, pages: qr });
+          return page;
+        });
+
+        this.storage.set('database', { fileId: this.fileId, version: this.version, sheetId: this.sheetId, pages: this.pages });
 
         this.initialising = false;
 
@@ -135,9 +136,9 @@ export class GSheetsPageDatabase implements PageDatabase {
 
         (this.pages as any[]).push(newPage);
 
-        const bur = this.convertToBatchUpdateRequest(newPage);
+        const addRowrequest = this.addRowRequest(newPage);
 
-        return this.sheetBatchUpdateCommand.execute(this.fileId, [bur]).pipe(
+        return this.sheetBatchUpdateCommand.execute(this.fileId, [addRowrequest]).pipe(
           switchMap(x => this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet)),
           tap(x => this.version = x[0].version),
           switchMap(x => of(DomainHelper.adapt(Page, newPage)))
@@ -146,8 +147,13 @@ export class GSheetsPageDatabase implements PageDatabase {
     );
   }
 
-  private convertToBatchUpdateRequest(page: Page) {
+  private addRowRequest(page: Page) {
     const cols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(page[x.name]));
+
+    const rowNumColIdx = this.cols.findIndex(x => x.name === 'rowNum');
+    const rowNumCol = cols[rowNumColIdx];
+    rowNumCol.userEnteredValue = new GoogleSpreadsheet.ExtendedValue();
+    rowNumCol.userEnteredValue.formulaValue = '=ROW()';
 
     const row = GoogleSpreadsheet.RowData.Create(cols);
 
@@ -230,6 +236,18 @@ export class GSheetsPageDatabase implements PageDatabase {
     );
   }
 
+  private updateRowRequest(page: Page) {
+    const cols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(page[x.name]));
+
+    const row = GoogleSpreadsheet.RowData.Create(cols);
+
+    const request = GoogleSpreadsheet.UpdateCellsRequest.Create([row]);
+    request.range = GoogleSpreadsheet.GridRange.Create(this.sheetId);
+
+
+    return GoogleSpreadsheet.BatchUpdateRequest.Create(request);
+  }
+
   updateAll(updatedPages: Page[]) {
     this.initialize();
 
@@ -302,4 +320,8 @@ export class GSheetsPageDatabase implements PageDatabase {
       })
     );
   }
+}
+
+class SheetPage extends Page {
+  rowNum = 0;
 }

@@ -51,7 +51,7 @@ export class SheetQuery {
 
             const col = json_response.table.cols[cellIdx];
 
-            x[(col.label || col.id).trim()] = cell.v;
+            x[(col.label || col.id).trim()] = cell === null || cell.v === 'null' ? null : cell.v;
           }
 
           response.push(x);
