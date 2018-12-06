@@ -27,14 +27,14 @@ export class PageApproveCommand {
       );
     }
 
-    return this.pageDatabase.get(model.kind).pipe(
-      map(pages => pages.filter(page => page.status === 'Approved')),
+    return this.pageDatabase.list(model.kind).pipe(
       switchMap(_ => this.onPages(_, model))
     );
   }
 
   private onPages(pages: Page[], model: Page<string | {}>) {
-    const overlappingPage = pages.find(page => page.effectiveFrom.valueOf() === model.effectiveFrom.valueOf());
+    // tslint:disable-next-line:max-line-length
+    const overlappingPage = pages.find(page => page.status === 'Approved' && page.effectiveFrom.valueOf() === model.effectiveFrom.valueOf());
     if (overlappingPage) {
       return throwError(Result.CreateErrorResult(`Cannot approve as it would overlap with ${overlappingPage.id}.`));
     }

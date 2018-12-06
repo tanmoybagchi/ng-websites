@@ -10,9 +10,7 @@ export class PagesCurrentQuery {
   ) { }
 
   execute(kind: string) {
-    return this.pageDatabase.get(kind).pipe(
-      map(pages => this.getCurrentPagesInternal(pages))
-    );
+    return this.pageDatabase.getCurrentPages(kind);
   }
 
   private getCurrentPagesInternal(pages: Page[]) {

@@ -5,7 +5,7 @@ import { routes } from '@app/app-routes';
 import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
-import { GDrivePageDatabase, MaterialCmsProvidersModule } from 'material-cms-providers';
+import { /* GDrivePageDatabase, */ MaterialCmsProvidersModule } from 'material-cms-providers';
 import { MaterialCmsViewModule } from 'material-cms-view';
 import { AboutUsModule } from './about-us/about-us.module';
 import { AppRootComponent } from './app-root/app-root.component';

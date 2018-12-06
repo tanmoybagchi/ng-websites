@@ -53,7 +53,7 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
       this.name = `${pageInfo[0].name} edit`;
     }
 
-    this.pageIdQuery.execute(Number(params.get('id')), this.model.kind, this.modelCreator).pipe(
+    this.pageIdQuery.execute(Number(params.get('id')), this.modelCreator).pipe(
       catchError(err => this.onError(err))
     ).subscribe(_ => this.onPage(_));
   }

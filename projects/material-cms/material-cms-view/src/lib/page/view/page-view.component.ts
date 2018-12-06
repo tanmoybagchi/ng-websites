@@ -4,9 +4,9 @@ import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { SitePages, SITE_PAGES } from '../../site-pages';
 import { Page } from '../../page';
-import { PageCurrentQuery } from '../queries/page-current-query.service';
+import { PageDatabase, PAGE_DATABASE } from '../../page-database';
+import { SitePages, SITE_PAGES } from '../../site-pages';
 
 @Component({
   selector: 'cms-page-view',
@@ -28,9 +28,9 @@ export class PageViewComponent implements OnInit {
   }
 
   constructor(
+    @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase,
     @Inject(SITE_PAGES) private sitePages: SitePages,
     private eventManagerService: EventManagerService,
-    private pageCurrentQuery: PageCurrentQuery,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
@@ -54,7 +54,7 @@ export class PageViewComponent implements OnInit {
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.pageCurrentQuery.execute(kind).pipe(
+    this.pageDatabase.getCurrentPage(kind).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onCurrentQuery(_));

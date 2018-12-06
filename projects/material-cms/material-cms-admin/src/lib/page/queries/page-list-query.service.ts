@@ -9,6 +9,6 @@ export class PageListQuery {
   ) { }
 
   execute(kind: string): Observable<Page[]> {
-    return this.pageDatabase.get(kind);
+    return this.pageDatabase.list(kind);
   }
 }

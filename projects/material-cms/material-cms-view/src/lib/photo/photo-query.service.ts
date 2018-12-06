@@ -11,7 +11,7 @@ export class PhotoQuery {
   ) { }
 
   execute() {
-    return this.pageDatabase.get('photo').pipe(
+    return this.pageDatabase.getCurrentPages('photo').pipe(
       map(pages => pages.map(item => {
         const photo = DomainHelper.adapt(Photo, item);
         photo.setSizes(JSON.parse(<string>item.content));

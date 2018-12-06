@@ -3,7 +3,11 @@ import { Observable } from 'rxjs';
 import { Page } from './page';
 
 export interface PageDatabase {
-  get(kind: string): Observable<Page[]>;
+  getCurrentPage(kind: string): Observable<Page>;
+  getCurrentPages(kind: string): Observable<Page[]>;
+  list(kind: string): Observable<Page[]>;
+  listWithContent(kind: string): Observable<Page[]>;
+  get(id: number): Observable<Page>;
   add(pageToAdd: Page): Observable<Page>;
   addAll(pagesToAdd: Page[]): Observable<Page[]>;
   update(updatedPage: Page): Observable<Page>;
