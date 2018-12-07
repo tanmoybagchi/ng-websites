@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment as env } from '@env/environment';
 import { DomainHelper, LocalStorageService, Result } from 'core';
 // tslint:disable-next-line:max-line-length
-import { DriveFile, DriveFileSaveCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery } from 'gapi';
+import { DriveFile, DriveFileSaveCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery, SheetCreateCommand, DriveCreateCommand } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
 import { EMPTY, Observable, of, throwError, iif, Subscription } from 'rxjs';
 import { map, share, switchMap, tap, filter, take } from 'rxjs/operators';
@@ -38,8 +38,10 @@ export class GSheetsPageDatabase implements PageDatabase {
   private effectiveToColId: string;
 
   constructor(
+    private driveCreateCommand: DriveCreateCommand,
     private driveFileSaveCommand: DriveFileSaveCommand,
     private driveFileSearchQuery: DriveFileSearchQuery,
+    private sheetCreateCommand: SheetCreateCommand,
     private sheetReadQuery: SheetReadQuery,
     private sheetQuery: SheetQuery,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
@@ -153,20 +155,27 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   add(pageToAdd: Page) {
-    const query = `SELECT max(${this.idColId})`;
+    const query = `SELECT max(${this.idColId}) label max(${this.idColId}) 'maxId'`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
+      switchMap(_ => this.initializeSpreadsheet()),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map(_ => {
-        const newPage = DomainHelper.adapt(SheetRow, pageToAdd);
-        newPage.id = this.pages.length === 0 ? 1 : Math.max(...this.pages.map(x => x.id)) + 1;
-        newPage.identifier = this.uid();
-        newPage.version = 1;
-        newPage.savedBy = env.g_oauth_login_name;
-        newPage.savedOn = new Date();
+      map(qr => qr[0].maxId),
+      map(maxId => {
+        const sheetRow = DomainHelper.adapt(SheetRow, pageToAdd);
+        sheetRow.id = maxId + 1;
+        sheetRow.identifier = this.uid();
+        sheetRow.version = 1;
+        sheetRow.savedBy = env.g_oauth_login_name;
+        sheetRow.savedOn = new Date();
         // tslint:disable-next-line:no-unused-expression
-        typeof pageToAdd.content === 'object' && (newPage.content = JSON.stringify(pageToAdd.content));
-      })
+        typeof pageToAdd.content === 'object' && (sheetRow.content = JSON.stringify(pageToAdd.content));
+
+        return sheetRow;
+      }),
+      map(sheetRow => ({ row: this.addRowRequest(sheetRow), id: sheetRow.id })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.row]).pipe(map(_ => x.id))),
+      switchMap(id => this.get(id))
     );
   }
 
@@ -190,6 +199,48 @@ export class GSheetsPageDatabase implements PageDatabase {
 
   remove(page: Page<string | {}>): Observable<never> {
     throw new Error('Method not implemented.');
+  }
+
+  private initializeSpreadsheet() {
+    if (String.hasData(this.spreadsheetId)) {
+      return of(true);
+    }
+
+    const spreadsheet = GoogleSpreadsheet.Create(env.database2);
+    spreadsheet.sheets = [
+      this.CreateDatabaseSheet()
+    ];
+
+    return this.driveCreateCommand.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
+      switchMap(_ => of(true))
+    );
+
+    return this.sheetCreateCommand.execute(spreadsheet).pipe(
+      tap(ss => this.spreadsheetUrl = ss.spreadsheetUrl.replace('/edit', '')),
+      tap(ss => this.sheetId = ss.sheets[0].properties.sheetId),
+      tap(_ => this.rowCount = 2),
+      switchMap(_ => this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet)),
+      tap(files => this.spreadsheetId = files[0].id),
+      switchMap(_ => of(true))
+    );
+  }
+
+  private CreateDatabaseSheet() {
+    const headerCols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(x.name));
+
+    const headerRow = GoogleSpreadsheet.RowData.Create(headerCols);
+
+    const fakePage = new SheetRow();
+    fakePage.content = 'Do not delete this row';
+
+    const fakeDataRow = this.convertToRow(fakePage);
+
+    const grid = GoogleSpreadsheet.GridData.Create([headerRow, fakeDataRow]);
+    const sheet = GoogleSpreadsheet.Sheet.Create(this.sheetName, [grid]);
+    sheet.properties.gridProperties = new GoogleSpreadsheet.GridProperties();
+    sheet.properties.gridProperties.frozenRowCount = 1;
+
+    return sheet;
   }
 
   private addRowRequest(page: Page) {

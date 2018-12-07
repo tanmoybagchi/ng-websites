@@ -320,6 +320,10 @@ export namespace GoogleSpreadsheet {
   /** A single kind of update to apply to a spreadsheet.
    * Union field kind can be only one of the following: */
   export class BatchUpdateRequest {
+    updateSpreadsheetProperties: UpdateSpreadsheetPropertiesRequest;
+    updateSheetProperties: UpdateSheetPropertiesRequest;
+    addSheet: AddSheetRequest;
+    deleteSheet: DeleteSheetRequest;
     appendCells: AppendCellsRequest;
     updateCells: UpdateCellsRequest;
 
@@ -333,6 +337,71 @@ export namespace GoogleSpreadsheet {
       if (request instanceof UpdateCellsRequest) {
         result.updateCells = request;
       }
+
+      return result;
+    }
+  }
+
+  export class UpdateSpreadsheetPropertiesRequest {
+    /** The properties to update. */
+    properties: SpreadsheetProperties;
+    /** The fields of CellData that should be updated.
+     * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
+     * A single "*" can be used as short-hand for listing every field. */
+    fields: string;
+
+    static Create(properties: SpreadsheetProperties) {
+      const result = new UpdateSpreadsheetPropertiesRequest();
+
+      result.properties = properties;
+      result.fields = '*';
+
+      return result;
+    }
+  }
+
+  export class UpdateSheetPropertiesRequest {
+    /** The properties to update. */
+    properties: SheetProperties;
+    /** The fields of CellData that should be updated.
+     * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
+     * A single "*" can be used as short-hand for listing every field. */
+    fields: string;
+
+    static Create(properties: SheetProperties) {
+      const result = new UpdateSheetPropertiesRequest();
+
+      result.properties = properties;
+      result.fields = '*';
+
+      return result;
+    }
+  }
+
+  export class AddSheetRequest {
+    /** The properties the new sheet should have.
+     * All properties are optional.
+     * The sheetId field is optional; if one is not set, an id will be randomly generated.
+     * (It is an error to specify the ID of a sheet that already exists.) */
+    properties: SheetProperties;
+
+    static Create(properties: SheetProperties) {
+      const result = new AddSheetRequest();
+
+      result.properties = properties;
+
+      return result;
+    }
+  }
+
+  export class DeleteSheetRequest {
+    /** The ID of the sheet to delete. */
+    sheetId: number;
+
+    static Create(sheetId: number) {
+      const result = new DeleteSheetRequest();
+
+      result.sheetId = sheetId;
 
       return result;
     }

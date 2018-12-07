@@ -72,20 +72,64 @@ export class GDrivePageDatabase implements PageDatabase {
     );
   }
 
-  get(kind: string) {
+  getCurrentPage(kind: string) {
+    return this.listWithContent(kind).pipe(
+      map(pages => {
+        const now = Date.now();
+
+        const approvedPages = pages.filter(x => x.status === 'Approved' && x.effectiveFrom.valueOf() <= now);
+        if (approvedPages.length === 0) {
+          return new Page();
+        }
+
+        if (approvedPages.length === 1) {
+          return approvedPages[0];
+        }
+
+        const mostRecentlyApproved = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
+
+        return approvedPages.find(x => x.effectiveFrom.valueOf() === mostRecentlyApproved);
+      })
+    );
+  }
+
+  getCurrentPages(kind: string) {
+    return this.listWithContent(kind).pipe(
+      map(pages => {
+        const now = Date.now();
+
+        const approvedPages = pages.filter(x => x.status === 'Approved' && x.effectiveFrom.valueOf() <= now);
+        if (approvedPages.length === 0) {
+          return [];
+        }
+
+        return approvedPages.filter(x => x.effectiveTo.valueOf() > now);
+      })
+    );
+  }
+
+  list(kind: string) {
+    return this.listWithContent(kind);
+  }
+
+  listWithContent(kind: string) {
     const result = this.initialising ? this.observable : of(this.pages);
     return result.pipe(
-      map(pages => pages
-        .filter(x => x.kind === kind)
-        .map(page => DomainHelper.adapt(Page, page))
-      )
+      map(pages => pages.filter(x => x.kind === kind).map(page => DomainHelper.adapt(Page, page)))
+    );
+  }
+
+  get(id: number) {
+    const result = this.initialising ? this.observable : of(this.pages);
+    return result.pipe(
+      map(pages => pages.find(x => x.id === id).map(page => DomainHelper.adapt(Page, page)))
     );
   }
 
   add(pageToAdd: Page) {
     this.initialize();
 
-    return this.get(pageToAdd.kind).pipe(
+    return this.list(pageToAdd.kind).pipe(
       switchMap(_ => {
         const newPage = DomainHelper.adapt(Page, pageToAdd);
         newPage.id = this.pages.length === 0 ? 1 : Math.max(...this.pages.map(x => x.id)) + 1;
@@ -111,7 +155,7 @@ export class GDrivePageDatabase implements PageDatabase {
   addAll(pagesToAdd: Page[]) {
     this.initialize();
 
-    return this.get(pagesToAdd[0].kind).pipe(
+    return this.list(pagesToAdd[0].kind).pipe(
       switchMap(_ => {
         const addedItems: Page[] = [];
 
@@ -149,7 +193,7 @@ export class GDrivePageDatabase implements PageDatabase {
   update(updatedPage: Page) {
     this.initialize();
 
-    return this.get(updatedPage.kind).pipe(
+    return this.get(updatedPage.id).pipe(
       switchMap(_ => {
         const result = new Result();
 
@@ -185,7 +229,7 @@ export class GDrivePageDatabase implements PageDatabase {
   updateAll(updatedPages: Page[]) {
     this.initialize();
 
-    return this.get(updatedPages[0].kind).pipe(
+    return this.get(updatedPages[0].id).pipe(
       switchMap(_ => {
         const result = new Result();
 
@@ -228,7 +272,7 @@ export class GDrivePageDatabase implements PageDatabase {
   remove(page: Page) {
     this.initialize();
 
-    return this.get(page.kind).pipe(
+    return this.get(page.id).pipe(
       switchMap(_ => {
         const result = new Result();
 

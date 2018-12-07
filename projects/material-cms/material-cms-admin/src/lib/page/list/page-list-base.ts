@@ -61,6 +61,7 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     private router: Router,
     private storage: LocalStorageService,
   ) {
+    this.canAddNew = true;
     this.dataSource = new MatTableDataSource<TPageListItem>();
   }
 
@@ -103,7 +104,6 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
 
   onListQuery(list: Page[]) {
     if (list.length === 0) {
-      this.canAddNew = true;
       return;
     }
 
