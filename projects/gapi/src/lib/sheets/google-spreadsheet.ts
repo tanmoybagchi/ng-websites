@@ -327,8 +327,25 @@ export namespace GoogleSpreadsheet {
     appendCells: AppendCellsRequest;
     updateCells: UpdateCellsRequest;
 
-    static Create(request: AppendCellsRequest | UpdateCellsRequest) {
+    // tslint:disable-next-line:max-line-length
+    static Create(request: UpdateSpreadsheetPropertiesRequest | UpdateSheetPropertiesRequest | AddSheetRequest | DeleteSheetRequest | AppendCellsRequest | UpdateCellsRequest) {
       const result = new BatchUpdateRequest();
+
+      if (request instanceof UpdateSpreadsheetPropertiesRequest) {
+        result.updateSpreadsheetProperties = request;
+      }
+
+      if (request instanceof UpdateSheetPropertiesRequest) {
+        result.updateSheetProperties = request;
+      }
+
+      if (request instanceof AddSheetRequest) {
+        result.addSheet = request;
+      }
+
+      if (request instanceof DeleteSheetRequest) {
+        result.deleteSheet = request;
+      }
 
       if (request instanceof AppendCellsRequest) {
         result.appendCells = request;
@@ -447,6 +464,29 @@ export namespace GoogleSpreadsheet {
 
       return result;
     }
+  }
+
+  /** A single response from an update. */
+  export class BatchUpdateResponse {
+    /** The spreadsheet the updates were applied to. */
+    spreadsheetId: string;
+    /** The reply of the updates. This maps 1:1 with the updates, although replies to some requests may be empty. */
+    replies: BatchUpdateReply[];
+    /** The spreadsheet after updates were applied.
+     * This is only set if [BatchUpdateSpreadsheetRequest.include_spreadsheet_in_response] is true. */
+    updatedSpreadsheet: GoogleSpreadsheet;
+  }
+
+  /** Union field kind can be only one of the following: */
+  export class BatchUpdateReply {
+    /** A reply from adding a sheet. */
+    addSheet: AddSheetResponse;
+  }
+
+  /** The result of adding a sheet. */
+  export class AddSheetResponse {
+    /** The properties of the newly added sheet. */
+    properties: SheetProperties;
   }
 
   /** A range on a sheet. All indexes are zero-based.

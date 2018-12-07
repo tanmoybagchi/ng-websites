@@ -70,9 +70,9 @@
         </mat-expansion-panel-header>
 
         <input-text [model]="wine.name" (modelChange)="onItemChange(wine, 'name', $event)" label="Wine" [disabled]="readOnly"
-          [errMsg]="errors?.content.wineTypes[wineTypeIdx]?.wines[wineIdx].name"></input-text>
+          [errMsg]="errors?.content?.wineTypes[wineTypeIdx]?.wines[wineIdx]?.name"></input-text>
 
-        <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'name', $event)" [disabled]="readOnly"></cms-editor>
+        <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'description', $event)" [disabled]="readOnly"></cms-editor>
       </mat-expansion-panel> <!-- wines -->
     </mat-expansion-panel> <!-- wine types -->
   </mat-card-content>

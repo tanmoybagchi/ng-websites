@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment as env } from '@env/environment';
-import { DomainHelper, LocalStorageService, Result } from 'core';
+import { DomainHelper, Result } from 'core';
 // tslint:disable-next-line:max-line-length
-import { DriveFile, DriveFileSaveCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery, SheetCreateCommand, DriveCreateCommand } from 'gapi';
+import { DriveCreateCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
-import { EMPTY, Observable, of, throwError, iif, Subscription } from 'rxjs';
-import { map, share, switchMap, tap, filter, take } from 'rxjs/operators';
+import { iif, Observable, of, throwError } from 'rxjs';
+import { filter, map, share, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GSheetsPageDatabase implements PageDatabase {
@@ -29,35 +29,39 @@ export class GSheetsPageDatabase implements PageDatabase {
     { id: 'J', name: 'content' },
     { id: 'K', name: 'rowNum' },
   ];
-  private queryWithContent: string;
-  private queryWithoutContent: string;
   private idColId: string;
   private kindColId: string;
   private statusColId: string;
   private effectiveFromColId: string;
   private effectiveToColId: string;
+  private selectClauseWithoutContent: string;
+  private labelClauseWithoutContent: string;
+  private selectClauseWithContent: string;
+  private labelClauseWithContent: string;
+  private versionColId: string;
+  private rowNumColId: string;
 
   constructor(
     private driveCreateCommand: DriveCreateCommand,
-    private driveFileSaveCommand: DriveFileSaveCommand,
     private driveFileSearchQuery: DriveFileSearchQuery,
-    private sheetCreateCommand: SheetCreateCommand,
     private sheetReadQuery: SheetReadQuery,
     private sheetQuery: SheetQuery,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
   ) {
     const colsWithoutContent = this.cols.filter(x => x.name !== 'content');
-    // tslint:disable-next-line:max-line-length
-    this.queryWithoutContent = `select ${colsWithoutContent.map(x => x.id).join(', ')} label ${colsWithoutContent.map(x => `${x.id} '${x.name}'`).join(', ')}`;
+    this.selectClauseWithoutContent = `select ${colsWithoutContent.map(x => x.id).join(', ')}`;
+    this.labelClauseWithoutContent = `label ${colsWithoutContent.map(x => `${x.id} '${x.name}'`).join(', ')}`;
 
-    // tslint:disable-next-line:max-line-length
-    this.queryWithContent = `select ${this.cols.map(x => x.id).join(', ')} label ${this.cols.map(x => `${x.id} '${x.name}'`).join(', ')}`;
+    this.selectClauseWithContent = `select ${this.cols.map(x => x.id).join(', ')}`;
+    this.labelClauseWithContent = `label ${this.cols.map(x => `${x.id} '${x.name}'`).join(', ')}`;
 
     this.idColId = this.cols.find(x => x.name === 'id').id;
     this.kindColId = this.cols.find(x => x.name === 'kind').id;
     this.statusColId = this.cols.find(x => x.name === 'status').id;
     this.effectiveFromColId = this.cols.find(x => x.name === 'effectiveFrom').id;
     this.effectiveToColId = this.cols.find(x => x.name === 'effectiveTo').id;
+    this.versionColId = this.cols.find(x => x.name === 'version').id;
+    this.rowNumColId = this.cols.find(x => x.name === 'rowNum').id;
 
     this.initialising$ = this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
       tap(_ => this.initialising = false),
@@ -66,9 +70,9 @@ export class GSheetsPageDatabase implements PageDatabase {
       // tslint:disable-next-line:max-line-length
       switchMap(_ => this.sheetReadQuery.execute(this.spreadsheetId, undefined, 'spreadsheetUrl,sheets(properties/sheetId,properties/title)')),
       filter(spreadsheet => spreadsheet.sheets.length > 0),
-      filter(spreadsheet => spreadsheet.sheets[0].properties.title === this.sheetName),
+      filter(spreadsheet => spreadsheet.sheets.findIndex(s => s.properties.title === this.sheetName) > -1),
       tap(spreadsheet => this.spreadsheetUrl = spreadsheet.spreadsheetUrl.replace('/edit', '')),
-      tap(spreadsheet => this.sheetId = spreadsheet.sheets[0].properties.sheetId),
+      tap(spreadsheet => this.sheetId = spreadsheet.sheets.find(s => s.properties.title === this.sheetName).properties.sheetId),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, 'select count(A) label count(A) "rowCount"', this.sheetName)),
       filter((qr: any[]) => qr.length > 0),
       tap(qr => this.rowCount = qr[0].rowCount),
@@ -81,8 +85,8 @@ export class GSheetsPageDatabase implements PageDatabase {
     const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}'`;
-    const query = `${this.queryWithContent} where ${whereClause}`;
+    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}'`;
+    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
@@ -110,8 +114,8 @@ export class GSheetsPageDatabase implements PageDatabase {
     const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}' AND ${this.effectiveToColId} > date '${param}'`;
-    const query = `${this.queryWithContent} where ${whereClause}`;
+    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}' AND ${this.effectiveToColId} > date '${param}'`;
+    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
@@ -121,8 +125,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   list(kind: string) {
-    const whereClause = `${this.kindColId} = '${kind}'`;
-    const query = `${this.queryWithoutContent} where ${whereClause}`;
+    const whereClause = `where ${this.kindColId} = '${kind}'`;
+    const query = `${this.selectClauseWithoutContent} ${whereClause} ${this.labelClauseWithoutContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
@@ -132,8 +136,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   listWithContent(kind: string) {
-    const whereClause = `${this.kindColId} = '${kind}'`;
-    const query = `${this.queryWithContent} where ${whereClause}`;
+    const whereClause = `where ${this.kindColId} = '${kind}'`;
+    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
@@ -143,8 +147,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   get(id: number) {
-    const whereClause = `${this.idColId} = '${id}'`;
-    const query = `${this.queryWithContent} where ${whereClause}`;
+    const whereClause = `where ${this.idColId} = ${id}`;
+    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
@@ -161,22 +165,27 @@ export class GSheetsPageDatabase implements PageDatabase {
       switchMap(_ => this.initializeSpreadsheet()),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       map(qr => qr[0].maxId),
-      map(maxId => {
-        const sheetRow = DomainHelper.adapt(SheetRow, pageToAdd);
-        sheetRow.id = maxId + 1;
-        sheetRow.identifier = this.uid();
-        sheetRow.version = 1;
-        sheetRow.savedBy = env.g_oauth_login_name;
-        sheetRow.savedOn = new Date();
-        // tslint:disable-next-line:no-unused-expression
-        typeof pageToAdd.content === 'object' && (sheetRow.content = JSON.stringify(pageToAdd.content));
-
-        return sheetRow;
-      }),
-      map(sheetRow => ({ row: this.addRowRequest(sheetRow), id: sheetRow.id })),
-      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.row]).pipe(map(_ => x.id))),
+      map(maxId => this.createSheetRow(pageToAdd, maxId + 1)),
+      map(sheetRow => ({ addRowRequest: this.createAddRowRequest(sheetRow), id: sheetRow.id })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.addRowRequest]).pipe(map(_ => x.id))),
+      tap(id => this.rowCount++),
       switchMap(id => this.get(id))
     );
+  }
+
+  private createSheetRow(page: Page, id?: number) {
+    const sheetRow = DomainHelper.adapt(SheetRow, page);
+
+    // tslint:disable-next-line:no-unused-expression
+    id !== undefined && id !== null && (sheetRow.id = id);
+    sheetRow.identifier = this.uid();
+    sheetRow.version = 1;
+    sheetRow.savedBy = env.g_oauth_login_name;
+    sheetRow.savedOn = new Date();
+    // tslint:disable-next-line:no-unused-expression
+    typeof page.content === 'object' && (sheetRow.content = JSON.stringify(page.content));
+
+    return sheetRow;
   }
 
   addAll(pagesToAdd: Page<string | {}>[]): Observable<Page<string | {}>[]> {
@@ -189,8 +198,41 @@ export class GSheetsPageDatabase implements PageDatabase {
     return tan.join('');
   }
 
-  update(updatedPage: Page<string | {}>): Observable<Page<string | {}>> {
-    throw new Error('Method not implemented.');
+  update(updatedPage: Page) {
+    // tslint:disable-next-line:max-line-length
+    const query = `SELECT ${this.versionColId}, ${this.rowNumColId} where ${this.idColId} = ${updatedPage.id} label ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+
+    return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
+      switchMap((qr: any[]) => this.ensureLatestCopy(qr[0], updatedPage)),
+      map(qr => this.updateSheetRow(qr, updatedPage)),
+      map(sheetRow => ({ updateRowRequest: this.createUpdateRowRequest(sheetRow), sheetRow })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.updateRowRequest]).pipe(map(_ => x.sheetRow))),
+      tap(sheetRow => updatedPage.version = sheetRow.version),
+      tap(sheetRow => updatedPage.savedBy = sheetRow.savedBy),
+      tap(sheetRow => updatedPage.savedOn = sheetRow.savedOn),
+      map(sheetRow => updatedPage)
+    );
+  }
+
+  private ensureLatestCopy(qr: any, updatedPage: Page) {
+    return qr.version !== updatedPage.version
+      // tslint:disable-next-line:max-line-length
+      ? throwError(Result.CreateErrorResult(`This was last updated by ${updatedPage.savedBy} on ${updatedPage.savedOn}. Please refresh your page.`))
+      : of(qr);
+  }
+
+  private updateSheetRow(qr: any, updatedPage: Page) {
+    const res = DomainHelper.adapt(SheetRow, updatedPage);
+
+    res.version++;
+    res.savedBy = env.g_oauth_login_name;
+    res.savedOn = new Date();
+    res.rowNum = qr.rowNum;
+
+    // tslint:disable-next-line:no-unused-expression
+    typeof updatedPage.content === 'object' && (res.content = JSON.stringify(updatedPage.content));
+
+    return res;
   }
 
   updateAll(updatedPages: Page<string | {}>[]): Observable<Page<string | {}>[]> {
@@ -206,44 +248,46 @@ export class GSheetsPageDatabase implements PageDatabase {
       return of(true);
     }
 
-    const spreadsheet = GoogleSpreadsheet.Create(env.database2);
-    spreadsheet.sheets = [
-      this.CreateDatabaseSheet()
-    ];
-
     return this.driveCreateCommand.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
-      switchMap(_ => of(true))
-    );
-
-    return this.sheetCreateCommand.execute(spreadsheet).pipe(
+      tap(files => this.spreadsheetId = files.id),
+      switchMap(_ => this.sheetReadQuery.execute(this.spreadsheetId, undefined, 'spreadsheetUrl,sheets(properties)')),
       tap(ss => this.spreadsheetUrl = ss.spreadsheetUrl.replace('/edit', '')),
       tap(ss => this.sheetId = ss.sheets[0].properties.sheetId),
+      switchMap(ss => this.updateSheet(ss)),
+      // tap(bur => this.sheetId = bur.replies[0].addSheet.properties.sheetId),
+      switchMap(_ => this.addDatabaseSheetHeader()),
+      // tslint:disable-next-line:max-line-length
       tap(_ => this.rowCount = 2),
-      switchMap(_ => this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet)),
-      tap(files => this.spreadsheetId = files[0].id),
       switchMap(_ => of(true))
     );
   }
 
-  private CreateDatabaseSheet() {
-    const headerCols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(x.name));
+  private updateSheet(ss: GoogleSpreadsheet) {
+    const sp = ss.sheets[0].properties;
+    sp.title = this.sheetName;
+    sp.gridProperties.frozenRowCount = 1;
+    const updateSheetRequest = GoogleSpreadsheet.UpdateSheetPropertiesRequest.Create(sp);
+    const bur = GoogleSpreadsheet.BatchUpdateRequest.Create(updateSheetRequest);
 
+    return this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [bur]);
+  }
+
+  private addDatabaseSheetHeader() {
+    const headerCols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(x.name));
     const headerRow = GoogleSpreadsheet.RowData.Create(headerCols);
 
     const fakePage = new SheetRow();
     fakePage.content = 'Do not delete this row';
-
     const fakeDataRow = this.convertToRow(fakePage);
 
-    const grid = GoogleSpreadsheet.GridData.Create([headerRow, fakeDataRow]);
-    const sheet = GoogleSpreadsheet.Sheet.Create(this.sheetName, [grid]);
-    sheet.properties.gridProperties = new GoogleSpreadsheet.GridProperties();
-    sheet.properties.gridProperties.frozenRowCount = 1;
+    const appendCellsRequest = GoogleSpreadsheet.AppendCellsRequest.Create(this.sheetId, [headerRow, fakeDataRow]);
 
-    return sheet;
+    const bur = GoogleSpreadsheet.BatchUpdateRequest.Create(appendCellsRequest);
+
+    return this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [bur]);
   }
 
-  private addRowRequest(page: Page) {
+  private createAddRowRequest(page: Page) {
     const row = this.convertToRow(page);
 
     const request = GoogleSpreadsheet.AppendCellsRequest.Create(this.sheetId, [row]);
@@ -251,13 +295,12 @@ export class GSheetsPageDatabase implements PageDatabase {
     return GoogleSpreadsheet.BatchUpdateRequest.Create(request);
   }
 
-  private updateRowRequest(page: SheetRow) {
+  private createUpdateRowRequest(page: SheetRow) {
     const row = this.convertToRow(page);
 
     const request = GoogleSpreadsheet.UpdateCellsRequest.Create([row]);
     request.range = GoogleSpreadsheet.GridRange.Create(this.sheetId);
-    request.range.startRowIndex = page.rowNum;
-    request.range.endRowIndex = page.rowNum + 1;
+    request.range.startRowIndex = page.rowNum - 1;
 
     return GoogleSpreadsheet.BatchUpdateRequest.Create(request);
   }

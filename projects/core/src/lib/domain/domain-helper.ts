@@ -38,27 +38,27 @@ export class DomainHelper {
 
       switch (typeof target[k]) {
         case 'string':
-          target[k] = source[k] === null ?
-            null :
-            typeof source[k] === 'string' ?
-              source[k] :
-              source[k].toString();
+          target[k] = source[k] === null
+            ? target[k]
+            : typeof source[k] === 'string'
+              ? source[k]
+              : source[k].toString();
           break;
 
         case 'boolean':
-          target[k] = source[k] === null ?
-            null :
-            typeof source[k] === 'boolean' ?
-              source[k] :
-              !!source[k];
+          target[k] = source[k] === null
+            ? target[k]
+            : typeof source[k] === 'boolean'
+              ? source[k]
+              : !!source[k];
           break;
 
         case 'number':
-          target[k] = source[k] === null ?
-            null :
-            typeof source[k] === 'number' ?
-              source[k] :
-              Number(source[k]);
+          target[k] = source[k] === null
+            ? target[k]
+            : typeof source[k] === 'number'
+              ? source[k]
+              : Number(source[k]);
           break;
 
         case 'object':

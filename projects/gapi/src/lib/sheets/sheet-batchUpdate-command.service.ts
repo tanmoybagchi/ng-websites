@@ -17,6 +17,6 @@ export class SheetBatchUpdateCommand {
       responseIncludeGridData: false
     };
 
-    return this.http.post<GoogleSpreadsheet>(url, body);
+    return this.http.post<GoogleSpreadsheet.BatchUpdateResponse>(url, body);
   }
 }
