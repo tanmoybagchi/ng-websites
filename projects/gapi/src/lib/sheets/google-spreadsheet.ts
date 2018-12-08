@@ -326,9 +326,10 @@ export namespace GoogleSpreadsheet {
     deleteSheet: DeleteSheetRequest;
     appendCells: AppendCellsRequest;
     updateCells: UpdateCellsRequest;
+    deleteDimension: DeleteDimensionRequest;
 
     // tslint:disable-next-line:max-line-length
-    static Create(request: UpdateSpreadsheetPropertiesRequest | UpdateSheetPropertiesRequest | AddSheetRequest | DeleteSheetRequest | AppendCellsRequest | UpdateCellsRequest) {
+    static Create(request: UpdateSpreadsheetPropertiesRequest | UpdateSheetPropertiesRequest | AddSheetRequest | DeleteSheetRequest | AppendCellsRequest | UpdateCellsRequest | DeleteDimensionRequest) {
       const result = new BatchUpdateRequest();
 
       if (request instanceof UpdateSpreadsheetPropertiesRequest) {
@@ -353,6 +354,10 @@ export namespace GoogleSpreadsheet {
 
       if (request instanceof UpdateCellsRequest) {
         result.updateCells = request;
+      }
+
+      if (request instanceof DeleteDimensionRequest) {
+        result.deleteDimension = request;
       }
 
       return result;
@@ -464,6 +469,54 @@ export namespace GoogleSpreadsheet {
 
       return result;
     }
+  }
+
+  /** Deletes the dimensions from the sheet. */
+  export class DeleteDimensionRequest {
+    /** The dimensions to delete from the sheet. */
+    range: DimensionRange;
+
+    static Create(range: DimensionRange) {
+      const result = new DeleteDimensionRequest();
+
+      result.range = range;
+
+      return result;
+    }
+  }
+
+  /** A range along a single dimension on a sheet. All indexes are zero-based.
+   * Indexes are half open: the start index is inclusive and the end index is exclusive.
+   * Missing indexes indicate the range is unbounded on that side. */
+  export class DimensionRange {
+    /** The sheet this span is on. */
+    sheetId: number;
+    /** The dimension of the span. */
+    dimension: Dimension;
+    /** The start (inclusive) of the span, or not set if unbounded. */
+    startIndex: number;
+    /** The end (exclusive) of the span, or not set if unbounded. */
+    endIndex: number;
+
+    static Create(sheetId: number, dimension: Dimension, startIndex: number) {
+      const result = new DimensionRange();
+
+      result.sheetId = sheetId;
+      result.dimension = dimension;
+      result.startIndex = startIndex;
+
+      return result;
+    }
+  }
+
+  /** Indicates which dimension an operation should apply to. */
+  export enum Dimension {
+    /** The default value, do not use. */
+    DIMENSION_UNSPECIFIED,
+    /** Operates on the rows of a sheet. */
+    ROWS,
+    /** Operates on the columns of a sheet. */
+    COLUMNS
   }
 
   /** A single response from an update. */

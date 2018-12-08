@@ -4,7 +4,7 @@ import { DomainHelper, Result } from 'core';
 // tslint:disable-next-line:max-line-length
 import { DriveCreateCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
-import { iif, Observable, of, throwError } from 'rxjs';
+import { iif, Observable, of, throwError, noop, EMPTY } from 'rxjs';
 import { filter, map, share, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -164,20 +164,20 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       switchMap(_ => this.initializeSpreadsheet()),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map(qr => qr[0].maxId),
-      map(maxId => this.createSheetRow(pageToAdd, maxId + 1)),
-      map(sheetRow => ({ addRowRequest: this.createAddRowRequest(sheetRow), id: sheetRow.id })),
-      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.addRowRequest]).pipe(map(_ => x.id))),
-      tap(id => this.rowCount++),
-      switchMap(id => this.get(id))
+      map(qr => this.createSheetRow(pageToAdd, ++qr[0].maxId)),
+      map(sheetRow => ({ addRowRequest: this.createAddRowRequest(sheetRow), sheetRow })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.addRowRequest]).pipe(map(_ => x.sheetRow))),
+      tap(sheetRow => pageToAdd.version = sheetRow.version),
+      tap(sheetRow => pageToAdd.savedBy = sheetRow.savedBy),
+      tap(sheetRow => pageToAdd.savedOn = sheetRow.savedOn),
+      map(sheetRow => pageToAdd)
     );
   }
 
-  private createSheetRow(page: Page, id?: number) {
+  private createSheetRow(page: Page, id: number) {
     const sheetRow = DomainHelper.adapt(SheetRow, page);
 
-    // tslint:disable-next-line:no-unused-expression
-    id !== undefined && id !== null && (sheetRow.id = id);
+    sheetRow.id = id;
     sheetRow.identifier = this.uid();
     sheetRow.version = 1;
     sheetRow.savedBy = env.g_oauth_login_name;
@@ -188,8 +188,19 @@ export class GSheetsPageDatabase implements PageDatabase {
     return sheetRow;
   }
 
-  addAll(pagesToAdd: Page<string | {}>[]): Observable<Page<string | {}>[]> {
-    throw new Error('Method not implemented.');
+  addAll(pagesToAdd: Page[]) {
+    const query = `SELECT max(${this.idColId}) label max(${this.idColId}) 'maxId'`;
+
+    return iif(() => this.initialising, this.initialising$, of(true)).pipe(
+      switchMap(_ => this.initializeSpreadsheet()),
+      switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
+      map(qr => qr[0].maxId),
+      map(maxId => pagesToAdd.map(pageToAdd => this.createSheetRow(pageToAdd, ++maxId))),
+      map(sheetRows => ({ addRowRequest: sheetRows.map(sheetRow => this.createAddRowRequest(sheetRow)), sheetRows })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.addRowRequest).pipe(map(_ => x.sheetRows))),
+      tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(pagesToAdd.find(pg => pg.id === sheetRow.id), sheetRow))),
+      map(_ => pagesToAdd)
+    );
   }
 
   private uid() {
@@ -204,13 +215,10 @@ export class GSheetsPageDatabase implements PageDatabase {
 
     return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
       switchMap((qr: any[]) => this.ensureLatestCopy(qr[0], updatedPage)),
-      map(qr => this.updateSheetRow(qr, updatedPage)),
+      map(qr => this.updateSheetRow(updatedPage, qr)),
       map(sheetRow => ({ updateRowRequest: this.createUpdateRowRequest(sheetRow), sheetRow })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.updateRowRequest]).pipe(map(_ => x.sheetRow))),
-      tap(sheetRow => updatedPage.version = sheetRow.version),
-      tap(sheetRow => updatedPage.savedBy = sheetRow.savedBy),
-      tap(sheetRow => updatedPage.savedOn = sheetRow.savedOn),
-      map(sheetRow => updatedPage)
+      map(sheetRow => DomainHelper.adapt(updatedPage, sheetRow))
     );
   }
 
@@ -221,8 +229,8 @@ export class GSheetsPageDatabase implements PageDatabase {
       : of(qr);
   }
 
-  private updateSheetRow(qr: any, updatedPage: Page) {
-    const res = DomainHelper.adapt(SheetRow, updatedPage);
+  private updateSheetRow(page: Page, qr: any) {
+    const res = DomainHelper.adapt(SheetRow, page);
 
     res.version++;
     res.savedBy = env.g_oauth_login_name;
@@ -230,17 +238,54 @@ export class GSheetsPageDatabase implements PageDatabase {
     res.rowNum = qr.rowNum;
 
     // tslint:disable-next-line:no-unused-expression
-    typeof updatedPage.content === 'object' && (res.content = JSON.stringify(updatedPage.content));
+    typeof page.content === 'object' && (res.content = JSON.stringify(page.content));
 
     return res;
   }
 
-  updateAll(updatedPages: Page<string | {}>[]): Observable<Page<string | {}>[]> {
-    throw new Error('Method not implemented.');
+  updateAll(updatedPages: Page[]) {
+    const selectClause = `SELECT ${this.idColId}, ${this.versionColId}, ${this.rowNumColId}`;
+    const whereClause = `where ${updatedPages.map(x => `${this.idColId} = ${x.id}`).join(' or ')}`;
+    const labelClause = `label ${this.idColId} 'id', ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
+
+    return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
+      switchMap((qr: any[]) => this.ensureLatestCopies(qr, updatedPages)),
+      map((qr: any[]) => updatedPages.map(updatedPage => this.updateSheetRow(updatedPage, qr.find(x => x.id === updatedPage.id)))),
+      map(sheetRows => ({ updateRowsRequest: sheetRows.map(sheetRow => this.createUpdateRowRequest(sheetRow)), sheetRows })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.updateRowsRequest).pipe(map(_ => x.sheetRows))),
+      tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(updatedPages.find(pg => pg.id === sheetRow.id), sheetRow))),
+      map(_ => updatedPages)
+    );
   }
 
-  remove(page: Page<string | {}>): Observable<never> {
-    throw new Error('Method not implemented.');
+  private ensureLatestCopies(savedPages: any[], updatedPages: Page[]) {
+    const result = new Result();
+
+    updatedPages.forEach(updatedPage => {
+      const savedPage = savedPages.find(x => x.id === updatedPage.id);
+      if (savedPage === null) {
+        result.addError(`Could not find page with id ${updatedPage.id}.`);
+      } else if (updatedPage.version !== savedPage.version) {
+        result.addError(`This was last updated by ${updatedPage.savedBy} on ${updatedPage.savedOn}. Please refresh your page.`);
+      }
+    });
+
+    return result.hasErrors ? throwError(result) : of(savedPages);
+  }
+
+  remove(page: Page) {
+    // tslint:disable-next-line:max-line-length
+    const query = `SELECT ${this.versionColId}, ${this.rowNumColId} where ${this.idColId} = ${page.id} label ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+
+    return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
+      switchMap((qr: any[]) => this.ensureLatestCopy(qr[0], page)),
+      map(qr => GoogleSpreadsheet.DimensionRange.Create(this.sheetId, GoogleSpreadsheet.Dimension.ROWS, qr.RowNum - 1)),
+      map(dimensionRange => GoogleSpreadsheet.DeleteDimensionRequest.Create(dimensionRange)),
+      map(deleteDimensionRequest => GoogleSpreadsheet.BatchUpdateRequest.Create(deleteDimensionRequest)),
+      switchMap(batchUpdateRequest => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [batchUpdateRequest])),
+      switchMap(batchUpdateResponse => EMPTY)
+    );
   }
 
   private initializeSpreadsheet() {
