@@ -20,7 +20,7 @@ export class SheetQuery {
       return throwError(Result.CreateErrorResult('Required', 'query'));
     }
 
-    let params = new HttpParams().append('tq', query);
+    let params = new HttpParams().append('tq', query.includes(' options ') ? query : `${query} options no_format`);
     // tslint:disable-next-line:no-unused-expression
     String.hasData(sheetName) && (params = params.append('sheet', sheetName));
     // tslint:disable-next-line:no-unused-expression
@@ -51,7 +51,15 @@ export class SheetQuery {
 
             const col = json_response.table.cols[cellIdx];
 
-            x[(col.label || col.id).trim()] = cell === null || cell.v === 'null' ? null : cell.v;
+            const prop = (col.label || col.id).trim();
+            const value = cell === null || cell.v === 'null'
+              ? null
+              : col.type === 'datetime'
+                // tslint:disable-next-line:no-eval
+                 ? eval(`new ${cell.v}`)
+                : cell.v;
+
+            x[prop] = value;
           }
 
           response.push(x);

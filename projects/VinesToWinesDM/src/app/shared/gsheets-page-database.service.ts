@@ -4,7 +4,7 @@ import { DomainHelper, Result } from 'core';
 // tslint:disable-next-line:max-line-length
 import { DriveCreateCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
-import { iif, Observable, of, throwError, noop, EMPTY } from 'rxjs';
+import { EMPTY, iif, Observable, of, throwError } from 'rxjs';
 import { filter, map, share, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -82,10 +82,11 @@ export class GSheetsPageDatabase implements PageDatabase {
 
   getCurrentPage(kind: string) {
     const today = new Date();
-    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    // tslint:disable-next-line:max-line-length
+    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}'`;
+    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'Approved' AND ${this.effectiveFromColId} < datetime '${param}'`;
     const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
@@ -97,10 +98,10 @@ export class GSheetsPageDatabase implements PageDatabase {
         }
 
         if (rows.length === 1) {
-          return this.convertToPage(rows[0]);
+          return DomainHelper.adapt(SheetRow, rows[0]);
         }
 
-        const approvedPages = rows.map(x => this.convertToPage(x));
+        const approvedPages = rows.map(x => DomainHelper.adapt(SheetRow, x));
 
         const mostRecentlyApproved = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
 
@@ -120,7 +121,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => this.convertToPage(x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
     );
   }
 
@@ -131,7 +132,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => this.convertToPage(x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
     );
   }
 
@@ -142,7 +143,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => this.convertToPage(x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
     );
   }
 
@@ -154,7 +155,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       filter((rows: any[]) => rows.length > 0),
-      map((rows: any[]) => this.convertToPage(rows[0]))
+      map((rows: any[]) => DomainHelper.adapt(SheetRow, rows[0]))
     );
   }
 
@@ -348,21 +349,6 @@ export class GSheetsPageDatabase implements PageDatabase {
     request.range.startRowIndex = page.rowNum - 1;
 
     return GoogleSpreadsheet.BatchUpdateRequest.Create(request);
-  }
-
-  private convertToPage(row: any) {
-    const page = DomainHelper.adapt(SheetRow, row);
-
-    // tslint:disable-next-line:no-eval no-unused-expression
-    String.hasData(row.effectiveFrom) && (page.effectiveFrom = new Date(eval(row.effectiveFrom)));
-
-    // tslint:disable-next-line:no-eval no-unused-expression
-    String.hasData(row.effectiveTo) && (page.effectiveTo = new Date(eval(row.effectiveTo)));
-
-    // tslint:disable-next-line:no-eval no-unused-expression
-    String.hasData(row.savedOn) && (page.savedOn = new Date(eval(row.savedOn)));
-
-    return page;
   }
 
   private convertToRow(page: Page) {
