@@ -112,10 +112,11 @@ export class GSheetsPageDatabase implements PageDatabase {
 
   getCurrentPages(kind: string) {
     const today = new Date();
-    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    // tslint:disable-next-line:max-line-length
+    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'approved' AND ${this.effectiveFromColId} < date '${param}' AND ${this.effectiveToColId} > date '${param}'`;
+    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'Approved' AND ${this.effectiveFromColId} < datetime '${param}' AND (${this.effectiveToColId} is null OR ${this.effectiveToColId}  = 'null' OR ${this.effectiveToColId} > datetime '${param}')`;
     const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
@@ -168,10 +169,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       map(qr => this.createSheetRow(pageToAdd, ++qr[0].maxId)),
       map(sheetRow => ({ addRowRequest: this.createAddRowRequest(sheetRow), sheetRow })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.addRowRequest]).pipe(map(_ => x.sheetRow))),
-      tap(sheetRow => pageToAdd.version = sheetRow.version),
-      tap(sheetRow => pageToAdd.savedBy = sheetRow.savedBy),
-      tap(sheetRow => pageToAdd.savedOn = sheetRow.savedOn),
-      map(sheetRow => pageToAdd)
+      map(sheetRow => DomainHelper.adapt(pageToAdd, sheetRow))
     );
   }
 
