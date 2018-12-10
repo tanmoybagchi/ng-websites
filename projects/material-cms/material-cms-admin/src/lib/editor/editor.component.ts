@@ -243,7 +243,8 @@ export class EditorComponent implements OnInit {
       delay(0),
       map(imgEl => document.getElementById(imgEl.id)),
       tap(imgEl => imgEl.id = ''),
-      tap(imgEl => this.photo_click_register(imgEl))
+      tap(imgEl => this.photo_click_register(imgEl)),
+      tap(_ => this.onBlur())
     ).subscribe();
   }
 
@@ -347,11 +348,13 @@ export class EditorComponent implements OnInit {
     this.content = this.savedContent;
 
     return timer(0, 50).pipe(
-      filter(_ => String.hasData(this._editor.innerHTML)),
+      filter(_ => this._editor.innerHTML !== null),
       take(1),
       tap(_ => {
-        const startContainer = this.findNode(this.rangeStartContainer);
-        const endContainer = this.findNode(this.rangeEndContainer);
+        // tslint:disable-next-line:max-line-length
+        const startContainer = (<HTMLElement>this.rangeStartContainer).id === this._editor.id ? this._editor : this.findNode(this.rangeStartContainer);
+        // tslint:disable-next-line:max-line-length
+        const endContainer = (<HTMLElement>this.rangeEndContainer).id === this._editor.id ? this._editor : this.findNode(this.rangeEndContainer);
 
         const range = new Range();
         range.setStart(startContainer, this.rangeStartOffset);

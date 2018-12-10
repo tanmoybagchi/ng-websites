@@ -345,6 +345,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     const request = GoogleSpreadsheet.UpdateCellsRequest.Create([row]);
     request.range = GoogleSpreadsheet.GridRange.Create(this.sheetId);
     request.range.startRowIndex = page.rowNum - 1;
+    request.range.endRowIndex = page.rowNum;
 
     return GoogleSpreadsheet.BatchUpdateRequest.Create(request);
   }
