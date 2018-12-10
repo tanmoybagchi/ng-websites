@@ -80,6 +80,10 @@ export class GSheetsPageDatabase implements PageDatabase {
     );
   }
 
+  warmup() {
+    this.initialising$.subscribe();
+  }
+
   getCurrentPage(kind: string) {
     const today = new Date();
     // tslint:disable-next-line:max-line-length

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Inject } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { routes } from '@app/app-routes';
@@ -6,7 +6,7 @@ import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
 import { /* GDrivePageDatabase, */ MaterialCmsProvidersModule } from 'material-cms-providers';
-import { MaterialCmsViewModule } from 'material-cms-view';
+import { MaterialCmsViewModule, PAGE_DATABASE, PageDatabase } from 'material-cms-view';
 import { AboutUsModule } from './about-us/about-us.module';
 import { AppRootComponent } from './app-root/app-root.component';
 import { AppRootModule } from './app-root/app-root.module';
@@ -45,4 +45,8 @@ import { GSheetsPageDatabase } from './shared/gsheets-page-database.service';
   ],
   bootstrap: [AppRootComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(@Inject(PAGE_DATABASE) gsh: PageDatabase) {
+    (<GSheetsPageDatabase>gsh).warmup();
+  }
+}
