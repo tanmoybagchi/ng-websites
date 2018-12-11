@@ -15,6 +15,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   modelCreator = AdminWinesPage;
   choosingPhoto = false;
   protected approvalRules = new AdminWinesApprovalRules();
+  private itemWorkedOn: Wine;
 
   constructor(
     @Inject(SITE_PAGES) sitePages: SitePages,
@@ -82,9 +83,20 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     (parent as any).expanded = true;
 
     this.choosingPhoto = true;
+    this.itemWorkedOn = item;
   }
 
   onPhotoListDone(photoId: number) {
     this.choosingPhoto = false;
+
+    if (photoId === undefined || photoId === null || photoId === 0) {
+      if (String.hasData(this.itemWorkedOn.photoIdentifier)) {
+        this.itemWorkedOn.photoIdentifier = '';
+        this.saveStream.next();
+      }
+
+      this.itemWorkedOn = null;
+      return;
+    }
   }
 }
