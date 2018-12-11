@@ -20,7 +20,7 @@ export class SheetQuery {
       return throwError(Result.CreateErrorResult('Required', 'query'));
     }
 
-    let params = new HttpParams().append('tq', query.includes(' options ') ? query : `${query} options no_format`);
+    let params = new HttpParams().append('tq', query);
     // tslint:disable-next-line:no-unused-expression
     String.hasData(sheetName) && (params = params.append('sheet', sheetName));
     // tslint:disable-next-line:no-unused-expression
