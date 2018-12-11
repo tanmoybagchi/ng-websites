@@ -208,6 +208,10 @@ export namespace GoogleSpreadsheet {
     static Create(inp: any) {
       const ev = new ExtendedValue();
 
+      if (inp === null) {
+        return ev;
+      }
+
       switch (typeof inp) {
         case 'string':
           ev.stringValue = inp;

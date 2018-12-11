@@ -8,7 +8,7 @@ export class PageListQuery {
     @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
-  execute(kind: string): Observable<Page[]> {
+  execute(kind: string) {
     return this.pageDatabase.list(kind);
   }
 }

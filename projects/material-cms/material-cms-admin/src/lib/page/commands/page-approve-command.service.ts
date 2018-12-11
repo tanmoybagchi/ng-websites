@@ -32,7 +32,7 @@ export class PageApproveCommand {
     );
   }
 
-  private onPages(pages: Page[], model: Page<string | {}>) {
+  private onPages(pages: PageDatabase.ListResult[], model: Page<string | {}>) {
     // tslint:disable-next-line:max-line-length
     const overlappingPage = pages.find(page => page.status === 'Approved' && page.effectiveFrom.valueOf() === model.effectiveFrom.valueOf());
     if (overlappingPage) {

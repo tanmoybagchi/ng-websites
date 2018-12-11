@@ -17,45 +17,19 @@ export class GSheetsPageDatabase implements PageDatabase {
   private sheetId: number;
   private rowCount: number;
 
-  private readonly cols2 = {
-    id: { colId: '', label: '' },
-    kind: { colId: '', label: '' },
-    identifier: { colId: '', label: '' },
-    effectiveFrom: { colId: '', label: '' },
-    effectiveTo: { colId: '', label: '' },
-    status: { colId: '', label: '' },
-    savedBy: { colId: '', label: '' },
-    savedOn: { colId: '', label: '' },
-    version: { colId: '', label: '' },
-    content: { colId: '', label: '' },
-    rowNum: { colId: '', label: '' },
+  private readonly pageColMapping = {
+    id: 'A',
+    kind: 'B',
+    identifier: 'C',
+    effectiveFrom: 'D',
+    effectiveTo: 'E',
+    status: 'F',
+    savedBy: 'G',
+    savedOn: 'H',
+    version: 'I',
+    content: 'J',
+    rowNum: 'K'
   };
-
-  private readonly cols = [
-    { id: 'A', name: 'id' },
-    { id: 'B', name: 'kind' },
-    { id: 'C', name: 'identifier' },
-    { id: 'D', name: 'effectiveFrom' },
-    { id: 'E', name: 'effectiveTo' },
-    { id: 'F', name: 'status' },
-    { id: 'G', name: 'savedBy' },
-    { id: 'H', name: 'savedOn' },
-    { id: 'I', name: 'version' },
-    { id: 'J', name: 'content' },
-    { id: 'K', name: 'rowNum' },
-  ];
-  private idColId: string;
-  private kindColId: string;
-  private statusColId: string;
-  private effectiveFromColId: string;
-  private effectiveToColId: string;
-  private selectClauseWithoutContent: string;
-  private labelClauseWithoutContent: string;
-  private selectClauseWithContent: string;
-  private labelClauseWithContent: string;
-  private versionColId: string;
-  private contentColId: string;
-  private rowNumColId: string;
 
   constructor(
     private driveCreateCommand: DriveCreateCommand,
@@ -64,32 +38,6 @@ export class GSheetsPageDatabase implements PageDatabase {
     private sheetQuery: SheetQuery,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
   ) {
-    // tslint:disable-next-line:max-line-length
-    const sheetCols = ['id', 'kind', 'identifier', 'effectiveFrom', 'effectiveTo', 'status', 'savedBy', 'savedOn', 'version', 'content', 'rowNum'];
-
-    for (let index = 0; index < sheetCols.length; index++) {
-      const element = sheetCols[index];
-
-      this.cols2[element].colId = String.fromCharCode(65 + index);
-      this.cols2[element].label = element;
-    }
-
-    const colsWithoutContent = this.cols.filter(x => x.name !== 'content');
-    this.selectClauseWithoutContent = `select ${colsWithoutContent.map(x => x.id).join(', ')}`;
-    this.labelClauseWithoutContent = `label ${colsWithoutContent.map(x => `${x.id} '${x.name}'`).join(', ')}`;
-
-    this.selectClauseWithContent = `select ${this.cols.map(x => x.id).join(', ')}`;
-    this.labelClauseWithContent = `label ${this.cols.map(x => `${x.id} '${x.name}'`).join(', ')}`;
-
-    this.idColId = this.cols.find(x => x.name === 'id').id;
-    this.kindColId = this.cols.find(x => x.name === 'kind').id;
-    this.statusColId = this.cols.find(x => x.name === 'status').id;
-    this.effectiveFromColId = this.cols.find(x => x.name === 'effectiveFrom').id;
-    this.effectiveToColId = this.cols.find(x => x.name === 'effectiveTo').id;
-    this.versionColId = this.cols.find(x => x.name === 'version').id;
-    this.contentColId = this.cols.find(x => x.name === 'content').id;
-    this.rowNumColId = this.cols.find(x => x.name === 'rowNum').id;
-
     this.initialising$ = this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
       tap(_ => this.initialising = false),
       filter(files => files.length > 0),
@@ -107,21 +55,16 @@ export class GSheetsPageDatabase implements PageDatabase {
     );
   }
 
-  warmup() {
-    this.initialising$.subscribe();
-  }
-
   getCurrentPage(kind: string) {
-    const today = new Date();
-
     const colsToReturn = ['effectiveFrom', 'content'];
     const selectClause = this.getSelectClause(colsToReturn);
     const labelClause = this.getLabelClause(colsToReturn);
 
+    const today = new Date();
     // tslint:disable-next-line:max-line-length
     const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.cols2.kind.colId} = '${kind}' AND ${this.cols2.status.colId} = 'Approved' AND ${this.cols2.effectiveFrom.colId} < datetime '${param}'`;
+    const whereClause = `where ${this.pageColMapping.kind} = '${kind}' AND ${this.pageColMapping.status} = 'Approved' AND ${this.pageColMapping.effectiveFrom} < datetime '${param}'`;
 
     const query = `${selectClause} ${whereClause} ${labelClause}`;
 
@@ -130,20 +73,18 @@ export class GSheetsPageDatabase implements PageDatabase {
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       map((rows: any[]) => {
         if (rows.length === 0) {
-          return { content: '' };
+          return new PageDatabase.GetCurrentPageResult();
         }
 
         if (rows.length === 1) {
-          return { content: rows[0].content };
+          return DomainHelper.adapt(PageDatabase.GetCurrentPageResult, rows[0]);
         }
-
-        // const approvedPages = rows.map(x => DomainHelper.adapt(SheetRow, x));
 
         const maxEffectiveFrom = Math.max(...rows.map(x => x.effectiveFrom.valueOf()));
 
         const currentPage = rows.find(x => x.effectiveFrom.valueOf() === maxEffectiveFrom);
 
-        return { content: currentPage.content };
+        return DomainHelper.adapt(PageDatabase.GetCurrentPageResult, currentPage);
       })
     );
   }
@@ -158,61 +99,66 @@ export class GSheetsPageDatabase implements PageDatabase {
     // tslint:disable-next-line:max-line-length
     const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.cols2.kind.colId} = '${kind}' AND ${this.cols2.status.colId} = 'Approved' AND ${this.cols2.effectiveFrom.colId} < datetime '${param}' AND (${this.cols2.effectiveTo.colId} is null OR ${this.cols2.effectiveTo.colId}  = 'null' OR ${this.cols2.effectiveTo.colId} > datetime '${param}')`;
+    const whereClause = `where ${this.pageColMapping.kind} = '${kind}' AND ${this.pageColMapping.status} = 'Approved' AND ${this.pageColMapping.effectiveFrom} < datetime '${param}' AND (${this.pageColMapping.effectiveTo} is null ${this.pageColMapping.effectiveTo} > datetime '${param}')`;
 
     const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.GetCurrentPagesResult, x)))
     );
   }
 
-  private getSelectClause(cols: string[]) {
-    return `select ${cols.map(c => this.cols2[c].colId).join(', ')}`;
-  }
-
-  private getLabelClause(cols: string[]) {
-    return `label ${cols.map(c => this.cols2[c].label).join(', ')}`;
-  }
-
   list(kind: string) {
-    const whereClause = `where ${this.kindColId} = '${kind}'`;
-    const query = `${this.selectClauseWithoutContent} ${whereClause} ${this.labelClauseWithoutContent}`;
+    const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'status'];
+
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
+    const whereClause = `where ${this.pageColMapping.kind} = '${kind}'`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListResult, x)))
     );
   }
 
   listWithContent(kind: string) {
-    const whereClause = `where ${this.kindColId} = '${kind}'`;
-    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
+    const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'status', 'content'];
+
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
+    const whereClause = `where ${this.pageColMapping.kind} = '${kind}'`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListWithContentResult, x)))
     );
   }
 
   get(id: number) {
-    const whereClause = `where ${this.idColId} = ${id}`;
-    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
+    const selectClause = 'select *';
+    const labelClause = this.getLabelClause(Object.keys(this.pageColMapping));
+    const whereClause = `where ${this.pageColMapping.id} = ${id}`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       filter((rows: any[]) => rows.length > 0),
-      map((rows: any[]) => DomainHelper.adapt(SheetRow, rows[0]))
+      map((rows: any[]) => DomainHelper.adapt(Page, rows[0]))
     );
   }
 
   add(pageToAdd: Page) {
-    const query = `SELECT max(${this.idColId}) label max(${this.idColId}) 'maxId'`;
+    const query = `SELECT max(${this.pageColMapping.id}) label max(${this.pageColMapping.id}) 'maxId'`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       switchMap(_ => this.initializeSpreadsheet()),
@@ -220,8 +166,27 @@ export class GSheetsPageDatabase implements PageDatabase {
       map(qr => this.createSheetRow(pageToAdd, ++qr[0].maxId)),
       map(sheetRow => ({ addRowRequest: this.createAddRowRequest(sheetRow), sheetRow })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.addRowRequest]).pipe(map(_ => x.sheetRow))),
-      map(sheetRow => DomainHelper.adapt(pageToAdd, sheetRow))
+      map(sheetRow => DomainHelper.adapt(PageDatabase.AddUpdateResult, sheetRow))
     );
+  }
+
+  addAll(pagesToAdd: Page[]) {
+    const query = `SELECT max(${this.pageColMapping.id}) label max(${this.pageColMapping.id}) 'maxId'`;
+
+    return iif(() => this.initialising, this.initialising$, of(true)).pipe(
+      switchMap(_ => this.initializeSpreadsheet()),
+      switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
+      map(qr => pagesToAdd.map(pageToAdd => this.createSheetRow(pageToAdd, ++qr[0].maxId))),
+      map(sheetRows => ({ addRowRequest: sheetRows.map(sheetRow => this.createAddRowRequest(sheetRow)), sheetRows })),
+      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.addRowRequest).pipe(map(_ => x.sheetRows))),
+      map(sheetRows => sheetRows.map(sheetRow => DomainHelper.adapt(PageDatabase.AddUpdateResult, sheetRow)))
+    );
+  }
+
+  private uid() {
+    const tan = new Uint8Array(8);
+    crypto.getRandomValues(tan);
+    return tan.join('');
   }
 
   private createSheetRow(page: Page, id: number) {
@@ -238,38 +203,21 @@ export class GSheetsPageDatabase implements PageDatabase {
     return sheetRow;
   }
 
-  addAll(pagesToAdd: Page[]) {
-    const query = `SELECT max(${this.idColId}) label max(${this.idColId}) 'maxId'`;
-
-    return iif(() => this.initialising, this.initialising$, of(true)).pipe(
-      switchMap(_ => this.initializeSpreadsheet()),
-      switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map(qr => qr[0].maxId),
-      map(maxId => pagesToAdd.map(pageToAdd => this.createSheetRow(pageToAdd, ++maxId))),
-      map(sheetRows => ({ addRowRequest: sheetRows.map(sheetRow => this.createAddRowRequest(sheetRow)), sheetRows })),
-      switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.addRowRequest).pipe(map(_ => x.sheetRows))),
-      tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(pagesToAdd.find(pg => pg.id === sheetRow.id), sheetRow))),
-      map(_ => pagesToAdd)
-    );
-  }
-
-  private uid() {
-    const tan = new Uint8Array(8);
-    crypto.getRandomValues(tan);
-    return tan.join('');
-  }
-
   update(updatedPage: Page) {
-    // tslint:disable-next-line:max-line-length
-    const query = `SELECT ${this.versionColId}, ${this.rowNumColId} where ${this.idColId} = ${updatedPage.id} label ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+    const colsToReturn = ['version', 'rowNum'];
+
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
+    const whereClause = `where ${this.pageColMapping.id} = ${updatedPage.id}`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
       switchMap((qr: any[]) => this.ensureLatestCopy(qr[0], updatedPage)),
       map(qr => this.updateSheetRow(updatedPage, qr)),
       map(sheetRow => ({ updateRowRequest: this.createUpdateRowRequest(sheetRow), sheetRow })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.updateRowRequest]).pipe(map(_ => x.sheetRow))),
-      tap(sheetRow => delete sheetRow.content),
-      map(sheetRow => DomainHelper.adapt(updatedPage, sheetRow))
+      map(sheetRow => DomainHelper.adapt(PageDatabase.AddUpdateResult, sheetRow))
     );
   }
 
@@ -280,24 +228,13 @@ export class GSheetsPageDatabase implements PageDatabase {
       : of(qr);
   }
 
-  private updateSheetRow(page: Page, qr: any) {
-    const res = DomainHelper.adapt(SheetRow, page);
-
-    res.version++;
-    res.savedBy = env.g_oauth_login_name;
-    res.savedOn = new Date();
-    res.rowNum = qr.rowNum;
-
-    // tslint:disable-next-line:no-unused-expression
-    typeof page.content === 'object' && (res.content = JSON.stringify(page.content));
-
-    return res;
-  }
-
   updateAll(updatedPages: Page[]) {
-    const selectClause = `SELECT ${this.idColId}, ${this.versionColId}, ${this.rowNumColId}`;
-    const whereClause = `where ${updatedPages.map(x => `${this.idColId} = ${x.id}`).join(' or ')}`;
-    const labelClause = `label ${this.idColId} 'id', ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+    const colsToReturn = ['id', 'version', 'rowNum'];
+
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
+    const whereClause = `where ${updatedPages.map(x => `${this.pageColMapping.id} = ${x.id}`).join(' or ')}`;
+
     const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
@@ -306,7 +243,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       map(sheetRows => ({ updateRowsRequest: sheetRows.map(sheetRow => this.createUpdateRowRequest(sheetRow)), sheetRows })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.updateRowsRequest).pipe(map(_ => x.sheetRows))),
       tap(sheetRows => sheetRows.forEach(sheetRow => delete sheetRow.content)),
-      tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(updatedPages.find(pg => pg.id === sheetRow.id), sheetRow))),
+      tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(PageDatabase.AddUpdateResult, sheetRow))),
       map(_ => updatedPages)
     );
   }
@@ -326,9 +263,28 @@ export class GSheetsPageDatabase implements PageDatabase {
     return result.hasErrors ? throwError(result) : of(savedPages);
   }
 
+  private updateSheetRow(page: Page, qr: any) {
+    const res = DomainHelper.adapt(SheetRow, page);
+
+    res.version++;
+    res.savedBy = env.g_oauth_login_name;
+    res.savedOn = new Date();
+    res.rowNum = qr.rowNum;
+
+    // tslint:disable-next-line:no-unused-expression
+    typeof page.content === 'object' && (res.content = JSON.stringify(page.content));
+
+    return res;
+  }
+
   remove(page: Page) {
-    // tslint:disable-next-line:max-line-length
-    const query = `SELECT ${this.versionColId}, ${this.rowNumColId} where ${this.idColId} = ${page.id} label ${this.versionColId} 'version', ${this.rowNumColId} 'rowNum'`;
+    const colsToReturn = ['version', 'rowNum'];
+
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
+    const whereClause = `where ${this.pageColMapping.id} = ${page.id}`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName).pipe(
       switchMap((qr: any[]) => this.ensureLatestCopy(qr[0], page)),
@@ -338,6 +294,14 @@ export class GSheetsPageDatabase implements PageDatabase {
       switchMap(batchUpdateRequest => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [batchUpdateRequest])),
       switchMap(batchUpdateResponse => EMPTY)
     );
+  }
+
+  private getSelectClause(cols: string[]) {
+    return `select ${cols.map(c => this.pageColMapping[c]).join(', ')}`;
+  }
+
+  private getLabelClause(cols: string[]) {
+    return `label ${cols.map(c => `${this.pageColMapping[c]} '${c}'`).join(', ')}`;
   }
 
   private initializeSpreadsheet() {
@@ -370,7 +334,7 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   private addDatabaseSheetHeader() {
-    const headerCols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(x.name));
+    const headerCols = Object.keys(this.pageColMapping).map(x => GoogleSpreadsheet.CellData.Create(x));
     const headerRow = GoogleSpreadsheet.RowData.Create(headerCols);
 
     const fakePage = new SheetRow();
@@ -404,15 +368,18 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   private convertToRow(page: Page) {
-    const cols = this.cols.map(x => GoogleSpreadsheet.CellData.Create(page[x.name]));
+    const cols = Object.keys(this.pageColMapping).map(propName => {
+      if (propName === 'rowNum') {
+        const cell = new GoogleSpreadsheet.CellData();
+        cell.userEnteredValue = new GoogleSpreadsheet.ExtendedValue();
+        cell.userEnteredValue.formulaValue = '=ROW()';
+        return cell;
+      }
 
-    const rowNumColIdx = this.cols.findIndex(x => x.name === 'rowNum');
-    const rowNumCol = cols[rowNumColIdx];
-    rowNumCol.userEnteredValue = new GoogleSpreadsheet.ExtendedValue();
-    rowNumCol.userEnteredValue.formulaValue = '=ROW()';
-    const row = GoogleSpreadsheet.RowData.Create(cols);
+      return GoogleSpreadsheet.CellData.Create(page[propName]);
+    });
 
-    return row;
+    return GoogleSpreadsheet.RowData.Create(cols);
   }
 }
 

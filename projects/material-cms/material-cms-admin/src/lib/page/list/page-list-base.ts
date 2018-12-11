@@ -2,7 +2,7 @@ import { Inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { EventManagerService, LocalStorageService, Result } from 'core';
-import { Page, SitePages, SITE_PAGES } from 'material-cms-view';
+import { Page, PageDatabase, SitePages, SITE_PAGES } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
@@ -99,10 +99,10 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     this.listQuery.execute(this.kind).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe((list: Page[]) => this.onListQuery(list));
+    ).subscribe(list => this.onListQuery(list));
   }
 
-  onListQuery(list: Page[]) {
+  onListQuery(list: PageDatabase.ListResult[]) {
     if (list.length === 0) {
       return;
     }
@@ -114,7 +114,7 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     this.applyFilter();
   }
 
-  protected setFullList(list: Page[]) {
+  protected setFullList(list: PageDatabase.ListResult[]) {
     this.fullList = list.map(x => new PageListItem(x)) as TPageListItem[];
 
     const now = Date.now();
@@ -198,7 +198,7 @@ export class PageListItem {
   status: string;
   current: boolean;
 
-  constructor(model: Page) {
+  constructor(model: PageDatabase.ListResult) {
     this.id = model.id;
     this.effectiveFrom = model.effectiveFrom;
     this.effectiveTo = model.effectiveTo;

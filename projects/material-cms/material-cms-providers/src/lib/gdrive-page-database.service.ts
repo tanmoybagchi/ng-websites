@@ -79,16 +79,18 @@ export class GDrivePageDatabase implements PageDatabase {
 
         const approvedPages = pages.filter(x => x.status === 'Approved' && x.effectiveFrom.valueOf() <= now);
         if (approvedPages.length === 0) {
-          return new Page();
+          return new PageDatabase.GetCurrentPageResult();
         }
 
         if (approvedPages.length === 1) {
-          return approvedPages[0];
+          return DomainHelper.adapt(PageDatabase.GetCurrentPageResult, approvedPages[0]);
         }
 
-        const mostRecentlyApproved = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
+        const maxEffectiveFrom = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
 
-        return approvedPages.find(x => x.effectiveFrom.valueOf() === mostRecentlyApproved);
+        const currentPage = approvedPages.find(x => x.effectiveFrom.valueOf() === maxEffectiveFrom);
+
+        return DomainHelper.adapt(PageDatabase.GetCurrentPageResult, currentPage);
       })
     );
   }
@@ -103,7 +105,9 @@ export class GDrivePageDatabase implements PageDatabase {
           return [];
         }
 
-        return approvedPages.filter(x => x.effectiveTo.valueOf() > now);
+        const currentPages = approvedPages.filter(x => x.effectiveTo.valueOf() > now);
+
+        return currentPages.map(x => DomainHelper.adapt(PageDatabase.GetCurrentPagesResult, x));
       })
     );
   }
@@ -115,7 +119,7 @@ export class GDrivePageDatabase implements PageDatabase {
   listWithContent(kind: string) {
     const result = this.initialising ? this.observable : of(this.pages);
     return result.pipe(
-      map(pages => pages.filter(x => x.kind === kind).map(page => DomainHelper.adapt(Page, page)))
+      map(pages => pages.filter(x => x.kind === kind).map(page => DomainHelper.adapt(PageDatabase.ListWithContentResult, page)))
     );
   }
 
@@ -145,7 +149,7 @@ export class GDrivePageDatabase implements PageDatabase {
         return this.driveFileSaveCommand.execute(this.pages, this.fileId).pipe(
           switchMap(x => {
             this.version = x.version;
-            return of(DomainHelper.adapt(Page, newPage));
+            return of(DomainHelper.adapt(PageDatabase.AddUpdateResult, newPage));
           })
         );
       })
@@ -177,7 +181,7 @@ export class GDrivePageDatabase implements PageDatabase {
         return this.driveFileSaveCommand.execute(this.pages, this.fileId).pipe(
           switchMap(x => {
             this.version = x.version;
-            return of(addedItems.map(item => DomainHelper.adapt(Page, item)));
+            return of(addedItems.map(item => DomainHelper.adapt(PageDatabase.AddUpdateResult, item)));
           })
         );
       })
@@ -199,13 +203,12 @@ export class GDrivePageDatabase implements PageDatabase {
 
         const savedPage = this.pages.find(x => x.id === updatedPage.id);
         if (!savedPage) {
-          result.addError(`Cannot find item with id ${updatedPage.id}.`);
-          return throwError(result);
+          return throwError(Result.CreateErrorResult(`Cannot find item with id ${updatedPage.id}.`));
         }
 
         if (savedPage.version !== updatedPage.version) {
-          result.addError(`This was last updated by ${updatedPage.savedBy} on ${updatedPage.savedOn}. Please refresh your page.`);
-          return throwError(result);
+          // tslint:disable-next-line:max-line-length
+          return throwError(Result.CreateErrorResult(`This was last updated by ${updatedPage.savedBy} on ${updatedPage.savedOn}. Please refresh your page.`));
         }
 
         DomainHelper.adapt(savedPage, updatedPage);
@@ -219,7 +222,7 @@ export class GDrivePageDatabase implements PageDatabase {
         return this.driveFileSaveCommand.execute(this.pages, this.fileId).pipe(
           switchMap(x => {
             this.version = x.version;
-            return of(DomainHelper.adapt(Page, savedPage));
+            return of(DomainHelper.adapt(PageDatabase.AddUpdateResult, savedPage));
           })
         );
       })
@@ -238,14 +241,12 @@ export class GDrivePageDatabase implements PageDatabase {
         updatedPages.forEach(updatePage => {
           const savedPage = this.pages.find(x => x.id === updatePage.id);
           if (!savedPage) {
-            result.addError(`Cannot find item with id ${updatePage.id}.`);
-            return throwError(result);
+            return throwError(Result.CreateErrorResult(`Cannot find item with id ${updatePage.id}.`));
           }
 
           if (savedPage.version !== updatePage.version) {
             // tslint:disable-next-line:max-line-length
-            result.addError(`Item with id ${updatePage.id} was last updated by ${updatePage.savedBy} on ${updatePage.savedOn}. Please refresh your page.`);
-            return throwError(result);
+            return throwError(Result.CreateErrorResult(`Item with id ${updatePage.id} was last updated by ${updatePage.savedBy} on ${updatePage.savedOn}. Please refresh your page.`));
           }
 
           DomainHelper.adapt(savedPage, updatePage);
@@ -262,7 +263,7 @@ export class GDrivePageDatabase implements PageDatabase {
         return this.driveFileSaveCommand.execute(this.pages, this.fileId).pipe(
           switchMap(x => {
             this.version = x.version;
-            return of(updatedItems.map(item => DomainHelper.adapt(Page, item)));
+            return of(updatedItems.map(item => DomainHelper.adapt(PageDatabase.AddUpdateResult, item)));
           })
         );
       })
@@ -278,13 +279,12 @@ export class GDrivePageDatabase implements PageDatabase {
 
         const itemIdx = this.pages.findIndex(x => x.id === page.id);
         if (itemIdx === -1) {
-          result.addError(`Cannot find item with id ${page.id}.`);
-          return throwError(result);
+          return throwError(Result.CreateErrorResult(`Cannot find item with id ${page.id}.`));
         }
 
         if (this.pages[itemIdx].version !== page.version) {
-          result.addError(`This was last updated by ${page.savedBy} on ${page.savedOn}. Please refresh your page.`);
-          return throwError(result);
+          // tslint:disable-next-line:max-line-length
+          return throwError(Result.CreateErrorResult(`This was last updated by ${page.savedBy} on ${page.savedOn}. Please refresh your page.`));
         }
 
         this.pages.splice(itemIdx, 1);
