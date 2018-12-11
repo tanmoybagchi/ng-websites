@@ -46,6 +46,7 @@ export namespace PageDatabase {
 
   export class AddUpdateResult {
     id = 0;
+    status = '';
     savedBy = '';
     @Reflect.metadata('design:type', Date)
     savedOn: Date = null;
