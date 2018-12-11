@@ -176,7 +176,7 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     this.createCommand.execute(this.kind).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe((model: Page) => {
+    ).subscribe(model => {
       this.router.navigate(['.', model.id], { relativeTo: this.route });
     });
   }

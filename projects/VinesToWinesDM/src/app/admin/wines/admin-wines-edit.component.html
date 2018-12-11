@@ -73,9 +73,17 @@
           [errMsg]="errors?.content?.wineTypes[wineTypeIdx]?.wines[wineIdx]?.name"></input-text>
 
         <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'description', $event)" [disabled]="readOnly"></cms-editor>
+
+        <button mat-raised-button (click)="choosingPhoto = true">Select Photo</button>
+
+        <cms-photo-list *ngIf="choosingPhoto" [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></cms-photo-list>
       </mat-expansion-panel> <!-- wines -->
     </mat-expansion-panel> <!-- wine types -->
   </mat-card-content>
+
+  <!-- <mat-card-content *ngIf="choosingPhoto">
+    <cms-photo-list [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></cms-photo-list>
+  </mat-card-content> -->
 
   <mat-card-actions>
     <cms-page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)"

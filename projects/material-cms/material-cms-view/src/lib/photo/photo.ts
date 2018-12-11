@@ -11,7 +11,7 @@ export class Photo {
     { name: 'Size_LG', dimension: 1919 },
   ];
 
-  identifier = '';
+  id = 0;
   @Reflect.metadata('design:type', Date)
   effectiveFrom: Date = null;
   smallThumbnail: PhotoContent;

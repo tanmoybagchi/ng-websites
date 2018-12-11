@@ -12,25 +12,4 @@ export class PagesCurrentQuery {
   execute(kind: string) {
     return this.pageDatabase.getCurrentPages(kind);
   }
-
-  private getCurrentPagesInternal(pages: Page[]) {
-    const now = Date.now();
-
-    const approvedPages = pages.filter(x => x.status === 'Approved' && x.effectiveFrom.valueOf() <= now);
-    if (approvedPages.length === 0) {
-      return [];
-    }
-
-    let result: Page[];
-
-    if (approvedPages[0].effectiveTo) {
-      result = approvedPages.filter(x => x.effectiveTo.valueOf() > now);
-    } else {
-      const mostRecentlyApproved = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
-
-      result = approvedPages.filter(x => x.effectiveFrom.valueOf() === mostRecentlyApproved);
-    }
-
-    return result;
-  }
 }

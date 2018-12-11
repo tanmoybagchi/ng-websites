@@ -4,7 +4,7 @@ import { Result } from 'core';
 import { EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Photo } from '../photo';
-import { PhotoQuery } from '../photo-query.service';
+import { PhotoListQuery } from '../photo-list-query.service';
 
 @Component({
   selector: 'cms-photo-viewer',
@@ -14,12 +14,12 @@ import { PhotoQuery } from '../photo-query.service';
 export class PhotoViewerComponent implements OnInit {
   private currentPhotoIndex: number;
   errors: any;
-  identifier: string;
+  id: number;
   private photos: Photo[];
   @ViewChild('photo') private photoElRef: ElementRef;
 
   constructor(
-    private photoCurrentQuery: PhotoQuery,
+    private photoListQuery: PhotoListQuery,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
@@ -35,7 +35,7 @@ export class PhotoViewerComponent implements OnInit {
       this.currentPhotoIndex = 0;
     }
 
-    this.router.navigate(['..', this.photos[this.currentPhotoIndex].identifier], { relativeTo: this.route, replaceUrl: true });
+    this.router.navigate(['..', this.photos[this.currentPhotoIndex].id], { relativeTo: this.route, replaceUrl: true });
   }
 
   onSwipeRight() {
@@ -45,17 +45,17 @@ export class PhotoViewerComponent implements OnInit {
       this.currentPhotoIndex = this.photos.length - 1;
     }
 
-    this.router.navigate(['..', this.photos[this.currentPhotoIndex].identifier], { relativeTo: this.route, replaceUrl: true });
+    this.router.navigate(['..', this.photos[this.currentPhotoIndex].id], { relativeTo: this.route, replaceUrl: true });
   }
 
   private onParams(params: ParamMap) {
-    this.identifier = params.get('identifier');
+    this.id = Number(params.get('id'));
 
     this.getPhotos();
   }
 
   private getPhotos() {
-    this.photoCurrentQuery.execute().pipe(
+    this.photoListQuery.execute().pipe(
       catchError(err => this.onError(err))
     ).subscribe(_ => this.onListQuery(_));
   }
@@ -63,7 +63,7 @@ export class PhotoViewerComponent implements OnInit {
   private onListQuery(photos: Photo[]) {
     this.photos = photos;
 
-    const currentPhoto = photos.filter(p => p.identifier === this.identifier)[0];
+    const currentPhoto = photos.find(p => p.id === this.id);
     this.currentPhotoIndex = photos.indexOf(currentPhoto);
 
     const photoSizes = currentPhoto.photos();

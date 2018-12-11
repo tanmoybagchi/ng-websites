@@ -137,7 +137,6 @@ export class GDrivePageDatabase implements PageDatabase {
       switchMap(_ => {
         const newPage = DomainHelper.adapt(Page, pageToAdd);
         newPage.id = this.pages.length === 0 ? 1 : Math.max(...this.pages.map(x => x.id)) + 1;
-        newPage.identifier = this.uid();
         newPage.version = 1;
         newPage.savedBy = this.env.g_oauth_login_name;
         newPage.savedOn = new Date();
@@ -166,7 +165,6 @@ export class GDrivePageDatabase implements PageDatabase {
         pagesToAdd.forEach(pageToAdd => {
           const newPage = DomainHelper.adapt(Page, pageToAdd);
           newPage.id = Math.max(...this.pages.map(x => x.id)) + 1;
-          newPage.identifier = this.uid();
           newPage.version = 1;
           newPage.savedBy = this.env.g_oauth_login_name;
           newPage.savedOn = new Date();
@@ -186,12 +184,6 @@ export class GDrivePageDatabase implements PageDatabase {
         );
       })
     );
-  }
-
-  private uid() {
-    const tan = new Uint8Array(8);
-    crypto.getRandomValues(tan);
-    return tan.join('');
   }
 
   update(updatedPage: Page) {

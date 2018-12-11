@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 import { UniqueIdService } from 'core';
-import { Photo, PhotoQuery } from 'material-cms-view';
+import { Photo, PhotoListQuery, PhotoGetQuery } from 'material-cms-view';
 import { from, timer } from 'rxjs';
 import { delay, filter, first, map, switchMap, take, tap } from 'rxjs/operators';
 
@@ -75,7 +75,8 @@ export class EditorComponent implements OnInit {
   private onPaste_StripFormatting_IEPaste = false;
 
   constructor(
-    private photoCurrentQuery: PhotoQuery,
+    private photoListQuery: PhotoListQuery,
+    private photoGetQuery: PhotoGetQuery,
     private uniqueIdService: UniqueIdService,
   ) {
     this.editorId = uniqueIdService.getUniqueId();
@@ -229,15 +230,13 @@ export class EditorComponent implements OnInit {
     this.choosingPhoto = true;
   }
 
-  onPhotoListDone(photoIdentifier: string) {
+  onPhotoListDone(photoId: number) {
     this.choosingPhoto = false;
 
     this.editorVisible$.pipe(
       switchMap(_ => this.restoreSelection()),
-      filter(_ => String.hasData(photoIdentifier)),
-      switchMap(() => this.photoCurrentQuery.execute()),
-      switchMap(photos => from(photos)),
-      first(photo => photo.identifier === photoIdentifier),
+      filter(_ => photoId !== undefined && photoId !== null && photoId > 0),
+      switchMap(() => this.photoGetQuery.execute(photoId)),
       map(photo => this.convertToImgElement(photo)),
       tap(imgEl => this.execCommand('insertHTML', imgEl.outerHTML)),
       delay(0),

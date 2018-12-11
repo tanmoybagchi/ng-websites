@@ -5,18 +5,18 @@ import { PageDatabase, PAGE_DATABASE } from '../page-database';
 import { Photo } from './photo';
 
 @Injectable({ providedIn: 'root' })
-export class PhotoQuery {
+export class PhotoGetQuery {
   constructor(
     @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase
   ) { }
 
-  execute() {
-    return this.pageDatabase.getCurrentPages('photo').pipe(
-      map(pages => pages.map(item => {
+  execute(id: number) {
+    return this.pageDatabase.get(id).pipe(
+      map(item => {
         const photo = DomainHelper.adapt(Photo, item);
         photo.setSizes(JSON.parse(<string>item.content));
         return photo;
-      }))
+      })
     );
   }
 }

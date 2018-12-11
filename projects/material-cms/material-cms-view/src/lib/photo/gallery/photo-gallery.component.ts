@@ -6,7 +6,7 @@ import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { Photo } from '../photo';
-import { PhotoQuery } from '../photo-query.service';
+import { PhotoListQuery } from '../photo-list-query.service';
 
 @Component({
   selector: 'cms-photo-gallery',
@@ -24,7 +24,7 @@ export class PhotoGalleryComponent implements OnInit {
 
   constructor(
     private eventManagerService: EventManagerService,
-    private photoQuery: PhotoQuery,
+    private photoListQuery: PhotoListQuery,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -50,7 +50,7 @@ export class PhotoGalleryComponent implements OnInit {
   private getPhotos() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.photoQuery.execute().pipe(
+    this.photoListQuery.execute().pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onListQuery(_));
@@ -145,7 +145,7 @@ export class PhotoGalleryComponent implements OnInit {
   }
 
   onPhotoClick($event: PhotoGalleryComponent.ListItem) {
-    this.router.navigate(['.', $event.identifier], { relativeTo: this.route });
+    this.router.navigate(['.', $event.id], { relativeTo: this.route });
   }
 
   onOKClick() {
@@ -164,7 +164,6 @@ export namespace PhotoGalleryComponent {
     savedOn: Date;
     height = 0;
     id = 0;
-    identifier = '';
     left = 0;
     name = '';
     selected = false;
@@ -176,8 +175,8 @@ export namespace PhotoGalleryComponent {
     width = 0;
 
     constructor(model: Photo, sanitizer: DomSanitizer) {
+      this.id = model.id;
       this.savedOn = model.effectiveFrom;
-      this.identifier = model.identifier;
       this.height = model.smallThumbnail.height;
       this.width = model.smallThumbnail.width;
 

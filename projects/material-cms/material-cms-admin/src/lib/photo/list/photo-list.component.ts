@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { EventManagerService, Result, ScrollbarDimensionService } from 'core';
-import { Photo, PhotoQuery } from 'material-cms-view';
+import { Photo, PhotoListQuery } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class PhotoListComponent implements OnInit {
   @Input() selected: string | string[];
   @Input() showDone = false;
   @Input() title = 'Choose photo(s)';
-  @Output() done = new EventEmitter<string | string[]>();
+  @Output() done = new EventEmitter<number | number[]>();
   @Output() error = new EventEmitter<Result>();
   @ViewChild('photos') private photosElRef: ElementRef;
   private photos: Photo[];
@@ -28,7 +28,7 @@ export class PhotoListComponent implements OnInit {
 
   constructor(
     private eventManagerService: EventManagerService,
-    private listQuery: PhotoQuery,
+    private listQuery: PhotoListQuery,
     private sanitizer: DomSanitizer,
     private scrollbarDimensionService: ScrollbarDimensionService,
   ) { }
@@ -78,7 +78,7 @@ export class PhotoListComponent implements OnInit {
     const list = this.photos.map(x => new PhotoListComponent.ListItem(x, this.sanitizer));
     const selectedPhotos = [].concat(this.selected);
 
-    list.forEach(photo => photo.selected = selectedPhotos.indexOf(photo.identifier) > -1);
+    list.forEach(photo => photo.selected = selectedPhotos.indexOf(photo.id) > -1);
 
     list.sort(function (a, b) {
       if (a.selected && b.selected) {
@@ -179,10 +179,10 @@ export class PhotoListComponent implements OnInit {
   }
 
   onDoneClick() {
-    const selectedPhotos: string[] = [];
+    const selectedPhotos: number[] = [];
 
     this.dataSource.forEach(photoRow => {
-      photoRow.forEach(photoItem => photoItem.selected && (selectedPhotos.push(photoItem.identifier)));
+      photoRow.forEach(photoItem => photoItem.selected && (selectedPhotos.push(photoItem.id)));
     });
 
     if (this.multiple) {
@@ -225,7 +225,7 @@ export class PhotoListComponent implements OnInit {
 export namespace PhotoListComponent {
   export class ListItem {
     height = 0;
-    identifier = '';
+    id = 0;
     left = 0;
     name: string;
     savedOn: Date;
@@ -238,9 +238,10 @@ export namespace PhotoListComponent {
     width = 0;
 
     constructor(model: Photo, sanitizer: DomSanitizer) {
+      this.id = model.id;
       this.savedOn = model.effectiveFrom;
       this.height = model.bigThumbnail.height;
-      this.identifier = model.identifier;
+      this.id = model.id;
       this.width = model.bigThumbnail.width;
 
       if (model.bigThumbnail) {

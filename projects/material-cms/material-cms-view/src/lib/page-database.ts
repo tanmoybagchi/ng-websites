@@ -23,7 +23,7 @@ export namespace PageDatabase {
   }
 
   export class GetCurrentPagesResult {
-    identifier = '';
+    id = 0;
     @Reflect.metadata('design:type', Date)
     effectiveFrom: Date = null;
     @Reflect.metadata('design:type', Date)

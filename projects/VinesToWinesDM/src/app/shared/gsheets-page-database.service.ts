@@ -20,15 +20,14 @@ export class GSheetsPageDatabase implements PageDatabase {
   private readonly pageColMapping = {
     id: 'A',
     kind: 'B',
-    identifier: 'C',
-    effectiveFrom: 'D',
-    effectiveTo: 'E',
-    status: 'F',
-    savedBy: 'G',
-    savedOn: 'H',
-    version: 'I',
-    content: 'J',
-    rowNum: 'K'
+    effectiveFrom: 'C',
+    effectiveTo: 'D',
+    status: 'E',
+    savedBy: 'F',
+    savedOn: 'G',
+    version: 'H',
+    content: 'I',
+    rowNum: 'J'
   };
 
   constructor(
@@ -92,14 +91,14 @@ export class GSheetsPageDatabase implements PageDatabase {
   getCurrentPages(kind: string) {
     const today = new Date();
 
-    const colsToReturn = ['effectiveFrom', 'effectiveTo', 'content'];
+    const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'content'];
     const selectClause = this.getSelectClause(colsToReturn);
     const labelClause = this.getLabelClause(colsToReturn);
 
     // tslint:disable-next-line:max-line-length
     const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.pageColMapping.kind} = '${kind}' AND ${this.pageColMapping.status} = 'Approved' AND ${this.pageColMapping.effectiveFrom} < datetime '${param}' AND (${this.pageColMapping.effectiveTo} is null ${this.pageColMapping.effectiveTo} > datetime '${param}')`;
+    const whereClause = `where ${this.pageColMapping.kind} = '${kind}' AND ${this.pageColMapping.status} = 'Approved' AND ${this.pageColMapping.effectiveFrom} < datetime '${param}' AND (${this.pageColMapping.effectiveTo} is null or ${this.pageColMapping.effectiveTo} > datetime '${param}')`;
 
     const query = `${selectClause} ${whereClause} ${labelClause}`;
 
@@ -183,17 +182,10 @@ export class GSheetsPageDatabase implements PageDatabase {
     );
   }
 
-  private uid() {
-    const tan = new Uint8Array(8);
-    crypto.getRandomValues(tan);
-    return tan.join('');
-  }
-
   private createSheetRow(page: Page, id: number) {
     const sheetRow = DomainHelper.adapt(SheetRow, page);
 
     sheetRow.id = id;
-    sheetRow.identifier = this.uid();
     sheetRow.version = 1;
     sheetRow.savedBy = env.g_oauth_login_name;
     sheetRow.savedOn = new Date();

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Wine } from '@app/wines/wines';
-import { PageEditBase } from 'material-cms-admin';
+import { ErrorFocusService } from 'core';
+import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
+import { Photo, PhotoGetQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { AdminWinesPage, AdminWineType } from './admin-wines';
 import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 
@@ -10,7 +13,20 @@ import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 })
 export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   modelCreator = AdminWinesPage;
+  choosingPhoto = false;
   protected approvalRules = new AdminWinesApprovalRules();
+
+  constructor(
+    @Inject(SITE_PAGES) sitePages: SitePages,
+    errorFocusService: ErrorFocusService,
+    pageIdQuery: PageIdQuery,
+    pageUpdateCommand: PageUpdateCommand,
+    private photoGetQuery: PhotoGetQuery,
+    route: ActivatedRoute,
+    router: Router,
+  ) {
+    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+  }
 
   onEffectiveFromChange($event) {
     this.model.effectiveFrom = $event;
@@ -54,5 +70,9 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   moveDown(list, item) {
     list.moveDown(item);
     this.saveStream.next();
+  }
+
+  onPhotoListDone(photoId: number) {
+    this.choosingPhoto = false;
   }
 }
