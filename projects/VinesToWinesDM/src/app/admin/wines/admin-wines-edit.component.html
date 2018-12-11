@@ -3,11 +3,11 @@
 <general-error [errors]="errors"></general-error>
 
 <mat-card>
-  <mat-card-content>
+  <mat-card-content *ngIf="!choosingPhoto">
     <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
       placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
 
-    <mat-expansion-panel style="margin-bottom: 1em" *ngFor="let wineType of model.content.wineTypes; let wineTypeIdx=index">
+    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of model.content.wineTypes; let wineTypeIdx=index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{wineType.name || '(no name)'}}
@@ -41,7 +41,7 @@
       <input-text [model]="wineType.description" (modelChange)="onItemChange(wineType, 'description', $event)" label="Wine Type Description"
         [disabled]="readOnly"></input-text>
 
-      <mat-expansion-panel style="margin-bottom: 1em" *ngFor="let wine of wineType.wines; let wineIdx=index">
+      <mat-expansion-panel [expanded]="wine.expanded" style="margin-bottom: 1em" *ngFor="let wine of wineType.wines; let wineIdx=index">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{wine.name || '(no name)'}}
@@ -74,16 +74,14 @@
 
         <cms-editor [content]="wine.description" (changed)="onItemChange(wine, 'description', $event)" [disabled]="readOnly"></cms-editor>
 
-        <button mat-raised-button (click)="choosingPhoto = true">Select Photo</button>
-
-        <cms-photo-list *ngIf="choosingPhoto" [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></cms-photo-list>
+        <button mat-raised-button (click)="onSetPhoto(wine, wineType)">Set Photo</button>
       </mat-expansion-panel> <!-- wines -->
     </mat-expansion-panel> <!-- wine types -->
   </mat-card-content>
 
-  <!-- <mat-card-content *ngIf="choosingPhoto">
+  <mat-card-content *ngIf="choosingPhoto">
     <cms-photo-list [allowSelection]="true" [showDone]="true" (done)="onPhotoListDone($event)"></cms-photo-list>
-  </mat-card-content> -->
+  </mat-card-content>
 
   <mat-card-actions>
     <cms-page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)"

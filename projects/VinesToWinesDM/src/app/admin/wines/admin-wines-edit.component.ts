@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Wine } from '@app/wines/wines';
+import { Wine, WineType } from '@app/wines/wines';
 import { ErrorFocusService } from 'core';
 import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
 import { Photo, PhotoGetQuery, SitePages, SITE_PAGES } from 'material-cms-view';
@@ -70,6 +70,18 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   moveDown(list, item) {
     list.moveDown(item);
     this.saveStream.next();
+  }
+
+  onSetPhoto(item: Wine, parent: WineType) {
+    this.model.content.wineTypes.forEach(wt => {
+      (wt as any).expanded = false;
+      wt.wines.forEach((w: any) => w.expanded = false);
+    });
+
+    (item as any).expanded = true;
+    (parent as any).expanded = true;
+
+    this.choosingPhoto = true;
   }
 
   onPhotoListDone(photoId: number) {
