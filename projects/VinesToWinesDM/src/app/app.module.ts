@@ -46,7 +46,7 @@ import { GSheetsPageDatabase } from './shared/gsheets-page-database.service';
   bootstrap: [AppRootComponent]
 })
 export class AppModule {
-  constructor(@Inject(PAGE_DATABASE) gsh: PageDatabase) {
-    (<GSheetsPageDatabase>gsh).warmup();
-  }
+  // constructor(@Inject(PAGE_DATABASE) gsh: PageDatabase) {
+  //   (<GSheetsPageDatabase>gsh).warmup();
+  // }
 }

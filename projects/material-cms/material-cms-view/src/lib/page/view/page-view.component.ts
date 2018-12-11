@@ -60,7 +60,7 @@ export class PageViewComponent implements OnInit {
     ).subscribe(_ => this.onCurrentQuery(_));
   }
 
-  private onCurrentQuery(page: Page) {
+  private onCurrentQuery(page: PageDatabase.GetCurrentPageResult) {
     // tslint:disable-next-line:no-unused-expression
     this._content && (this._content.innerHTML = <string>page.content);
   }

@@ -16,6 +16,21 @@ export class GSheetsPageDatabase implements PageDatabase {
   private readonly sheetName = 'Database';
   private sheetId: number;
   private rowCount: number;
+
+  private readonly cols2 = {
+    id: { colId: '', label: '' },
+    kind: { colId: '', label: '' },
+    identifier: { colId: '', label: '' },
+    effectiveFrom: { colId: '', label: '' },
+    effectiveTo: { colId: '', label: '' },
+    status: { colId: '', label: '' },
+    savedBy: { colId: '', label: '' },
+    savedOn: { colId: '', label: '' },
+    version: { colId: '', label: '' },
+    content: { colId: '', label: '' },
+    rowNum: { colId: '', label: '' },
+  };
+
   private readonly cols = [
     { id: 'A', name: 'id' },
     { id: 'B', name: 'kind' },
@@ -39,6 +54,7 @@ export class GSheetsPageDatabase implements PageDatabase {
   private selectClauseWithContent: string;
   private labelClauseWithContent: string;
   private versionColId: string;
+  private contentColId: string;
   private rowNumColId: string;
 
   constructor(
@@ -48,6 +64,16 @@ export class GSheetsPageDatabase implements PageDatabase {
     private sheetQuery: SheetQuery,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
   ) {
+    // tslint:disable-next-line:max-line-length
+    const sheetCols = ['id', 'kind', 'identifier', 'effectiveFrom', 'effectiveTo', 'status', 'savedBy', 'savedOn', 'version', 'content', 'rowNum'];
+
+    for (let index = 0; index < sheetCols.length; index++) {
+      const element = sheetCols[index];
+
+      this.cols2[element].colId = String.fromCharCode(65 + index);
+      this.cols2[element].label = element;
+    }
+
     const colsWithoutContent = this.cols.filter(x => x.name !== 'content');
     this.selectClauseWithoutContent = `select ${colsWithoutContent.map(x => x.id).join(', ')}`;
     this.labelClauseWithoutContent = `label ${colsWithoutContent.map(x => `${x.id} '${x.name}'`).join(', ')}`;
@@ -61,6 +87,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     this.effectiveFromColId = this.cols.find(x => x.name === 'effectiveFrom').id;
     this.effectiveToColId = this.cols.find(x => x.name === 'effectiveTo').id;
     this.versionColId = this.cols.find(x => x.name === 'version').id;
+    this.contentColId = this.cols.find(x => x.name === 'content').id;
     this.rowNumColId = this.cols.find(x => x.name === 'rowNum').id;
 
     this.initialising$ = this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
@@ -86,48 +113,68 @@ export class GSheetsPageDatabase implements PageDatabase {
 
   getCurrentPage(kind: string) {
     const today = new Date();
-    // tslint:disable-next-line:max-line-length
-    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+
+    const colsToReturn = ['effectiveFrom', 'content'];
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'Approved' AND ${this.effectiveFromColId} < datetime '${param}'`;
-    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
+    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    // tslint:disable-next-line:max-line-length
+    const whereClause = `where ${this.cols2.kind.colId} = '${kind}' AND ${this.cols2.status.colId} = 'Approved' AND ${this.cols2.effectiveFrom.colId} < datetime '${param}'`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       map((rows: any[]) => {
         if (rows.length === 0) {
-          return new Page();
+          return { content: '' };
         }
 
         if (rows.length === 1) {
-          return DomainHelper.adapt(SheetRow, rows[0]);
+          return { content: rows[0].content };
         }
 
-        const approvedPages = rows.map(x => DomainHelper.adapt(SheetRow, x));
+        // const approvedPages = rows.map(x => DomainHelper.adapt(SheetRow, x));
 
-        const mostRecentlyApproved = Math.max(...approvedPages.map(x => x.effectiveFrom.valueOf()));
+        const maxEffectiveFrom = Math.max(...rows.map(x => x.effectiveFrom.valueOf()));
 
-        return approvedPages.find(x => x.effectiveFrom.valueOf() === mostRecentlyApproved);
+        const currentPage = rows.find(x => x.effectiveFrom.valueOf() === maxEffectiveFrom);
+
+        return { content: currentPage.content };
       })
     );
   }
 
   getCurrentPages(kind: string) {
     const today = new Date();
-    // tslint:disable-next-line:max-line-length
-    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+
+    const colsToReturn = ['effectiveFrom', 'effectiveTo', 'content'];
+    const selectClause = this.getSelectClause(colsToReturn);
+    const labelClause = this.getLabelClause(colsToReturn);
 
     // tslint:disable-next-line:max-line-length
-    const whereClause = `where ${this.kindColId} = '${kind}' AND ${this.statusColId} = 'Approved' AND ${this.effectiveFromColId} < datetime '${param}' AND (${this.effectiveToColId} is null OR ${this.effectiveToColId}  = 'null' OR ${this.effectiveToColId} > datetime '${param}')`;
-    const query = `${this.selectClauseWithContent} ${whereClause} ${this.labelClauseWithContent}`;
+    const param = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    // tslint:disable-next-line:max-line-length
+    const whereClause = `where ${this.cols2.kind.colId} = '${kind}' AND ${this.cols2.status.colId} = 'Approved' AND ${this.cols2.effectiveFrom.colId} < datetime '${param}' AND (${this.cols2.effectiveTo.colId} is null OR ${this.cols2.effectiveTo.colId}  = 'null' OR ${this.cols2.effectiveTo.colId} > datetime '${param}')`;
+
+    const query = `${selectClause} ${whereClause} ${labelClause}`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
       map((rows: any[]) => rows.map(x => DomainHelper.adapt(SheetRow, x)))
     );
+  }
+
+  private getSelectClause(cols: string[]) {
+    return `select ${cols.map(c => this.cols2[c].colId).join(', ')}`;
+  }
+
+  private getLabelClause(cols: string[]) {
+    return `label ${cols.map(c => this.cols2[c].label).join(', ')}`;
   }
 
   list(kind: string) {
@@ -221,6 +268,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       map(qr => this.updateSheetRow(updatedPage, qr)),
       map(sheetRow => ({ updateRowRequest: this.createUpdateRowRequest(sheetRow), sheetRow })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, [x.updateRowRequest]).pipe(map(_ => x.sheetRow))),
+      tap(sheetRow => delete sheetRow.content),
       map(sheetRow => DomainHelper.adapt(updatedPage, sheetRow))
     );
   }
@@ -257,6 +305,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       map((qr: any[]) => updatedPages.map(updatedPage => this.updateSheetRow(updatedPage, qr.find(x => x.id === updatedPage.id)))),
       map(sheetRows => ({ updateRowsRequest: sheetRows.map(sheetRow => this.createUpdateRowRequest(sheetRow)), sheetRows })),
       switchMap(x => this.sheetBatchUpdateCommand.execute(this.spreadsheetId, x.updateRowsRequest).pipe(map(_ => x.sheetRows))),
+      tap(sheetRows => sheetRows.forEach(sheetRow => delete sheetRow.content)),
       tap(sheetRows => sheetRows.forEach(sheetRow => DomainHelper.adapt(updatedPages.find(pg => pg.id === sheetRow.id), sheetRow))),
       map(_ => updatedPages)
     );
