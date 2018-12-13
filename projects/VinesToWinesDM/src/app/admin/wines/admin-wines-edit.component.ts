@@ -1,12 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Wine, WineType } from '@app/wines/wines';
-import { ErrorFocusService } from 'core';
+import { Wine } from '@app/wines/wines';
+import { DomainHelper, ErrorFocusService } from 'core';
 import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
-import { Photo, PhotoGetQuery, SitePages, SITE_PAGES, PhotoListQuery } from 'material-cms-view';
-import { AdminWinesPage, AdminWineType } from './admin-wines';
-import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
+import { PhotoContent, PhotoGetQuery, PhotoListQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { tap } from 'rxjs/operators';
+import { AdminWines, AdminWinesPage, AdminWineType } from './admin-wines';
+import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 
 @Component({
   templateUrl: './admin-wines-edit.component.html',
@@ -16,7 +16,8 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   modelCreator = AdminWinesPage;
   choosingPhoto = false;
   protected approvalRules = new AdminWinesApprovalRules();
-  private itemWorkedOn: Wine;
+  private itemWorkedOn: AdminWineVM;
+  vm: AdminWinesVM;
 
   constructor(
     @Inject(SITE_PAGES) sitePages: SitePages,
@@ -47,17 +48,18 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
       }
     });
 
+    this.vm = DomainHelper.adapt(AdminWinesVM, model.content);
+
     this.photoListQuery.execute().pipe(
       tap(photos => {
-        model.content.wineTypes.forEach(wt => {
+        this.vm.wineTypes.forEach(wt => {
           wt.wines
-          .filter(w => w.photoId > 0)
-          .forEach(w => {
-            const photo = photos.find(p => p.id === w.photoId);
-            // tslint:disable-next-line:no-unused-expression
-            photo && ((w as any).photo = photo.smallThumbnail);
-          })
-          ;
+            .filter(w => w.photoId > 0)
+            .forEach(w => {
+              const photo = photos.find(p => p.id === w.photoId);
+              // tslint:disable-next-line:no-unused-expression
+              photo && (w.photo = photo.smallThumbnail);
+            });
         });
       })
     ).subscribe();
@@ -90,14 +92,14 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     this.saveStream.next();
   }
 
-  onSetPhoto(item: Wine, parent: WineType) {
-    this.model.content.wineTypes.forEach(wt => {
-      (wt as any).expanded = false;
-      wt.wines.forEach((w: any) => w.expanded = false);
+  onSetPhoto(item: AdminWineVM, parent: AdminWineTypeVM) {
+    this.vm.wineTypes.forEach(wt => {
+      wt.expanded = false;
+      wt.wines.forEach(w => w.expanded = false);
     });
 
-    (item as any).expanded = true;
-    (parent as any).expanded = true;
+    item.expanded = true;
+    parent.expanded = true;
 
     this.choosingPhoto = true;
     this.itemWorkedOn = item;
@@ -109,7 +111,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     if (photoId === undefined || photoId === null || photoId === 0) {
       if (this.itemWorkedOn.photoId > 0) {
         this.itemWorkedOn.photoId = 0;
-        (this.itemWorkedOn as any).photo = null;
+        this.itemWorkedOn.photo = null;
         this.saveStream.next();
       }
 
@@ -121,7 +123,23 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     this.saveStream.next();
 
     this.photoGetQuery.execute(photoId).pipe(
-      tap(photo => (this.itemWorkedOn as any).photo = photo.smallThumbnail)
+      tap(photo => this.itemWorkedOn.photo = photo.smallThumbnail)
     ).subscribe();
   }
+}
+
+class AdminWineVM extends Wine {
+  expanded = false;
+  photo: PhotoContent;
+}
+
+class AdminWineTypeVM extends AdminWineType {
+  expanded = false;
+  @Reflect.metadata('design:type', AdminWineVM)
+  wines: AdminWineVM[] = [];
+}
+
+class AdminWinesVM extends AdminWines {
+  @Reflect.metadata('design:type', AdminWineTypeVM)
+  wineTypes: AdminWineTypeVM[] = [];
 }

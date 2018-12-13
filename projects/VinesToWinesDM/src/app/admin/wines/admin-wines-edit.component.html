@@ -7,7 +7,7 @@
     <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
       placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
 
-    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of model.content.wineTypes; let wineTypeIdx=index">
+    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of vm?.wineTypes; let wineTypeIdx=index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{wineType.name || '(no name)'}}
