@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
+import { Photo, PhotoListQuery } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { Wines } from './wines';
 import { WinesCurrentQuery } from './wines-current-query.service';
 
@@ -14,7 +15,6 @@ import { WinesCurrentQuery } from './wines-current-query.service';
 export class WinesComponent implements OnInit {
   errors: any;
   model: Wines;
-  private kind: string;
   sanitizedDescription: SafeHtml;
   showOverview: boolean;
   wineName: string;
@@ -22,7 +22,7 @@ export class WinesComponent implements OnInit {
   constructor(
     private currentQuery: WinesCurrentQuery,
     private eventManagerService: EventManagerService,
-    private route: ActivatedRoute,
+    private photoListQuery: PhotoListQuery,
     private router: Router,
     private sanitizer: DomSanitizer,
   ) {
@@ -31,24 +31,15 @@ export class WinesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => this.onParams(params));
-  }
-
-  private onParams(params: ParamMap) {
-    if (params.has('kind')) {
-      this.kind = params.get('kind');
-      this.showOverview = false;
-    } else {
-      this.kind = null;
-      this.showOverview = true;
-    }
-
     this.eventManagerService.raise(ShowThrobberEvent);
 
     this.currentQuery.execute().pipe(
+      tap(qr => this.setModel(qr)),
+      switchMap(_ => this.photoListQuery.execute()),
+      tap(photos => this.setPhotos(photos)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onCurrentQuery(_));
+    ).subscribe();
   }
 
   onContentClick($event: MouseEvent) {
@@ -67,19 +58,24 @@ export class WinesComponent implements OnInit {
     window.history.back();
   }
 
-  private onCurrentQuery(value: Wines) {
+  private setModel(value: Wines) {
     this.model = value;
 
-    if (this.showOverview) {
-      return;
-    }
+    this.model.wineTypes.forEach(wt => {
+      wt.wines.filter(w => String.hasData(w.description)).forEach(w => {
+        (w as any).sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(w.description);
+      });
+    });
+  }
 
-    // const wines = this.model.reds.concat(this.model.whites).concat(this.model.speciality);
-
-    // const wine = wines.find(x => x.name === this.kind);
-
-    // this.wineName = wine.name;
-    // this.sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(wine.description);
+  private setPhotos(photos: Photo[]) {
+    this.model.wineTypes.forEach(wt => {
+      wt.wines.filter(w => w.photoId > 0).forEach(w => {
+        const photo = photos.find(p => p.id === w.photoId);
+        // tslint:disable-next-line:no-unused-expression
+        photo && ((w as any).photo = photo.smallThumbnail);
+      });
+    });
   }
 
   private onError(result: Result) {

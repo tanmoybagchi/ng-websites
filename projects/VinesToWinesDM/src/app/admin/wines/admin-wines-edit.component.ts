@@ -17,7 +17,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   choosingPhoto = false;
   protected approvalRules = new AdminWinesApprovalRules();
   private itemWorkedOn: AdminWineVM;
-  vm: AdminWinesVM;
+  vm: AdminWinesPageVM;
 
   constructor(
     @Inject(SITE_PAGES) sitePages: SitePages,
@@ -33,8 +33,8 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   }
 
   onEffectiveFromChange($event) {
-    this.model.effectiveFrom = $event;
-    this.saveStream.next();
+    this.vm.effectiveFrom = $event;
+    this.save();
   }
 
   onPage(model: AdminWinesPage) {
@@ -48,11 +48,11 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
       }
     });
 
-    this.vm = DomainHelper.adapt(AdminWinesVM, model.content);
+    this.vm = DomainHelper.adapt(AdminWinesPageVM, model);
 
     this.photoListQuery.execute().pipe(
       tap(photos => {
-        this.vm.wineTypes.forEach(wt => {
+        this.vm.content.wineTypes.forEach(wt => {
           wt.wines
             .filter(w => w.photoId > 0)
             .forEach(w => {
@@ -69,31 +69,31 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
 
   onItemChange(item, key: string, newValue) {
     item[key] = newValue;
-    this.saveStream.next();
+    this.save();
   }
 
   addAfter(list, item) {
     list.addAfter(item);
-    this.saveStream.next();
+    this.save();
   }
 
   remove(list, item) {
     list.remove(item);
-    this.saveStream.next();
+    this.save();
   }
 
   moveUp(list, item) {
     list.moveUp(item);
-    this.saveStream.next();
+    this.save();
   }
 
   moveDown(list, item) {
     list.moveDown(item);
-    this.saveStream.next();
+    this.save();
   }
 
   onSetPhoto(item: AdminWineVM, parent: AdminWineTypeVM) {
-    this.vm.wineTypes.forEach(wt => {
+    this.vm.content.wineTypes.forEach(wt => {
       wt.expanded = false;
       wt.wines.forEach(w => w.expanded = false);
     });
@@ -112,7 +112,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
       if (this.itemWorkedOn.photoId > 0) {
         this.itemWorkedOn.photoId = 0;
         this.itemWorkedOn.photo = null;
-        this.saveStream.next();
+        this.save();
       }
 
       this.itemWorkedOn = null;
@@ -120,11 +120,16 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     }
 
     this.itemWorkedOn.photoId = photoId;
-    this.saveStream.next();
+    this.save();
 
     this.photoGetQuery.execute(photoId).pipe(
       tap(photo => this.itemWorkedOn.photo = photo.smallThumbnail)
     ).subscribe();
+  }
+
+  private save() {
+    this.model = DomainHelper.adapt(AdminWinesPage, this.vm);
+    this.saveStream.next();
   }
 }
 
@@ -142,4 +147,8 @@ class AdminWineTypeVM extends AdminWineType {
 class AdminWinesVM extends AdminWines {
   @Reflect.metadata('design:type', AdminWineTypeVM)
   wineTypes: AdminWineTypeVM[] = [];
+}
+
+class AdminWinesPageVM extends AdminWinesPage {
+  content = new AdminWinesVM();
 }

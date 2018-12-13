@@ -3,21 +3,24 @@
 <general-error [errors]="errors"></general-error>
 
 <section *ngIf="showOverview">
-  <mat-card *ngFor="let wineType of wineTypes">
+  <mat-card *ngFor="let wineType of model.wineTypes">
     <mat-card-header>
       <mat-card-title>{{wineType.name}}</mat-card-title>
       <mat-card-subtitle>{{wineType.description}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content (click)="onContentClick($event)">
-      <mat-nav-list>
-        <mat-list-item *ngFor="let item of wineType.wines">
-          <img matListAvatar src="..." alt="...">
-          <a matLine routerLink="{{wineType.name}}/{{item.name}}">{{item.name}}</a>
-          <button mat-icon-button (click)="showInfo(wineType.name, item.name)">
-            <mat-icon>info</mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-nav-list>
+      <mat-expansion-panel style="margin-top: 0.5em" *ngFor="let wine of wineType.wines">
+        <mat-expansion-panel-header>
+          <img style="border-radius: 50%; height: 35px; width: 35px" *ngIf="wine.photo?.location" [src]="wine.photo.location">
+          <div style="align-self: center; margin-left: 1em">{{wine.name}}</div>
+        </mat-expansion-panel-header>
+
+        <section>
+          <img style="display: block;margin: 0 auto;" *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height"
+            [width]="wine.photo.width">
+          <div style="margin-top: 1em" [innerHTML]="wine.sanitizedDescription"></div>
+        </section>
+      </mat-expansion-panel>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>

@@ -34,7 +34,7 @@ export class AdminWinesApprovalRules {
     this.rulesEngine = RulesEngine.create(rules);
   }
 
-  private checkForDuplicateWines(wines: Wine[]) {
+  private checkForDuplicateWines(wines: Wine[], result: Result) {
     const wineNames = wines
       .filter(x => String.hasData(x.name))
       .map(x => x.name)
@@ -42,17 +42,17 @@ export class AdminWinesApprovalRules {
 
     for (let index = 0; index < wineNames.length - 1; index++) {
       if (wineNames[index] === wineNames[index + 1]) {
-        return Result.CreateErrorResult(`You have ${wineNames[index]} defined more than once. Please change one of their names.`);
+        result.addError(`You have ${wineNames[index]} defined more than once. Please change one of their names.`);
       }
     }
   }
 
   check(model: AdminWinesPage) {
-    let result = this.rulesEngine.check(model);
+    const result = this.rulesEngine.check(model);
 
     model.content.wineTypes.forEach(wt => {
       if (!result.hasErrors && wt.wines.length > 0) {
-        result = this.checkForDuplicateWines(wt.wines);
+        this.checkForDuplicateWines(wt.wines, result);
       }
     });
 

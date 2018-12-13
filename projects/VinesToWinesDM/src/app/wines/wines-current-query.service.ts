@@ -11,7 +11,7 @@ export class WinesCurrentQuery {
   ) { }
 
   execute() {
-    return this.pageCurrentQuery.execute('Wines').pipe(
+    return this.pageCurrentQuery.execute('wines').pipe(
       map(page => DomainHelper.adapt(Wines, page.content))
     );
   }

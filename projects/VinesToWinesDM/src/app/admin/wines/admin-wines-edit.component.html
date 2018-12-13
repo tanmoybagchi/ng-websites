@@ -7,7 +7,7 @@
     <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
       placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
 
-    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of vm?.wineTypes; let wineTypeIdx=index">
+    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of vm?.content?.wineTypes; let wineTypeIdx=index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{wineType.name || '(no name)'}}
@@ -78,7 +78,7 @@
           <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
           <input matInput placeholder="Photo" style="display: none">
           <img *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height" [width]="wine.photo.width">
-          <button mat-raised-button (click)="onSetPhoto(wine, wineType)">Set Photo</button>
+          <button style="margin-top: 0.5em" mat-raised-button color="accent" (click)="onSetPhoto(wine, wineType)">Set Photo</button>
         </mat-form-field>
       </mat-expansion-panel> <!-- wines -->
     </mat-expansion-panel> <!-- wine types -->
