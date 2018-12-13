@@ -6,6 +6,7 @@ import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin
 import { Photo, PhotoGetQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { AdminWinesPage, AdminWineType } from './admin-wines';
 import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
+import { tap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './admin-wines-edit.component.html',
@@ -90,13 +91,19 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     this.choosingPhoto = false;
 
     if (photoId === undefined || photoId === null || photoId === 0) {
-      if (String.hasData(this.itemWorkedOn.photoIdentifier)) {
-        this.itemWorkedOn.photoIdentifier = '';
+      if (this.itemWorkedOn.photoId > 0) {
+        this.itemWorkedOn.photoId = 0;
         this.saveStream.next();
       }
 
       this.itemWorkedOn = null;
       return;
     }
+
+    this.itemWorkedOn.photoId = photoId;
+
+    this.photoGetQuery.execute(photoId).pipe(
+      tap(photo => (this.itemWorkedOn as any).photo = photo.smallThumbnail)
+    ).subscribe();
   }
 }

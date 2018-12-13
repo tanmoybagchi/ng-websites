@@ -3,7 +3,7 @@ import { ValueObject } from 'core';
 export class Wine extends ValueObject {
   description = '';
   name = '';
-  photoIdentifier = '';
+  photoId = 0;
 }
 
 export class WineType extends ValueObject {
