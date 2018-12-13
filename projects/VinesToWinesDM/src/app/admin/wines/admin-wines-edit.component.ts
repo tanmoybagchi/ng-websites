@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Wine, WineType } from '@app/wines/wines';
 import { ErrorFocusService } from 'core';
 import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
-import { Photo, PhotoGetQuery, SitePages, SITE_PAGES } from 'material-cms-view';
+import { Photo, PhotoGetQuery, SitePages, SITE_PAGES, PhotoListQuery } from 'material-cms-view';
 import { AdminWinesPage, AdminWineType } from './admin-wines';
 import { AdminWinesApprovalRules } from './admin-wines-approval-rules';
 import { tap } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     errorFocusService: ErrorFocusService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
+    private photoListQuery: PhotoListQuery,
     private photoGetQuery: PhotoGetQuery,
     route: ActivatedRoute,
     router: Router,
@@ -45,6 +46,21 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
         wt.wines.push(new Wine());
       }
     });
+
+    this.photoListQuery.execute().pipe(
+      tap(photos => {
+        model.content.wineTypes.forEach(wt => {
+          wt.wines
+          .filter(w => w.photoId > 0)
+          .forEach(w => {
+            const photo = photos.find(p => p.id === w.photoId);
+            // tslint:disable-next-line:no-unused-expression
+            photo && ((w as any).photo = photo.smallThumbnail);
+          })
+          ;
+        });
+      })
+    ).subscribe();
 
     super.onPage(model);
   }
@@ -93,6 +109,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     if (photoId === undefined || photoId === null || photoId === 0) {
       if (this.itemWorkedOn.photoId > 0) {
         this.itemWorkedOn.photoId = 0;
+        (this.itemWorkedOn as any).photo = null;
         this.saveStream.next();
       }
 
@@ -101,6 +118,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     }
 
     this.itemWorkedOn.photoId = photoId;
+    this.saveStream.next();
 
     this.photoGetQuery.execute(photoId).pipe(
       tap(photo => (this.itemWorkedOn as any).photo = photo.smallThumbnail)
