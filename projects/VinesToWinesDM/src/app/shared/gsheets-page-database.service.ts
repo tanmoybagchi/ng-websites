@@ -16,6 +16,10 @@ export class GSheetsPageDatabase implements PageDatabase {
   private readonly sheetName = 'Database';
   private sheetId: number;
   private rowCount: number;
+  private currentPageCache: { [kind: string]: PageDatabase.GetCurrentPageResult; } = {};
+  private currentPagesCache: { [kind: string]: PageDatabase.GetCurrentPagesResult[]; } = {};
+  private listCache: { [kind: string]: PageDatabase.ListResult[]; } = {};
+  private listWithContentCache: { [kind: string]: PageDatabase.ListWithContentResult[]; } = {};
 
   private readonly pageColMapping = {
     id: 'A',
@@ -55,6 +59,10 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   getCurrentPage(kind: string) {
+    if (kind in this.currentPageCache) {
+      return of(this.currentPageCache[kind]);
+    }
+
     const colsToReturn = ['effectiveFrom', 'content'];
     const selectClause = this.getSelectClause(colsToReturn);
     const labelClause = this.getLabelClause(colsToReturn);
@@ -84,11 +92,16 @@ export class GSheetsPageDatabase implements PageDatabase {
         const currentPage = rows.find(x => x.effectiveFrom.valueOf() === maxEffectiveFrom);
 
         return DomainHelper.adapt(PageDatabase.GetCurrentPageResult, currentPage);
-      })
+      }),
+      tap(currPage => this.currentPageCache[kind] = currPage)
     );
   }
 
   getCurrentPages(kind: string) {
+    if (kind in this.currentPagesCache) {
+      return of(this.currentPagesCache[kind]);
+    }
+
     const today = new Date();
 
     const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'content'];
@@ -105,11 +118,16 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.GetCurrentPagesResult, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.GetCurrentPagesResult, x))),
+      tap(currPages => this.currentPagesCache[kind] = currPages)
     );
   }
 
   list(kind: string) {
+    if (kind in this.listCache) {
+      return of(this.listCache[kind]);
+    }
+
     const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'status'];
 
     const selectClause = this.getSelectClause(colsToReturn);
@@ -121,11 +139,16 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListResult, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListResult, x))),
+      tap(pages => this.listCache[kind] = pages)
     );
   }
 
   listWithContent(kind: string) {
+    if (kind in this.listWithContentCache) {
+      return of(this.listWithContentCache[kind]);
+    }
+
     const colsToReturn = ['id', 'effectiveFrom', 'effectiveTo', 'status', 'content'];
 
     const selectClause = this.getSelectClause(colsToReturn);
@@ -137,7 +160,8 @@ export class GSheetsPageDatabase implements PageDatabase {
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
       filter(_ => this.rowCount > 1),
       switchMap(_ => this.sheetQuery.execute(this.spreadsheetUrl, query, this.sheetName)),
-      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListWithContentResult, x)))
+      map((rows: any[]) => rows.map(x => DomainHelper.adapt(PageDatabase.ListWithContentResult, x))),
+      tap(pages => this.listWithContentCache[kind] = pages)
     );
   }
 
@@ -157,6 +181,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   add(pageToAdd: Page) {
+    this.clearCaches(pageToAdd.kind);
+
     const query = `SELECT max(${this.pageColMapping.id}) label max(${this.pageColMapping.id}) 'maxId'`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
@@ -170,6 +196,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   addAll(pagesToAdd: Page[]) {
+    pagesToAdd.forEach(p => this.clearCaches(p.kind));
+
     const query = `SELECT max(${this.pageColMapping.id}) label max(${this.pageColMapping.id}) 'maxId'`;
 
     return iif(() => this.initialising, this.initialising$, of(true)).pipe(
@@ -196,6 +224,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   update(updatedPage: Page) {
+    this.clearCaches(updatedPage.kind);
+
     const colsToReturn = ['version', 'rowNum'];
 
     const selectClause = this.getSelectClause(colsToReturn);
@@ -221,6 +251,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   updateAll(updatedPages: Page[]) {
+    updatedPages.forEach(u => this.clearCaches(u.kind));
+
     const colsToReturn = ['id', 'version', 'rowNum'];
 
     const selectClause = this.getSelectClause(colsToReturn);
@@ -270,6 +302,8 @@ export class GSheetsPageDatabase implements PageDatabase {
   }
 
   remove(page: Page) {
+    this.clearCaches(page.kind);
+
     const colsToReturn = ['version', 'rowNum'];
 
     const selectClause = this.getSelectClause(colsToReturn);
@@ -294,6 +328,13 @@ export class GSheetsPageDatabase implements PageDatabase {
 
   private getLabelClause(cols: string[]) {
     return `label ${cols.map(c => `${this.pageColMapping[c]} '${c}'`).join(', ')}`;
+  }
+
+  private clearCaches(kind: string) {
+    delete this.currentPageCache[kind];
+    delete this.currentPagesCache[kind];
+    delete this.listCache[kind];
+    delete this.listWithContentCache[kind];
   }
 
   private initializeSpreadsheet() {

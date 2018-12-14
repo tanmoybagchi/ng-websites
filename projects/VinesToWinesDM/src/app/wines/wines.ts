@@ -14,6 +14,7 @@ export class WineType extends ValueObject {
 }
 
 export class Wines extends ValueObject {
+  summary = '';
   @Reflect.metadata('design:type', WineType)
   wineTypes: WineType[] = [];
 }

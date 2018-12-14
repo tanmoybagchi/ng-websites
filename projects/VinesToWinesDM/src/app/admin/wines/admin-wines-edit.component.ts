@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Wine } from '@app/wines/wines';
 import { DomainHelper, ErrorFocusService } from 'core';
-import { PageEditBase, PageIdQuery, PageUpdateCommand } from 'material-cms-admin';
+import { PageEditBase, PageIdQuery, PageUpdateCommand, PageUpdateResult } from 'material-cms-admin';
 import { PhotoContent, PhotoGetQuery, PhotoListQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { tap } from 'rxjs/operators';
 import { AdminWines, AdminWinesPage, AdminWineType } from './admin-wines';
@@ -30,6 +30,7 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     router: Router,
   ) {
     super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    this.vm = new AdminWinesPageVM();
   }
 
   onEffectiveFromChange($event) {
@@ -72,22 +73,34 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     this.save();
   }
 
-  addAfter(list, item) {
+  addAfter(list, item, $event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     list.addAfter(item);
     this.save();
   }
 
-  remove(list, item) {
+  remove(list, item, $event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     list.remove(item);
     this.save();
   }
 
-  moveUp(list, item) {
+  moveUp(list, item, $event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     list.moveUp(item);
     this.save();
   }
 
-  moveDown(list, item) {
+  moveDown(list, item, $event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     list.moveDown(item);
     this.save();
   }
@@ -130,6 +143,15 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   private save() {
     this.model = DomainHelper.adapt(AdminWinesPage, this.vm);
     this.saveStream.next();
+  }
+
+  onUpdate(result: PageUpdateResult) {
+    super.onUpdate(result);
+
+    this.vm.status = result.status;
+    this.vm.savedBy = result.savedBy;
+    this.vm.savedOn = result.savedOn;
+    this.vm.version = result.version;
   }
 }
 

@@ -2,6 +2,7 @@
   <mat-label>{{label}}</mat-label>
   <input #inp type="search" matInput [attr.name]="inputName" [attr.maxlength]="_maxlength" [attr.style]="_style" [placeholder]="placeholder"
     [disabled]="disabled" [required]="required" [(ngModel)]="model" [errorStateMatcher]="errorStateMatcher" (change)="onChange()">
-  <mat-hint>{{hint}}</mat-hint>
-  <mat-error>{{errMsg}}</mat-error>
+    <mat-hint align="start">{{hint}}</mat-hint>
+    <mat-hint align="end" *ngIf="_maxlength">{{inp.value.length}} / {{_maxlength}}</mat-hint>
+    <mat-error>{{errMsg}}</mat-error>
 </mat-form-field>

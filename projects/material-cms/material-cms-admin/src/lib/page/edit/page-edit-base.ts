@@ -115,7 +115,7 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
     ).subscribe(_ => this.onUpdate(_));
   }
 
-  private onUpdate(result: PageUpdateResult) {
+  protected onUpdate(result: PageUpdateResult) {
     this.model.status = result.status;
     this.model.savedBy = result.savedBy;
     this.model.savedOn = result.savedOn;

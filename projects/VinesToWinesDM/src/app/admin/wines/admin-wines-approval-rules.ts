@@ -22,6 +22,7 @@ export class AdminWinesApprovalRules {
       .build();
 
     const adminWinesRules = RuleBuilder.for<AdminWines>()
+      .property(x => x.summary).required('Please enter a summary.')
       .property(x => x.wineTypes).object(wineTypeRules)
       .build();
 

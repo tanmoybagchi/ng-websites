@@ -4,8 +4,11 @@
 
 <mat-card>
   <mat-card-content *ngIf="!choosingPhoto">
-    <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
+    <input-date [model]="vm.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
       placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
+
+    <input-text [model]="vm.content.summary" (modelChange)="onItemChange(vm.content, 'summary', $event)" label="Homepage Summary"
+      [disabled]="readOnly" [errMsg]="errors?.content?.summary"></input-text>
 
     <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of vm?.content?.wineTypes; let wineTypeIdx=index">
       <mat-expansion-panel-header>
@@ -15,20 +18,20 @@
         <mat-panel-description>
           Wine type (red, white, dessert, etc.)
           <section>
-            <button mat-icon-button matTooltip="Add wine type" matTooltipShowDelay="500" (click)="addAfter(model.content, wineType)"
+            <button mat-icon-button matTooltip="Add wine type" matTooltipShowDelay="500" (click)="addAfter(vm.content, wineType, $event)"
               [disabled]="readOnly">
               <mat-icon>add</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Remove wine type" matTooltipShowDelay="500" (click)="remove(model.content, wineType)"
+            <button mat-icon-button matTooltip="Remove wine type" matTooltipShowDelay="500" (click)="remove(vm.content, wineType, $event)"
               [disabled]="readOnly">
               <mat-icon>remove</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(model.content, wineType)"
+            <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(vm.content, wineType, $event)"
               [disabled]="readOnly || wineTypeIdx === 0">
               <mat-icon>arrow_upward</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(model.content, wineType)"
-              [disabled]="readOnly || wineTypeIdx === model.content.wineTypes.length-1">
+            <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(vm.content, wineType, $event)"
+              [disabled]="readOnly || wineTypeIdx === vm.content.wineTypes.length-1">
               <mat-icon>arrow_downward</mat-icon>
             </button>
           </section>
@@ -49,19 +52,19 @@
           <mat-panel-description>
             Wine (name, description, photo)
             <section>
-              <button mat-icon-button matTooltip="Add wine" matTooltipShowDelay="500" (click)="addAfter(wineType, wine)"
+              <button mat-icon-button matTooltip="Add wine" matTooltipShowDelay="500" (click)="addAfter(wineType, wine, $event)"
                 [disabled]="readOnly">
                 <mat-icon>add</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Remove wine" matTooltipShowDelay="500" (click)="remove(wineType, wine)"
+              <button mat-icon-button matTooltip="Remove wine" matTooltipShowDelay="500" (click)="remove(wineType, wine, $event)"
                 [disabled]="readOnly">
                 <mat-icon>remove</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(wineType, wine)"
+              <button mat-icon-button matTooltip="Move up" matTooltipShowDelay="500" (click)="moveUp(wineType, wine, $event)"
                 [disabled]="readOnly || wineIdx === 0">
                 <mat-icon>arrow_upward</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(wineType, wine)"
+              <button mat-icon-button matTooltip="Move down" matTooltipShowDelay="500" (click)="moveDown(wineType, wine, $event)"
                 [disabled]="readOnly || wineIdx === wineType.wines.length-1">
                 <mat-icon>arrow_downward</mat-icon>
               </button>
@@ -78,7 +81,8 @@
           <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
           <input matInput placeholder="Photo" style="display: none">
           <img *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height" [width]="wine.photo.width">
-          <button style="margin-top: 0.5em" mat-raised-button color="accent" (click)="onSetPhoto(wine, wineType)">Set Photo</button>
+          <button style="margin-top: 0.5em" mat-raised-button color="accent" (click)="onSetPhoto(wine, wineType)"
+            [disabled]="readOnly">Set Photo</button>
         </mat-form-field>
       </mat-expansion-panel> <!-- wines -->
     </mat-expansion-panel> <!-- wine types -->
