@@ -5,20 +5,17 @@
     </mat-toolbar-row>
   </mat-toolbar-row>
 
-  <mat-toolbar-row>
-    <a mat-button style="min-width: 0; padding: 0 8px" *ngFor="let item of menu" [routerLink]="item.link" fxHide
-      [fxShow.xs]="item.xs" [fxShow.sm]="item.xs || item.sm" [fxShow.md]="item.xs || item.sm || item.md" [fxShow.lg]="item.xs || item.sm || item.md || item.lg"
-      [fxShow.xl]="item.xs || item.sm || item.md || item.lg || item.xl">
+  <mat-toolbar-row #menuBar>
+    <a mat-button style="min-width: 0; padding: 0 8px" *ngFor="let item of menu" [routerLink]="item.link">
       {{item.name}}
     </a>
 
-    <button mat-icon-button [matMenuTriggerFor]="moreMenu" fxHide.gt-md>
+    <button mat-icon-button *ngIf="overflowMenu" [matMenuTriggerFor]="moreMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
 
     <mat-menu #moreMenu="matMenu">
-      <a mat-menu-item *ngFor="let item of menu" [routerLink]="item.link" [fxHide.xs]="item.xs" [fxHide.sm]="item.xs || item.sm"
-        [fxHide.md]="item.xs || item.sm || item.md" [fxHide.lg]="item.xs || item.sm || item.md || item.lg" [fxHide.xl]="item.xs || item.sm || item.md || item.lg || item.xl">
+      <a mat-menu-item *ngFor="let item of overflowMenu" [routerLink]="item.link">
         {{item.name}}
       </a>
     </mat-menu>

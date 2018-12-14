@@ -11,7 +11,7 @@
     <mat-card-content (click)="onContentClick($event)">
       <mat-expansion-panel style="margin-top: 0.5em" *ngFor="let wine of wineType.wines">
         <mat-expansion-panel-header>
-          <img style="border-radius: 50%; height: 35px; width: 35px" *ngIf="wine.photo?.location" [src]="wine.photo.location">
+          <img style="align-self: center; height: 30px; width: 30px" *ngIf="wine.photo?.location" [src]="wine.photo.location">
           <div style="align-self: center; margin-left: 1em">{{wine.name}}</div>
         </mat-expansion-panel-header>
 

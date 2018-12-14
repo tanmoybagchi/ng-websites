@@ -6,13 +6,13 @@ import { Photo, PhotoListQuery } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import { Wines } from './wines';
-import { WinesCurrentQuery } from './wines-current-query.service';
+import { Wines } from '../wines';
+import { WinesCurrentQuery } from '../wines-current-query.service';
 
 @Component({
-  templateUrl: './wines.component.html'
+  templateUrl: './wines-detail.component.html'
 })
-export class WinesComponent implements OnInit {
+export class WinesDetailComponent implements OnInit {
   errors: any;
   model: Wines;
   sanitizedDescription: SafeHtml;
