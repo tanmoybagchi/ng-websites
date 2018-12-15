@@ -13,7 +13,6 @@ export class AdminWinesApprovalRules {
 
     const wineRules = RuleBuilder.for<Wine>()
       .property(x => x.name).required('Please enter a name')
-      .property(x => x.description).required('Please enter a description')
       .build();
 
     const wineTypeRules = RuleBuilder.for<AdminWineType>()

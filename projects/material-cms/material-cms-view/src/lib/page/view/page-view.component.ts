@@ -61,8 +61,13 @@ export class PageViewComponent implements OnInit {
   }
 
   private onCurrentQuery(page: PageDatabase.GetCurrentPageResult) {
-    // tslint:disable-next-line:no-unused-expression
-    this._content && (this._content.innerHTML = <string>page.content);
+    if (String.isNullOrWhitespace(page.content)) {
+      this.notFound = true;
+      return;
+    }
+
+    this.notFound = false;
+    this._content.innerHTML = page.content;
   }
 
   onContentClick($event: MouseEvent) {

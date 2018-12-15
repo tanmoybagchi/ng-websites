@@ -24,8 +24,8 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     errorFocusService: ErrorFocusService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
-    private photoListQuery: PhotoListQuery,
     private photoGetQuery: PhotoGetQuery,
+    private photoListQuery: PhotoListQuery,
     route: ActivatedRoute,
     router: Router,
   ) {

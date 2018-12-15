@@ -86,7 +86,7 @@ export class EditorComponent implements OnInit {
   }
 
   onBlur() {
-    const newContent = this._editor.innerHTML;
+    const newContent = String.isNullOrWhitespace(this._editor.innerText) ? '' : this._editor.innerHTML;
     if (this.lastContentEmitted === newContent) { return; }
 
     this.lastContentEmitted = newContent;

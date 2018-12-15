@@ -16,7 +16,6 @@ export class WinesDetailComponent implements OnInit {
   errors: any;
   model: Wines;
   sanitizedDescription: SafeHtml;
-  showOverview: boolean;
   wineName: string;
 
   constructor(
@@ -27,7 +26,6 @@ export class WinesDetailComponent implements OnInit {
     private sanitizer: DomSanitizer,
   ) {
     this.model = new Wines();
-    this.showOverview = true;
   }
 
   ngOnInit() {
@@ -62,9 +60,17 @@ export class WinesDetailComponent implements OnInit {
     this.model = value;
 
     this.model.wineTypes.forEach(wt => {
-      wt.wines.filter(w => String.hasData(w.description)).forEach(w => {
-        (w as any).sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(w.description);
-      });
+      wt.wines
+        .filter(w => String.isNullOrWhitespace(w.description) && w.photoId === 0)
+        .forEach(w => {
+          (w as any).empty = true;
+        });
+
+      wt.wines
+        .filter(w => String.hasData(w.description))
+        .forEach(w => {
+          (w as any).sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(w.description);
+        });
     });
   }
 

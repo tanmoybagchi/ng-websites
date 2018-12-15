@@ -10,7 +10,8 @@
     <input-text [model]="vm.content.summary" (modelChange)="onItemChange(vm.content, 'summary', $event)" label="Homepage Summary"
       [disabled]="readOnly" [errMsg]="errors?.content?.summary"></input-text>
 
-    <mat-expansion-panel [expanded]="wineType.expanded" style="margin-bottom: 1em" *ngFor="let wineType of vm?.content?.wineTypes; let wineTypeIdx=index">
+    <mat-expansion-panel [expanded]="wineType.expanded || errors?.content?.wineTypes[wineTypeIdx]" style="margin-bottom: 1em"
+      *ngFor="let wineType of vm?.content?.wineTypes; let wineTypeIdx=index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{wineType.name || '(no name)'}}
@@ -44,7 +45,8 @@
       <input-text [model]="wineType.description" (modelChange)="onItemChange(wineType, 'description', $event)" label="Wine Type Description"
         [disabled]="readOnly"></input-text>
 
-      <mat-expansion-panel [expanded]="wine.expanded" style="margin-bottom: 1em" *ngFor="let wine of wineType.wines; let wineIdx=index">
+      <mat-expansion-panel [expanded]="wine.expanded || errors?.content?.wineTypes[wineTypeIdx]?.wines[wineIdx]" style="margin-bottom: 1em"
+        *ngFor="let wine of wineType.wines; let wineIdx=index">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{wine.name || '(no name)'}}
