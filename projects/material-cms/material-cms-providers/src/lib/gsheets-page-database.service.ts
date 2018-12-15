@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { environment as env } from '@env/environment';
+import { Inject, Injectable } from '@angular/core';
 import { DomainHelper, Result } from 'core';
 // tslint:disable-next-line:max-line-length
 import { DriveCreateCommand, DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetQuery, SheetReadQuery } from 'gapi';
 import { Page, PageDatabase } from 'material-cms-view';
 import { EMPTY, iif, Observable, of, throwError } from 'rxjs';
 import { filter, map, share, switchMap, tap } from 'rxjs/operators';
+import { ProviderConfig, PROVIDER_CONFIG } from './provider-config';
 
 @Injectable({ providedIn: 'root' })
 export class GSheetsPageDatabase implements PageDatabase {
@@ -35,13 +35,14 @@ export class GSheetsPageDatabase implements PageDatabase {
   };
 
   constructor(
+    @Inject(PROVIDER_CONFIG) private env: ProviderConfig,
     private driveCreateCommand: DriveCreateCommand,
     private driveFileSearchQuery: DriveFileSearchQuery,
     private sheetReadQuery: SheetReadQuery,
     private sheetQuery: SheetQuery,
     private sheetBatchUpdateCommand: SheetBatchUpdateCommand,
   ) {
-    this.initialising$ = this.driveFileSearchQuery.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
+    this.initialising$ = this.driveFileSearchQuery.execute(env.g_sheets_database, DriveMimeTypes.Spreadsheet).pipe(
       tap(_ => this.initialising = false),
       filter(files => files.length > 0),
       tap(files => this.spreadsheetId = files[0].id),
@@ -215,7 +216,7 @@ export class GSheetsPageDatabase implements PageDatabase {
 
     sheetRow.id = id;
     sheetRow.version = 1;
-    sheetRow.savedBy = env.g_oauth_login_name;
+    sheetRow.savedBy = this.env.g_oauth_login_name;
     sheetRow.savedOn = new Date();
     // tslint:disable-next-line:no-unused-expression
     typeof page.content === 'object' && (sheetRow.content = JSON.stringify(page.content));
@@ -291,7 +292,7 @@ export class GSheetsPageDatabase implements PageDatabase {
     const res = DomainHelper.adapt(SheetRow, page);
 
     res.version++;
-    res.savedBy = env.g_oauth_login_name;
+    res.savedBy = this.env.g_oauth_login_name;
     res.savedOn = new Date();
     res.rowNum = qr.rowNum;
 
@@ -342,7 +343,7 @@ export class GSheetsPageDatabase implements PageDatabase {
       return of(true);
     }
 
-    return this.driveCreateCommand.execute(env.database2, DriveMimeTypes.Spreadsheet).pipe(
+    return this.driveCreateCommand.execute(this.env.g_sheets_database, DriveMimeTypes.Spreadsheet).pipe(
       tap(files => this.spreadsheetId = files.id),
       switchMap(_ => this.sheetReadQuery.execute(this.spreadsheetId, undefined, 'spreadsheetUrl,sheets(properties)')),
       tap(ss => this.spreadsheetUrl = ss.spreadsheetUrl.replace('/edit', '')),

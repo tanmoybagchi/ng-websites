@@ -5,6 +5,7 @@ export interface ProviderConfig {
   docFolder: any;
   g_drive_database: string;
   g_oauth_login_name: string;
+  g_sheets_database: string;
   photoFolder: any;
 }
 
