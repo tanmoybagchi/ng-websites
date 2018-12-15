@@ -41,7 +41,7 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanLoad {
       return of(false);
     }
 
-    return this.driveFileSearchQuery.execute(env.database).pipe(
+    return this.driveFileSearchQuery.execute(env.rootFolder).pipe(
       switchMap(sr => this.drivePermissionsQuery.execute(sr[0].id)),
       switchMap(qr => {
         if (qr.permissions.some(x => x.role !== DrivePermission.Roles.reader)) {
