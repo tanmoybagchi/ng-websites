@@ -15,8 +15,7 @@ export const environment = {
   audioFolder: 'Websites\\vinestowinesdm_assets',
   docFolder: 'Websites\\vinestowinesdm_assets',
   photoFolder: 'Websites\\vinestowinesdm_assets',
-  database: 'Websites\\vinestowinesdm.json',
-  database2: 'Websites\\vinestowinesdm',
+  database: 'Websites\\vinestowinesdm',
   gcalendar: 'https://calendar.google.com/calendar?cid=dGFubW95YmFnY2hpNzZAZ21haWwuY29t'
 };
 

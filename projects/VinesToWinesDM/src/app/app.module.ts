@@ -36,7 +36,7 @@ import { WinesModule } from './wines/wines.module';
       docFolder: env.docFolder,
       g_drive_database: env.database,
       g_oauth_login_name: env.g_oauth_login_name,
-      g_sheets_database: env.database2,
+      g_sheets_database: env.database,
       photoFolder: env.photoFolder,
     }),
     MaterialCmsViewModule.forRoot(MySitePages, GSheetsPageDatabase),
