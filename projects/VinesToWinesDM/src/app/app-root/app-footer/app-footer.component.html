@@ -1,4 +1,4 @@
-<mat-toolbar fxLayout="column" fxLayout.gt-xs="row">
+<mat-toolbar fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="0.75em" fxLayoutGap.gt-xs="0">
   <mat-toolbar-row fxLayout="column" fxLayoutGap="0.75em" fxLayoutAlign="center start" style="height: auto">
     Contact us
     <div class="mat-body-2" fxLayout="row">
@@ -12,14 +12,17 @@
       <mat-icon>phone</mat-icon>
       <a href="tel:+1-515-664-5161">(515) 664-5161</a>
     </div>
+
+    <div class="mat-body-2">
+      <a href="mailto:eric@vinestowinesdm.com?subject=Send%20Me%20The%20VINES%20to%20WINES%20newsletter!" target="_blank"
+        rel="noopener">
+        Get the Vines To Wines newsletter
+      </a>
+    </div>
   </mat-toolbar-row>
 
   <mat-toolbar-row fxLayout="column" fxLayoutAlign="center start" style="height: auto">
-    <!-- Newsletter
-    <div class="mat-body-2">
-      <a href="mailto:eric@vinestowinesdm.com?subject=Send%20Me%20The%20VINES%20to%20WINES%20newsletter!">Email us</a>
-      and we will put you on the list.
-    </div> -->
+    <!-- Newsletter  -->
     <a class="mat-body-2" routerLink="admin">Admin</a>
   </mat-toolbar-row>
 </mat-toolbar>
