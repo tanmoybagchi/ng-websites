@@ -1,32 +1,34 @@
-<page-title name="Wines"></page-title>
+<page-title name="Our Wines"></page-title>
 
 <general-error [errors]="errors"></general-error>
 
-<mat-card *ngFor="let wineType of model.wineTypes">
-  <mat-card-header>
-    <mat-card-title>{{wineType.name}}</mat-card-title>
-    <mat-card-subtitle>{{wineType.description}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayoutGap=".5em">
-    <section *ngFor="let wine of wineType.wines">
-      <mat-expansion-panel *ngIf="!wine.empty">
-        <mat-expansion-panel-header>
-          {{wine.name}}
-        </mat-expansion-panel-header>
+<section fxLayout="column" fxLayoutGap="1em">
+  <mat-card *ngFor="let wineType of model.wineTypes">
+    <mat-card-header>
+      <mat-card-title>{{wineType.name}}</mat-card-title>
+      <mat-card-subtitle>{{wineType.description}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayoutGap=".5em">
+      <section *ngFor="let wine of wineType.wines">
+        <mat-expansion-panel *ngIf="!wine.empty">
+          <mat-expansion-panel-header>
+            {{wine.name}}
+          </mat-expansion-panel-header>
 
-        <img style="display: block;margin: 0 auto;" *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height"
-          [width]="wine.photo.width">
-        <div style="margin-top: 1em" [innerHTML]="wine.sanitizedDescription"></div>
-      </mat-expansion-panel>
+          <img style="display: block;margin: 0 auto;" *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height"
+            [width]="wine.photo.width">
+          <div style="margin-top: 1em" [innerHTML]="wine.sanitizedDescription"></div>
+        </mat-expansion-panel>
 
-      <div class="mat-expansion-panel" *ngIf="wine.empty">
-        <div class="mat-expansion-panel-header" style="height: 48px;">
-          <span class="mat-content">{{wine.name}}</span>
+        <div class="mat-expansion-panel" *ngIf="wine.empty">
+          <div class="mat-expansion-panel-header" style="height: 48px;">
+            <span class="mat-content">{{wine.name}}</span>
+          </div>
         </div>
-      </div>
-    </section>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
-  </mat-card-actions>
-</mat-card>
+      </section>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</section>
