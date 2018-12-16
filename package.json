@@ -37,7 +37,8 @@
     "build-dsl": "ng b DailySpendLimit --prod --noprogress --output-path=../DailySpendLimit/docs/ --base-href=/DailySpendLimit/ && copy ..\\DailySpendLimit\\docs\\index.html ..\\DailySpendLimit\\docs\\404.html",
     "build-sc": "ng b StavesChurch --prod --noprogress --output-path=../StavesChurch/docs/ --base-href=/StavesChurch/ && copy ..\\StavesChurch\\docs\\index.html ..\\StavesChurch\\docs\\404.html",
     "build-tk": "ng b TiffanysKitchen --prod --noprogress --output-path=../TiffanysKitchen/docs/ --base-href=/TiffanysKitchen/ && copy ..\\TiffanysKitchen\\docs\\index.html ..\\TiffanysKitchen\\docs\\404.html",
-    "build-vtw": "ng b VinesToWinesDM --prod --noprogress --output-path=../VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/ && copy ..\\VinesToWinesDM\\docs\\index.html ..\\VinesToWinesDM\\docs\\404.html"
+    "build-vtw": "ng b VinesToWinesDM --prod --noprogress --output-path=../VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/ && copy ..\\VinesToWinesDM\\docs\\index.html ..\\VinesToWinesDM\\docs\\404.html",
+    "build-vtw-dev": "ng b VinesToWinesDM --configuration=dev --noprogress --output-path=C:/inetpub/wwwroot/VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/"
   },
   "private": true,
   "dependencies": {

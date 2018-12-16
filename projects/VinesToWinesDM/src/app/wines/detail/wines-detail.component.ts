@@ -78,8 +78,9 @@ export class WinesDetailComponent implements OnInit {
     this.model.wineTypes.forEach(wt => {
       wt.wines.filter(w => w.photoId > 0).forEach(w => {
         const photo = photos.find(p => p.id === w.photoId);
-        // tslint:disable-next-line:no-unused-expression
-        photo && ((w as any).photo = photo.smallThumbnail);
+        if (photo) {
+          (w as any).photo = this.sanitizer.bypassSecurityTrustStyle(`url(${photo.bigThumbnail.location})`);
+        }
       });
     });
   }

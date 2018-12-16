@@ -8,8 +8,20 @@
       <mat-card-title>{{wineType.name}}</mat-card-title>
       <mat-card-subtitle>{{wineType.description}}</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayoutGap=".5em">
-      <section *ngFor="let wine of wineType.wines">
+    <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayout.gt-xs="row wrap" fxLayoutAlign.gt-xs="space-around stretch">
+      <mat-card *ngFor="let wine of wineType.wines" style="margin: 0.5em" [ngStyle.gt-xs]="{width: '280px'}" fxLayout="column">
+        <mat-card-header>
+          <mat-card-title>{{wine.name}}</mat-card-title>
+        </mat-card-header>
+        <div *ngIf="wine.photo" mat-card-image style="height: 384px; background-size: cover; background-position: center;" [style.background-image]="wine.photo"></div>
+        <mat-card-content *ngIf="!wine.photo" fxFlex.gt-xs="grow">
+          &nbsp;
+        </mat-card-content>
+        <mat-card-actions>
+          <button color="accent" mat-raised-button>Learn more</button>
+        </mat-card-actions>
+      </mat-card>
+      <!-- <section *ngFor="let wine of wineType.wines">
         <mat-expansion-panel *ngIf="!wine.empty">
           <mat-expansion-panel-header>
             {{wine.name}}
@@ -25,7 +37,7 @@
             <span class="mat-content">{{wine.name}}</span>
           </div>
         </div>
-      </section>
+      </section> -->
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>
