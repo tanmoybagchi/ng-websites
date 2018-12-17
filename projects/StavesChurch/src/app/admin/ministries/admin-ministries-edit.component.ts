@@ -11,6 +11,14 @@ export class AdminMinistriesEditComponent extends PageEditBase<AdminMinistries> 
   modelCreator = AdminMinistries;
   protected approvalRules = new AdminMinistriesApprovalRules();
 
+  onPage(model: AdminMinistries) {
+    if (model.content.list.length === 0) {
+      model.content.list.push(new Ministry());
+    }
+
+    super.onPage(model);
+  }
+
   onEffectiveFromChange($event) {
     this.model.effectiveFrom = $event;
     this.saveStream.next();

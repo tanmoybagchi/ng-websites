@@ -5,7 +5,7 @@ import { routes } from '@app/app-routes';
 import { environment as env } from '@env/environment';
 import { CoreModule, LogLevel } from 'core';
 import { GapiModule } from 'gapi';
-import { GDrivePageDatabase, MaterialCmsProvidersModule } from 'material-cms-providers';
+import { GSheetsPageDatabase, MaterialCmsProvidersModule } from 'material-cms-providers';
 import { MaterialCmsViewModule } from 'material-cms-view';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { AppRootComponent } from './app-root/app-root.component';
@@ -36,11 +36,12 @@ import { SharedModule } from './shared/shared.module';
     MaterialCmsProvidersModule.forRoot({
       audioFolder: env.audioFolder,
       docFolder: env.docFolder,
-      g_drive_database: env.database,
+      g_drive_database: undefined,
       g_oauth_login_name: env.g_oauth_login_name,
+      g_sheets_database: env.database,
       photoFolder: env.photoFolder,
     }),
-    MaterialCmsViewModule.forRoot(MySitePages, GDrivePageDatabase),
+    MaterialCmsViewModule.forRoot(MySitePages, GSheetsPageDatabase),
     MinistriesModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,

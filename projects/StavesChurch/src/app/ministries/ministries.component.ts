@@ -9,16 +9,17 @@ import { catchError, finalize } from 'rxjs/operators';
 import { MinistriesCurrentQuery } from './ministries-current-query.service';
 
 @Component({
+  styleUrls: ['./ministries.component.scss'],
   templateUrl: './ministries.component.html'
 })
 export class MinistriesComponent implements OnInit {
   errors: any;
-  ministryName: string;
+  // ministryName: string;
   model: Ministries;
-  private kind: string;
+  // private kind: string;
   sanitizedHeader: SafeHtml;
-  sanitizedPurpose: SafeHtml;
-  showOverview: boolean;
+  // sanitizedPurpose: SafeHtml;
+  // showOverview: boolean;
 
   constructor(
     private currentQuery: MinistriesCurrentQuery,
@@ -28,21 +29,21 @@ export class MinistriesComponent implements OnInit {
     private sanitizer: DomSanitizer,
   ) {
     this.model = new Ministries();
-    this.showOverview = true;
+    // this.showOverview = true;
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => this.onParams(params));
-  }
+  //   this.route.paramMap.subscribe((params) => this.onParams(params));
+  // }
 
-  private onParams(params: ParamMap) {
-    if (params.has('kind')) {
-      this.kind = params.get('kind');
-      this.showOverview = false;
-    } else {
-      this.kind = null;
-      this.showOverview = true;
-    }
+  // private onParams(params: ParamMap) {
+  //   if (params.has('kind')) {
+  //     this.kind = params.get('kind');
+  //     this.showOverview = false;
+  //   } else {
+  //     this.kind = null;
+  //     this.showOverview = true;
+  //   }
 
     this.eventManagerService.raise(ShowThrobberEvent);
 
@@ -71,15 +72,18 @@ export class MinistriesComponent implements OnInit {
   private onCurrentQuery(value: Ministries) {
     this.model = value;
 
-    if (this.showOverview) {
+    // if (this.showOverview) {
       this.sanitizedHeader = this.sanitizer.bypassSecurityTrustHtml(this.model.header);
-      return;
-    }
+    //   return;
+    // }
 
-    const ministry = this.model.list.find(x => x.name === this.kind);
+    this.model.list.forEach(x => {
+      (x as any).sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(x.purpose);
+    });
+    // const ministry = this.model.list.find(x => x.name === this.kind);
 
-    this.ministryName = ministry.name;
-    this.sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(ministry.purpose);
+    // this.ministryName = ministry.name;
+    // this.sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(ministry.purpose);
   }
 
   private onError(result: Result) {
