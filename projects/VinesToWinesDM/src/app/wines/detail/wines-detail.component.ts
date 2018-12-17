@@ -10,7 +10,8 @@ import { Wines } from '../wines';
 import { WinesCurrentQuery } from '../wines-current-query.service';
 
 @Component({
-  templateUrl: './wines-detail.component.html'
+  templateUrl: './wines-detail.component.html',
+  styleUrls: ['./wines-detail.component.scss']
 })
 export class WinesDetailComponent implements OnInit {
   errors: any;

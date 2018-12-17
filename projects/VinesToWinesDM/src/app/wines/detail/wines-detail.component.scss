@@ -1,0 +1,24 @@
+@import '../../../styles/theme';
+
+::ng-deep {
+  mat-card-header {
+    color: mat-color($my-app-primary, 800);
+  }
+
+  mat-expansion-panel {
+    // background-color: mat-color($my-app-primary, 50) !important;
+    background-color: mat-color($my-app-primary, 50) !important;
+    // color: mat-color($my-app-accent, 700) !important;
+    color: mat-color(mat-palette($mat-deep-orange), 900) !important;
+
+    mat-expansion-panel-header {
+      background-color: mat-color($my-app-primary, darker) !important;
+      // color: mat-color($my-app-accent) !important;
+      color: #fed576 !important;
+
+      .mat-expansion-indicator:after {
+        color: mat-color($my-app-accent) !important;
+      }
+    }
+  }
+}
