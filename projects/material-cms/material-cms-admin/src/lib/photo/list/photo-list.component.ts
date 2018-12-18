@@ -238,15 +238,17 @@ export namespace PhotoListComponent {
     width = 0;
 
     constructor(model: Photo, sanitizer: DomSanitizer) {
+      const thumbnail = model.bigThumbnail || model.smallThumbnail;
+
       this.id = model.id;
       this.savedOn = model.effectiveFrom;
-      this.height = model.bigThumbnail.height;
+      this.height = thumbnail.height;
       this.id = model.id;
-      this.width = model.bigThumbnail.width;
+      this.width = thumbnail.width;
 
-      if (model.bigThumbnail) {
-        this.name = model.bigThumbnail.name;
-        this.url = sanitizer.bypassSecurityTrustStyle(`url(${model.bigThumbnail.location})`);
+      if (thumbnail) {
+        this.name = thumbnail.name;
+        this.url = sanitizer.bypassSecurityTrustStyle(`url(${thumbnail.location})`);
       }
     }
   }
