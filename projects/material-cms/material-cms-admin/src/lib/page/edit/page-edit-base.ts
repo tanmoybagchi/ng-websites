@@ -1,10 +1,11 @@
 import { Inject, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ErrorFocusService, Result } from 'core';
+import { ErrorFocusService, EventManagerService, Result } from 'core';
 import { Page, SitePages, SITE_PAGES } from 'material-cms-view';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY, Subject } from 'rxjs';
-import { catchError, debounceTime } from 'rxjs/operators';
+import { catchError, debounceTime, finalize } from 'rxjs/operators';
 import { PageApproveResult } from '../commands/page-approve-command.service';
 import { PageChangeResult } from '../commands/page-change-command.service';
 import { PageDeleteResult } from '../commands/page-delete-command.service';
@@ -25,6 +26,7 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
 
   constructor(
     @Inject(SITE_PAGES) private sitePages: SitePages,
+    private eventManagerService: EventManagerService,
     protected errorFocusService: ErrorFocusService,
     protected pageIdQuery: PageIdQuery,
     protected pageUpdateCommand: PageUpdateCommand,
@@ -53,8 +55,11 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
       this.name = `${pageInfo[0].name} edit`;
     }
 
+    this.eventManagerService.raise(ShowThrobberEvent);
+
     this.pageIdQuery.execute(Number(params.get('id')), this.modelCreator).pipe(
-      catchError(err => this.onError(err))
+      catchError(err => this.onError(err)),
+      finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(_ => this.onPage(_));
   }
 

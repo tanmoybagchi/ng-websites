@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Wine } from '@app/wines/wines';
-import { DomainHelper, ErrorFocusService } from 'core';
+import { DomainHelper, ErrorFocusService, EventManagerService } from 'core';
 import { PageEditBase, PageIdQuery, PageUpdateCommand, PageUpdateResult } from 'material-cms-admin';
 import { PhotoContent, PhotoGetQuery, PhotoListQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { tap } from 'rxjs/operators';
@@ -28,8 +28,9 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
     private photoListQuery: PhotoListQuery,
     route: ActivatedRoute,
     router: Router,
+    eventManagerService: EventManagerService
   ) {
-    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    super(sitePages, eventManagerService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
     this.vm = new AdminWinesPageVM();
   }
 
