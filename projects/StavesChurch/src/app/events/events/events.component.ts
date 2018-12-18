@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Result } from 'core';
+import { EventManagerService, Result } from 'core';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { EventList } from '../events-models';
 import { EventsQuery } from '../events-query.service';
 
@@ -15,14 +16,17 @@ export class EventsComponent implements OnInit {
   itemIndex = 0;
 
   constructor(
+    private eventManagerService: EventManagerService,
     private eventsQuery: EventsQuery
   ) { }
 
   ngOnInit() {
-    this.eventsQuery
-      .execute('10')
-      .pipe(catchError(err => this.onError(err)))
-      .subscribe((value: EventList) => this.onEventsQuery(value));
+    this.eventManagerService.raise(ShowThrobberEvent);
+
+    this.eventsQuery.execute('10').pipe(
+      catchError(err => this.onError(err)),
+      finalize(() => this.eventManagerService.raise(HideThrobberEvent))
+    ).subscribe((value: EventList) => this.onEventsQuery(value));
   }
 
   private onEventsQuery(value: EventList) {
