@@ -20,13 +20,13 @@ export class AdminSermonEditComponent extends PageEditBase<AdminSermon> {
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
     @Inject(SITE_PAGES) sitePages: SitePages,
     errorFocusService: ErrorFocusService,
+    eventManagerService: EventManagerService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
-    private eventManagerService: EventManagerService,
     route: ActivatedRoute,
     router: Router,
   ) {
-    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    super(sitePages, eventManagerService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
   }
 
   onEffectiveFromChange($event) {

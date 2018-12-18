@@ -21,7 +21,7 @@ export class AppHeaderComponent implements OnInit {
   }
 
   private maxWidth: number;
-  private readonly overflowWidth = 40 + 16 + 16;
+  private readonly overflowWidth = 40;
 
   constructor() { }
 
@@ -35,7 +35,7 @@ export class AppHeaderComponent implements OnInit {
 
   @HostListener('window:resize')
   setMenu() {
-    const containerWidth = this._menuBarEl.clientWidth - 16;
+    const containerWidth = this._menuBarEl.clientWidth - 32;
     if (this.maxWidth < containerWidth) {
       this.menu = this.pages;
       this.overflowMenu = null;
@@ -51,6 +51,7 @@ export class AppHeaderComponent implements OnInit {
         availWidth -= p.width;
         this.menu.push(p);
       } else {
+        availWidth = 0;
         this.overflowMenu.push(p);
       }
     });

@@ -22,14 +22,14 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
     @Inject(SITE_PAGES) sitePages: SitePages,
     errorFocusService: ErrorFocusService,
+    eventManagerService: EventManagerService,
     pageIdQuery: PageIdQuery,
     pageUpdateCommand: PageUpdateCommand,
-    private eventManagerService: EventManagerService,
     private sanitizer: DomSanitizer,
     route: ActivatedRoute,
     router: Router,
   ) {
-    super(sitePages, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
+    super(sitePages, eventManagerService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
   }
 
   onPage(model: AdminCaller) {

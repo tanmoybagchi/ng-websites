@@ -26,7 +26,7 @@ export abstract class PageEditBase<TPage extends Page> implements OnInit {
 
   constructor(
     @Inject(SITE_PAGES) private sitePages: SitePages,
-    private eventManagerService: EventManagerService,
+    protected eventManagerService: EventManagerService,
     protected errorFocusService: ErrorFocusService,
     protected pageIdQuery: PageIdQuery,
     protected pageUpdateCommand: PageUpdateCommand,

@@ -3,7 +3,6 @@ import { MySitePages } from '@app/shared/my-site-pages';
 
 @Component({
   selector: 'app-header',
-  styleUrls: ['./app-header.component.scss'],
   templateUrl: './app-header.component.html'
 })
 export class AppHeaderComponent implements OnInit {
@@ -36,7 +35,7 @@ export class AppHeaderComponent implements OnInit {
 
   @HostListener('window:resize')
   setMenu() {
-    const containerWidth = this._menuBarEl.clientWidth;
+    const containerWidth = this._menuBarEl.clientWidth - 32;
     if (this.maxWidth < containerWidth) {
       this.menu = this.pages;
       this.overflowMenu = null;
@@ -52,6 +51,7 @@ export class AppHeaderComponent implements OnInit {
         availWidth -= p.width;
         this.menu.push(p);
       } else {
+        availWidth = 0;
         this.overflowMenu.push(p);
       }
     });
