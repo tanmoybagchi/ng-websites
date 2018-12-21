@@ -10,9 +10,11 @@
   </mat-toolbar-row>
 
   <mat-toolbar-row #menuBar>
-    <a mat-button style="min-width: 0; padding: 0 8px" *ngFor="let item of menu" [routerLink]="item.link">
-      {{item.name}}
-    </a>
+    <section fxFlex>
+      <a mat-button style="min-width: 0; padding: 0 8px" *ngFor="let item of menu" [routerLink]="item.link">
+        {{item.name}}
+      </a>
+    </section>
 
     <button mat-icon-button *ngIf="overflowMenu" [matMenuTriggerFor]="moreMenu">
       <mat-icon>more_vert</mat-icon>
