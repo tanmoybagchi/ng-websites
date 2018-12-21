@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Wine } from '@app/wines/wines';
 import { DomainHelper, ErrorFocusService, EventManagerService } from 'core';
-import { PageEditBase, PageIdQuery, PageUpdateCommand, PageUpdateResult } from 'material-cms-admin';
+import { PageEditBase, PageIdQuery, PageUpdateCommand, PageUpdateResult, PageChangeResult } from 'material-cms-admin';
 import { PhotoContent, PhotoGetQuery, PhotoListQuery, SitePages, SITE_PAGES } from 'material-cms-view';
 import { tap } from 'rxjs/operators';
 import { AdminWines, AdminWinesPage, AdminWineType } from './admin-wines';
@@ -52,19 +52,21 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
 
     this.vm = DomainHelper.adapt(AdminWinesPageVM, model);
 
-    this.photoListQuery.execute().pipe(
-      tap(photos => {
-        this.vm.content.wineTypes.forEach(wt => {
-          wt.wines
-            .filter(w => w.photoId > 0)
-            .forEach(w => {
-              const photo = photos.find(p => p.id === w.photoId);
-              // tslint:disable-next-line:no-unused-expression
-              photo && (w.photo = photo.smallThumbnail);
-            });
-        });
-      })
-    ).subscribe();
+    if (this.vm.content.wineTypes.some(wt => wt.wines.some(w => w.photoId > 0))) {
+      this.photoListQuery.execute().pipe(
+        tap(photos => {
+          this.vm.content.wineTypes.forEach(wt => {
+            wt.wines
+              .filter(w => w.photoId > 0)
+              .forEach(w => {
+                const photo = photos.find(p => p.id === w.photoId);
+                // tslint:disable-next-line:no-unused-expression
+                photo && (w.photo = photo.smallThumbnail);
+              });
+          });
+        })
+      ).subscribe();
+    }
 
     super.onPage(model);
   }
@@ -144,6 +146,15 @@ export class AdminWinesEditComponent extends PageEditBase<AdminWinesPage> {
   private save() {
     this.model = DomainHelper.adapt(AdminWinesPage, this.vm);
     this.saveStream.next();
+  }
+
+  onChange(result: PageChangeResult) {
+    super.onChange(result);
+
+    this.vm.status = result.status;
+    this.vm.savedBy = result.savedBy;
+    this.vm.savedOn = result.savedOn;
+    this.vm.version = result.version;
   }
 
   onUpdate(result: PageUpdateResult) {
