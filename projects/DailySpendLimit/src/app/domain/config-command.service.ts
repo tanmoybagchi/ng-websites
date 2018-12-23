@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { SessionStorageService } from 'core';
 import { DriveFileSearchQuery, DriveMimeTypes, GoogleSpreadsheet, SheetBatchUpdateCommand, SheetCreateCommand, SheetReadQuery } from 'gapi';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, map } from 'rxjs/operators';
 import { Config } from './config';
 
 @Injectable({ providedIn: 'root' })
@@ -52,7 +52,9 @@ export class ConfigCommand {
 
     const bur = GoogleSpreadsheet.BatchUpdateRequest.Create(request);
 
-    return this.sheetBatchUpdateCommand.execute(spreadsheetId, [bur]);
+    return this.sheetBatchUpdateCommand.execute(spreadsheetId, [bur]).pipe(
+      map(_ => null)
+    );
   }
 
   private createSpreadsheet(model: Config) {
