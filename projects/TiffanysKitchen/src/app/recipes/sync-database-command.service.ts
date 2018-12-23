@@ -41,12 +41,12 @@ export class SyncDatabaseCommand {
   }
 
   private onDriveFile(db: IDBDatabase, value: DriveFile) {
-    debugger;
-    if (value.modifiedTime === this.localStorageService.get('modifiedTime')) {
+    // tslint:disable-next-line:triple-equals
+    if (value.modifiedTime.valueOf() == this.localStorageService.get('modifiedTime')) {
       return this.readDatabase(db);
     }
 
-    this.localStorageService.set('modifiedTime', value.modifiedTime);
+    this.localStorageService.set('modifiedTime', value.modifiedTime.valueOf());
 
     return this.populateDatabase(db);
   }

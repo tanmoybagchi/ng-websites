@@ -22,7 +22,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AppRootModule,
     CoreModule.forRoot({ keyPrefix: 'TiffanysKitchen' }, { logLevel: LogLevel.Warn }),
-    GapiModule,
+    GapiModule.forRoot(null),
     HomepageModule,
     RecipesModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),

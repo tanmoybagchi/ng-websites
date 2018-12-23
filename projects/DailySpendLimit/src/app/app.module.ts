@@ -23,7 +23,7 @@ import { SharedModule } from './shared/shared.module';
     AppRootModule,
     CoreModule.forRoot({ keyPrefix: 'DailySpendLimit' }, { logLevel: LogLevel.Warn }),
     DashboardModule,
-    GapiModule.forRoot(),
+    GapiModule.forRoot(null),
     HomepageModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     SecurityModule,
