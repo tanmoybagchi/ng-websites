@@ -99,7 +99,7 @@
             "index": "projects/TiffanysKitchen/src/index.html",
             "main": "projects/TiffanysKitchen/src/main.ts",
             "polyfills": "projects/TiffanysKitchen/src/polyfills.ts",
-            "tsConfig": "projects/TiffanysKitchen/tsconfig.app.json",
+            "tsConfig": "projects/TiffanysKitchen/tsconfig.json",
             "assets": [
               "projects/TiffanysKitchen/src/assets",
               "projects/TiffanysKitchen/src/manifest.json"
@@ -113,7 +113,25 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "dev": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+           "production": {
               "fileReplacements": [
                 {
                   "replace": "projects/TiffanysKitchen/src/environments/environment.ts",
@@ -178,7 +196,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/TiffanysKitchen/tsconfig.app.json",
+              "projects/TiffanysKitchen/tsconfig.json",
               "projects/TiffanysKitchen/tsconfig.spec.json"
             ],
             "exclude": [
@@ -239,7 +257,25 @@
             ]
           },
           "configurations": {
-            "production": {
+            "dev": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+           "production": {
               "fileReplacements": [
                 {
                   "replace": "projects/StavesChurch/src/environments/environment.ts",

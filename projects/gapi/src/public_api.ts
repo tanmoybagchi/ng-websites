@@ -8,6 +8,7 @@ export * from './lib/auth/service-account';
 export * from './lib/auth/signin-command.service';
 export * from './lib/auth/token-verify-command.service';
 export * from './lib/drive/drive-create-command.service';
+export * from './lib/drive/drive-file-properties-query.service';
 export * from './lib/drive/drive-file-read-query.service';
 export * from './lib/drive/drive-file-save-command.service';
 export * from './lib/drive/drive-file-search-query.service';

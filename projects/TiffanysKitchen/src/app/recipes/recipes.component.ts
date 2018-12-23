@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatChipEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
-import { HideThrobberEvent, ShowThrobberEvent } from 'material-helpers';
+import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Ingredient, Recipe } from '../recipes/models';

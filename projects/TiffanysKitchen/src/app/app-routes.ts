@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ServerErrorComponent } from 'material-helpers';
+import { ServerErrorComponent } from 'mh-server-error';
 import { HomepageComponent } from './homepage/homepage.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { SignInComponent } from './security/sign-in.component';

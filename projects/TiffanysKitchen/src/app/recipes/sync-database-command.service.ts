@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IndexedDBConfig, IndexedDBHelper, LocalStorageService, Result } from 'core';
-import { DriveFilePropertiesQuery, GoogleSpreadsheet, SheetReadQuery } from 'gapi';
+import { DriveFile, DriveFilePropertiesQuery, GoogleSpreadsheet, SheetReadQuery } from 'gapi';
 import { EMPTY, from, Observable, of, throwError, zip } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DatabaseConfig } from './database-config';
@@ -24,11 +24,9 @@ export class SyncDatabaseCommand {
   execute() {
     this.spreadsheetId = this.localStorageService.get('spreadsheetId');
     this.sheetName = this.localStorageService.get('sheetId');
-    const result = new Result();
 
     if (String.isNullOrWhitespace(this.spreadsheetId) || String.isNullOrWhitespace(this.sheetName)) {
-      result.addError('DatabaseNotFound');
-      return throwError(result);
+      return throwError(Result.CreateErrorResult('DatabaseNotFound'));
     }
 
     return this.idbHelper.open(this.dbConfig).pipe(
@@ -42,7 +40,8 @@ export class SyncDatabaseCommand {
     );
   }
 
-  private onDriveFile(db: IDBDatabase, value: any) {
+  private onDriveFile(db: IDBDatabase, value: DriveFile) {
+    debugger;
     if (value.modifiedTime === this.localStorageService.get('modifiedTime')) {
       return this.readDatabase(db);
     }
