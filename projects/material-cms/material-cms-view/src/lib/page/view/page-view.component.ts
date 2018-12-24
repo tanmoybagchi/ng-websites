@@ -41,6 +41,11 @@ export class PageViewComponent implements OnInit {
 
   private onParams(params: ParamMap) {
     const kind = params.get('kind');
+    if (kind.endsWith('.html') || kind.endsWith('.htm')) {
+      this.router.navigate(['/']);
+      return;
+    }
+
     this.name = kind;
 
     const knownPage = this.sitePages.list.filter(p => p.link === kind);
