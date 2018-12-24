@@ -39,8 +39,9 @@
     "build-sc-dev": "ng b StavesChurch --configuration=dev --noprogress --output-path=C:/inetpub/wwwroot/StavesChurch/docs/ --base-href=/StavesChurch/",
     "build-tk": "ng b TiffanysKitchen --prod --noprogress --output-path=../TiffanysKitchen/docs/ --base-href=/TiffanysKitchen/ && copy ..\\TiffanysKitchen\\docs\\index.html ..\\TiffanysKitchen\\docs\\404.html",
     "build-tk-dev": "ng b TiffanysKitchen --configuration=dev --noprogress --output-path=C:/inetpub/wwwroot/TiffanysKitchen/docs/ --base-href=/TiffanysKitchen/",
-    "build-vtw": "ng b VinesToWinesDM --prod --noprogress --output-path=../VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/ && copy ..\\VinesToWinesDM\\docs\\index.html ..\\VinesToWinesDM\\docs\\404.html",
-    "build-vtw-dev": "ng b VinesToWinesDM --configuration=dev --noprogress --output-path=C:/inetpub/wwwroot/VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/"
+    "build-vtw-dev": "ng b VinesToWinesDM --configuration=dev --noprogress --output-path=C:/inetpub/wwwroot/VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/",
+    "build-vtw-test": "ng b VinesToWinesDM --prod --noprogress --output-path=../VinesToWinesDM/docs/ --base-href=/VinesToWinesDM/ && copy ..\\VinesToWinesDM\\docs\\index.html ..\\VinesToWinesDM\\docs\\404.html",
+    "build-vtw": "ng b VinesToWinesDM --prod --noprogress --output-path=../VinesToWinesDM-Prod/ --base-href=/"
   },
   "private": true,
   "dependencies": {
