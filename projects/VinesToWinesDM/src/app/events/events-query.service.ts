@@ -8,24 +8,33 @@ import { EventsModule } from './events.module';
 
 @Injectable({ providedIn: EventsModule })
 export class EventsQuery {
+  private url: string;
+
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
+    this.url = `https://www.googleapis.com/calendar/v3/calendars/${env.g_oauth_login_hint}/events`;
+  }
 
   @ServiceAccountSignin()
-  execute(maxResults = '3', timeMin = new Date()) {
+  execute(maxResultsOrTimeMax: number | Date = 3, timeMin = new Date()) {
     const eventsInput = {
       timeMin: timeMin.toISOString(),
-      fields: 'items(id,start,end,location,summary,description)',
-      maxResults: maxResults,
+      fields: 'items(id,start,end,location,summary,description,htmlLink)',
       orderBy: 'startTime',
       showDeleted: 'false',
       singleEvents: 'true'
     };
 
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${env.g_oauth_login_hint}/events`;
+    if (typeof maxResultsOrTimeMax === 'number') {
+      (eventsInput as any).maxResults = maxResultsOrTimeMax.toString();
+    }
 
-    return this.http.get<EventList>(url, { params: new HttpParams({ fromObject: eventsInput }) }).pipe(
+    if (maxResultsOrTimeMax instanceof Date) {
+      (eventsInput as any).timeMax = maxResultsOrTimeMax.toISOString();
+    }
+
+    return this.http.get<EventList>(this.url, { params: new HttpParams({ fromObject: eventsInput }) }).pipe(
       map(x => EventList.convertFromJson(x))
     );
   }

@@ -13,17 +13,21 @@ import { EventsQuery } from '../events-query.service';
 export class EventsDetailComponent implements OnInit {
   errors: any;
   model: EventList;
-  itemIndex = 0;
+  private endOfNextYear: Date;
 
   constructor(
     private eventManagerService: EventManagerService,
     private eventsQuery: EventsQuery,
-  ) { }
+  ) {
+    this.endOfNextYear = new Date();
+    this.endOfNextYear.setFullYear(this.endOfNextYear.getFullYear() + 1, 11, 31);
+    this.endOfNextYear.setHours(23, 59, 59);
+  }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.eventsQuery.execute('10').pipe(
+    this.eventsQuery.execute(this.endOfNextYear).pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe((value: EventList) => this.onEventsQuery(value));
@@ -31,30 +35,6 @@ export class EventsDetailComponent implements OnInit {
 
   private onEventsQuery(value: EventList) {
     this.model = value;
-  }
-
-  onTodayClick() {
-    this.itemIndex = 0;
-  }
-
-  onLeftClick() {
-    if (this.itemIndex > 0) {
-      this.itemIndex -= 10;
-    }
-  }
-
-  onRightClick() {
-    if (this.itemIndex === this.model.items.length - 10) {
-      this.eventsQuery
-        .execute('10', this.model.items[this.model.items.length - 1].start)
-        .pipe(catchError(err => this.onError(err)))
-        .subscribe((value: EventList) => {
-          Array.prototype.push.apply(this.model.items, value.items);
-          this.itemIndex += 10;
-        });
-    } else {
-      this.itemIndex += 10;
-    }
   }
 
   onOKClick() {

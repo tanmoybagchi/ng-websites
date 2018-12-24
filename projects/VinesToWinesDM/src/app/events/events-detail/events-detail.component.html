@@ -1,12 +1,5 @@
 <mat-toolbar>
   <div>Events</div>
-  <button mat-button (click)="onTodayClick()">Today</button>
-  <button mat-icon-button (click)="onLeftClick()">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button mat-icon-button (click)="onRightClick()">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
 </mat-toolbar>
 
 <mat-card>
@@ -17,7 +10,7 @@
         wines you’ll be making, and then you’ll actually help make the wines with your fellow attendees. Come back in
         two months to bottle, cork, and label your wine, and take three bottles home with you to age, and later enjoy.
       </p>
-      <mat-list-item *ngFor="let item of model?.items.slice(itemIndex, itemIndex+10)" style="height: 7em;">
+      <mat-list-item *ngFor="let item of model?.items" style="height: 7em;">
         <p matListAvatar style="height: 5em; width: 4em">
           <time class="icon">
             <strong>{{item.start | date:'MMM'}}</strong>

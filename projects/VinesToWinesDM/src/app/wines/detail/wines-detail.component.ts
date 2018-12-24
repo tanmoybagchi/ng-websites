@@ -5,7 +5,7 @@ import { EventManagerService, Result } from 'core';
 import { Photo, PhotoListQuery } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, switchMap, tap, filter } from 'rxjs/operators';
 import { Wines } from '../wines';
 import { WinesCurrentQuery } from '../wines-current-query.service';
 
@@ -34,6 +34,7 @@ export class WinesDetailComponent implements OnInit {
 
     this.currentQuery.execute().pipe(
       tap(qr => this.setModel(qr)),
+      filter(_ => this.model.wineTypes.some(wt => wt.wines.some(w => w.photoId > 0))),
       switchMap(_ => this.photoListQuery.execute()),
       tap(photos => this.setPhotos(photos)),
       catchError(err => this.onError(err)),
