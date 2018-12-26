@@ -4,7 +4,7 @@
 
 <section class="wines" fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="start center">
   <mat-card *ngFor="let wineType of model.wineTypes" [ngStyle.sm]="{'width': '80vw'}" [ngStyle.md]="{'width': '70vw'}"
-    [ngStyle.lg]="{'width': '60vw'}">
+    [ngStyle.gt-md]="{'width': '60vw'}">
     <mat-card-header>
       <mat-card-title>{{wineType.name}}</mat-card-title>
       <mat-card-subtitle>{{wineType.description}}</mat-card-subtitle>
