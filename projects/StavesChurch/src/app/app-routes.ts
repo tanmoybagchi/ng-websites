@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'ministries', component: MinistriesComponent },
   { path: 'ministries/:kind', component: MinistriesComponent },
   { path: 'photos', component: PhotoGalleryComponent },
-  { path: 'photos/:identifier', component: PhotoViewerComponent },
+  { path: 'photos/:id', component: PhotoViewerComponent },
   { path: 'sermons', component: SermonComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: ':kind', component: PageViewComponent },

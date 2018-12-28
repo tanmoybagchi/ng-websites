@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventManagerService, Result, ScrollbarDimensionService } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
@@ -27,7 +27,6 @@ export class PhotoGalleryComponent implements OnInit {
     private photoListQuery: PhotoListQuery,
     private route: ActivatedRoute,
     private router: Router,
-    private sanitizer: DomSanitizer,
     private scrollbarDimensionService: ScrollbarDimensionService,
   ) { }
 
@@ -66,10 +65,12 @@ export class PhotoGalleryComponent implements OnInit {
     const containerWidth = this.getContainerWidth();
     const list = this.sort_and_filter_photos();
     this.arrange_photos_in_rows(list, containerWidth);
+
+    this.lazyLoadImages();
   }
 
   private sort_and_filter_photos() {
-    const list = this.photos.map(x => new PhotoGalleryComponent.ListItem(x, this.sanitizer));
+    const list = this.photos.map(x => new PhotoGalleryComponent.ListItem(x));
 
     list.sort((a, b) => b.savedOn.valueOf() - a.savedOn.valueOf());
 
@@ -144,6 +145,33 @@ export class PhotoGalleryComponent implements OnInit {
     return containerWidth;
   }
 
+  private lazyLoadImages() {
+    setTimeout(() => {
+      const lazyBackgrounds = Array.from(document.querySelectorAll('.lazy-background'));
+
+      if ('IntersectionObserver' in window) {
+        const lazyBackgroundObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const el = (entry.target as HTMLElement);
+              el.style.backgroundImage = `url(${el.dataset.src})`;
+              lazyBackgroundObserver.unobserve(entry.target);
+            }
+          });
+        });
+
+        lazyBackgrounds.forEach(lazyBackground => {
+          lazyBackgroundObserver.observe(lazyBackground);
+        });
+      } else {
+        lazyBackgrounds.forEach(lazyBackground => {
+          const el = (lazyBackground as HTMLElement);
+          el.style.backgroundImage = `url(${el.dataset.src})`;
+        });
+      }
+    }, 50);
+  }
+
   onPhotoClick($event: PhotoGalleryComponent.ListItem) {
     this.router.navigate(['.', $event.id], { relativeTo: this.route });
   }
@@ -174,7 +202,7 @@ export namespace PhotoGalleryComponent {
     viewportWidth = 0;
     width = 0;
 
-    constructor(model: Photo, sanitizer: DomSanitizer) {
+    constructor(model: Photo) {
       this.id = model.id;
       this.savedOn = model.effectiveFrom;
       this.height = model.smallThumbnail.height;
@@ -182,7 +210,7 @@ export namespace PhotoGalleryComponent {
 
       if (model.smallThumbnail) {
         this.name = model.smallThumbnail.name;
-        this.url = sanitizer.bypassSecurityTrustStyle(`url(${model.smallThumbnail.location})`);
+        this.url = model.smallThumbnail.location;
       }
     }
   }

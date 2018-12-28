@@ -8,7 +8,7 @@
       <div class="photo-viewport" *ngFor="let photo of photo_row" [style.width.px]="photo.viewportWidth"
         [style.height.px]="photo.viewportHeight" [style.margin-right.px]="photo.viewportRightMargin">
 
-        <i class="photo" [style.background-image]="photo.url" [style.width.px]="photo.width" [style.left.px]="photo.left"
+        <i class="photo lazy-background" [attr.data-src]="photo.url" [style.width.px]="photo.width" [style.left.px]="photo.left"
           [style.height.px]="photo.height" [style.top.px]="photo.top" [title]="photo.altText || photo.name" (click)="onPhotoClick(photo)"></i>
       </div>
     </div>
