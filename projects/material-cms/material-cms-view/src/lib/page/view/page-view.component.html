@@ -2,11 +2,9 @@
 
 <general-error [errors]="errors"></general-error>
 
-<mat-card>
-  <mat-card-content #content (click)="onContentClick($event)">
-    <p *ngIf="notFound">
-      We couldn't find the page you were looking for.
-    </p>
+<mat-card *ngIf="showContent">
+  <mat-card-content (click)="onContentClick($event)">
+    <p [innerHTML]="sanitizedContent"></p>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="accent" (click)="onOKClick()">OK</button>

@@ -1,10 +1,10 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { Page } from '../../page';
+import { catchError, filter, finalize, tap } from 'rxjs/operators';
 import { PageDatabase, PAGE_DATABASE } from '../../page-database';
 import { SitePages, SITE_PAGES } from '../../site-pages';
 
@@ -15,17 +15,8 @@ import { SitePages, SITE_PAGES } from '../../site-pages';
 export class PageViewComponent implements OnInit {
   errors: any;
   name = '';
-  notFound = false;
-
-  private _content: HTMLElement;
-  @ViewChild('content')
-  public set content(v: ElementRef) {
-    if (v === undefined || v === null) {
-      this._content = null;
-    } else {
-      this._content = v.nativeElement;
-    }
-  }
+  showContent = false;
+  sanitizedContent: SafeHtml;
 
   constructor(
     @Inject(PAGE_DATABASE) private pageDatabase: PageDatabase,
@@ -33,6 +24,7 @@ export class PageViewComponent implements OnInit {
     private eventManagerService: EventManagerService,
     private route: ActivatedRoute,
     private router: Router,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -50,8 +42,9 @@ export class PageViewComponent implements OnInit {
 
     const knownPage = this.sitePages.list.filter(p => p.link === kind);
     if (knownPage.length !== 1) {
-      this.notFound = true;
+      this.showContent = true;
       this.name = 'Page Not Found';
+      this.sanitizedContent = this.sanitizer.bypassSecurityTrustHtml('We couldn\'t find the page you were looking for.');
       return;
     }
 
@@ -60,19 +53,13 @@ export class PageViewComponent implements OnInit {
     this.eventManagerService.raise(ShowThrobberEvent);
 
     this.pageDatabase.getCurrentPage(kind).pipe(
+      tap(_ => this.showContent = true),
+      tap(qr => this.sanitizedContent = this.sanitizer.bypassSecurityTrustHtml(String.hasData(qr.content)
+        ? qr.content
+        : 'We couldn\'t find the page you were looking for.')),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onCurrentQuery(_));
-  }
-
-  private onCurrentQuery(page: PageDatabase.GetCurrentPageResult) {
-    if (String.isNullOrWhitespace(page.content)) {
-      this.notFound = true;
-      return;
-    }
-
-    this.notFound = false;
-    this._content.innerHTML = page.content;
+    ).subscribe();
   }
 
   onContentClick($event: MouseEvent) {
