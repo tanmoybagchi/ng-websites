@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { convertToParamMap } from '@angular/router';
 import { PageListBase, PageListItem } from 'material-cms-admin';
-import { AdminCaller } from './admin-caller';
+import { AdminNewsletter } from './admin-newsletter';
 
 @Component({
-  templateUrl: './admin-caller-list.component.html'
+  templateUrl: './admin-newsletter-list.component.html'
 })
-export class AdminCallerListComponent extends PageListBase<AdminCaller, PageListItem> implements OnInit {
+export class AdminNewsletterListComponent extends PageListBase<AdminNewsletter, PageListItem> implements OnInit {
   displayedColumns = ['effectiveFrom', 'status', 'title', 'action'];
 
   ngOnInit() {
     this.onParams(convertToParamMap({ kind: 'caller' }));
   }
 
-  setFullList(list: AdminCaller[]) {
+  setFullList(list: AdminNewsletter[]) {
     this.fullList = list.map(x => new AdminCallerListItem(x));
   }
 }
@@ -21,7 +21,7 @@ export class AdminCallerListComponent extends PageListBase<AdminCaller, PageList
 export class AdminCallerListItem extends PageListItem {
   title: string;
 
-  constructor(model: AdminCaller) {
+  constructor(model: AdminNewsletter) {
     super(model);
 
     if (typeof(model.content) === 'string') {

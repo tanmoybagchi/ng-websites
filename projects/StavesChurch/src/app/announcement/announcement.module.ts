@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { AnnouncementSummaryComponent } from './announcement-summary/announcement-summary.component';
-import { AnnouncementsComponent } from './announcements/announcements.component';
+import { AnnouncementSummaryComponent } from './summary/announcement-summary.component';
+import { AnnouncementDetailComponent } from './detail/announcement-detail.component';
 
 @NgModule({
   imports: [
     SharedModule,
   ],
   declarations: [
-    AnnouncementsComponent,
+    AnnouncementDetailComponent,
     AnnouncementSummaryComponent
   ],
   exports: [

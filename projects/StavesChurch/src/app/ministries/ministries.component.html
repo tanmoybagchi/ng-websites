@@ -2,7 +2,7 @@
 
 <general-error [errors]="errors"></general-error>
 
-<section class="ministries" fxLayout="column" fxLayoutAlign="start center">
+<section class="ministries" fxLayout="column" fxLayoutAlign="start center" *ngIf="showContent">
   <mat-card [ngStyle.sm]="{'width': '80vw'}" [ngStyle.md]="{'width': '70vw'}" [ngStyle.gt-md]="{'width': '60vw'}">
     <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayoutGap=".5em">
       <p [innerHTML]="sanitizedHeader"></p>

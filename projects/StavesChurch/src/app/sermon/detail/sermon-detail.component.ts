@@ -6,10 +6,10 @@ import { Sermon } from '../sermon';
 import { SermonCurrentQuery } from '../sermon-current-query.service';
 
 @Component({
-  templateUrl: './sermon.component.html',
-  styleUrls: ['./sermon.component.scss']
+  templateUrl: './sermon-detail.component.html',
+  styleUrls: ['./sermon-detail.component.scss']
 })
-export class SermonComponent implements OnInit {
+export class SermonDetailComponent implements OnInit {
   errors: any;
   model: Sermon[];
 

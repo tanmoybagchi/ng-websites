@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { DomainHelper } from 'core';
 import { PagesCurrentQuery } from 'material-cms-view';
 import { map } from 'rxjs/operators';
-import { Caller } from './caller';
+import { Newsletter } from './newsletter';
 
 @Injectable({ providedIn: 'root' })
-export class CallerCurrentQuery {
+export class NewsletterCurrentQuery {
   constructor(
     private pagesCurrentQuery: PagesCurrentQuery,
   ) { }
 
   execute() {
     return this.pagesCurrentQuery.execute('caller').pipe(
-      map(list => list.map(item => DomainHelper.adapt(Caller, item)))
+      map(list => list.map(item => DomainHelper.adapt(Newsletter, item)))
     );
   }
 }

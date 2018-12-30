@@ -14,8 +14,8 @@ import { MhPageTitleModule } from 'mh-page-title';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
-import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';
-import { AdminCallerListComponent } from './caller/admin-caller-list.component';
+import { AdminNewsletterEditComponent } from './newsletter/admin-newsletter-edit.component';
+import { AdminNewsletterListComponent } from './newsletter/admin-newsletter-list.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
 import { AdminMinistriesEditComponent } from './ministries/admin-ministries-edit.component';
@@ -55,8 +55,8 @@ import { AdminSermonListComponent } from './sermon/admin-sermon-list.component';
   declarations: [
     AdminAnnouncementEditComponent,
     AdminAnnouncementListComponent,
-    AdminCallerEditComponent,
-    AdminCallerListComponent,
+    AdminNewsletterEditComponent,
+    AdminNewsletterListComponent,
     AdminDashboardComponent,
     AdminEventsComponent,
     AdminMinistriesEditComponent,

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { EventSummaryComponent } from './event-summary/event-summary.component';
-import { EventsComponent } from './events/events.component';
+import { EventSummaryComponent } from './summary/event-summary.component';
+import { EventDetailComponent } from './detail/event-detail.component';
 
 @NgModule({
   imports: [
@@ -9,7 +9,7 @@ import { EventsComponent } from './events/events.component';
   ],
   declarations: [
     EventSummaryComponent,
-    EventsComponent
+    EventDetailComponent
   ],
   exports: [
     EventSummaryComponent

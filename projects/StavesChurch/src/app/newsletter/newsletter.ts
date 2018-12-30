@@ -1,12 +1,12 @@
 import { ValueObject } from 'core';
 
-export class Caller {
+export class Newsletter {
   @Reflect.metadata('design:type', Date)
   effectiveFrom: Date = null;
-  content = new CallerContent();
+  content = new NewsletterContent();
 }
 
-export class CallerContent extends ValueObject {
+export class NewsletterContent extends ValueObject {
   title = '';
   location = '';
 }

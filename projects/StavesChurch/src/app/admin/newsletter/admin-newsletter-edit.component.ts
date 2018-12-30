@@ -6,17 +6,17 @@ import { AssetUploader, ASSET_UPLOADER, PageEditBase, PageIdQuery, PageUpdateCom
 import { SitePages, SITE_PAGES } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { AdminCaller } from './admin-caller';
-import { AdminCallerApprovalRules } from './admin-caller-approval-rules';
+import { AdminNewsletter } from './admin-newsletter';
+import { AdminNewsletterApprovalRules } from './admin-newsletter-approval-rules';
 
 @Component({
-  templateUrl: './admin-caller-edit.component.html'
+  templateUrl: './admin-newsletter-edit.component.html'
 })
-export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
+export class AdminNewsletterEditComponent extends PageEditBase<AdminNewsletter> {
   sanitizedLocation: SafeResourceUrl;
   file: File;
-  modelCreator = AdminCaller;
-  protected approvalRules = new AdminCallerApprovalRules();
+  modelCreator = AdminNewsletter;
+  protected approvalRules = new AdminNewsletterApprovalRules();
 
   constructor(
     @Inject(ASSET_UPLOADER) private assetUploader: AssetUploader,
@@ -32,7 +32,7 @@ export class AdminCallerEditComponent extends PageEditBase<AdminCaller> {
     super(sitePages, eventManagerService, errorFocusService, pageIdQuery, pageUpdateCommand, route, router);
   }
 
-  onPage(model: AdminCaller) {
+  onPage(model: AdminNewsletter) {
     super.onPage(model);
     if (String.hasData(this.model.content.location)) {
       this.sanitizedLocation = this.sanitizer.bypassSecurityTrustResourceUrl(this.model.content.location);

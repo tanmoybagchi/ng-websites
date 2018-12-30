@@ -4,8 +4,8 @@ import { AdminGuard } from '@app/security/admin.guard';
 import { PageEditComponent, PageListComponent, PhotoListComponent } from 'material-cms-admin';
 import { AdminAnnouncementEditComponent } from './announcement/admin-announcement-edit.component';
 import { AdminAnnouncementListComponent } from './announcement/admin-announcement-list.component';
-import { AdminCallerEditComponent } from './caller/admin-caller-edit.component';
-import { AdminCallerListComponent } from './caller/admin-caller-list.component';
+import { AdminNewsletterEditComponent } from './newsletter/admin-newsletter-edit.component';
+import { AdminNewsletterListComponent } from './newsletter/admin-newsletter-list.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
 import { AdminMinistriesEditComponent } from './ministries/admin-ministries-edit.component';
@@ -23,8 +23,8 @@ const routes: Routes = [
         children: [
           { path: 'announcement', component: AdminAnnouncementListComponent },
           { path: 'announcement/:id', component: AdminAnnouncementEditComponent },
-          { path: 'caller', component: AdminCallerListComponent },
-          { path: 'caller/:id', component: AdminCallerEditComponent },
+          { path: 'caller', component: AdminNewsletterListComponent },
+          { path: 'caller/:id', component: AdminNewsletterEditComponent },
           { path: 'dashboard', component: AdminDashboardComponent },
           { path: 'events', component: AdminEventsComponent },
           { path: 'ministries/:id', component: AdminMinistriesEditComponent },

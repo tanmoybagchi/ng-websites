@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Ministries } from '@app/ministries/ministries';
+import { Router } from '@angular/router';
 import { EventManagerService, Result } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { Ministries } from './ministries';
 import { MinistriesCurrentQuery } from './ministries-current-query.service';
 
 @Component({
@@ -14,43 +14,33 @@ import { MinistriesCurrentQuery } from './ministries-current-query.service';
 })
 export class MinistriesComponent implements OnInit {
   errors: any;
-  // ministryName: string;
   model: Ministries;
-  // private kind: string;
   sanitizedHeader: SafeHtml;
-  // sanitizedPurpose: SafeHtml;
-  // showOverview: boolean;
+  showContent: boolean;
 
   constructor(
     private currentQuery: MinistriesCurrentQuery,
     private eventManagerService: EventManagerService,
-    private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
   ) {
     this.model = new Ministries();
-    // this.showOverview = true;
+    this.showContent = false;
   }
 
   ngOnInit() {
-  //   this.route.paramMap.subscribe((params) => this.onParams(params));
-  // }
-
-  // private onParams(params: ParamMap) {
-  //   if (params.has('kind')) {
-  //     this.kind = params.get('kind');
-  //     this.showOverview = false;
-  //   } else {
-  //     this.kind = null;
-  //     this.showOverview = true;
-  //   }
-
     this.eventManagerService.raise(ShowThrobberEvent);
 
     this.currentQuery.execute().pipe(
+      tap(qr => this.model = qr),
+      tap(qr => this.sanitizedHeader = this.sanitizer.bypassSecurityTrustHtml(this.model.header)),
+      tap(qr => this.model.list.forEach(x => {
+        (x as any).sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(x.purpose);
+      })),
+      tap(qr => this.showContent = true),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(_ => this.onCurrentQuery(_));
+    ).subscribe();
   }
 
   onContentClick($event: MouseEvent) {
@@ -67,23 +57,6 @@ export class MinistriesComponent implements OnInit {
 
   onOKClick() {
     window.history.back();
-  }
-
-  private onCurrentQuery(value: Ministries) {
-    this.model = value;
-
-    // if (this.showOverview) {
-      this.sanitizedHeader = this.sanitizer.bypassSecurityTrustHtml(this.model.header);
-    //   return;
-    // }
-
-    this.model.list.forEach(x => {
-      (x as any).sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(x.purpose);
-    });
-    // const ministry = this.model.list.find(x => x.name === this.kind);
-
-    // this.ministryName = ministry.name;
-    // this.sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(ministry.purpose);
   }
 
   private onError(result: Result) {

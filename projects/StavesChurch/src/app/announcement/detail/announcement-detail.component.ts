@@ -8,10 +8,10 @@ import { Announcement } from '../announcement';
 import { AnnouncementCurrentQuery } from '../announcement-current-query.service';
 
 @Component({
-  templateUrl: './announcements.component.html',
-  styleUrls: ['./announcements.component.scss']
+  templateUrl: './announcement-detail.component.html',
+  styleUrls: ['./announcement-detail.component.scss']
 })
-export class AnnouncementsComponent implements OnInit {
+export class AnnouncementDetailComponent implements OnInit {
   errors: any;
   model: Announcement[];
 

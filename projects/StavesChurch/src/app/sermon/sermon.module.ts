@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { SermonSummaryComponent } from './sermon-summary/sermon-summary.component';
-import { SermonComponent } from './sermon/sermon.component';
+import { SermonSummaryComponent } from './summary/sermon-summary.component';
+import { SermonDetailComponent } from './detail/sermon-detail.component';
 
 @NgModule({
   imports: [
@@ -9,7 +9,7 @@ import { SermonComponent } from './sermon/sermon.component';
   ],
   declarations: [
     SermonSummaryComponent,
-    SermonComponent
+    SermonDetailComponent
   ],
   exports: [
     SermonSummaryComponent,

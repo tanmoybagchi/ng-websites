@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { CallerComponent } from './caller.component';
+import { NewsletterComponent } from './newsletter.component';
 
 @NgModule({
   imports: [
     SharedModule
   ],
   declarations: [
-    CallerComponent
+    NewsletterComponent
   ],
   exports: [
   ]
 })
-export class CallerModule { }
+export class NewsletterModule { }
