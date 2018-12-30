@@ -9,7 +9,7 @@ export class MySitePages implements SitePages {
     { link: 'ministries', name: 'Ministries', width: 79 },
     { link: 'transportation', name: 'Transportation', width: 109 },
     { link: 'pastor', name: 'Pastor', width: 57 },
-    { link: 'sermon', name: 'Sermon', width: 65 },
+    { link: 'sermons', name: 'Sermons', width: 72 },
     { link: 'photos', name: 'Photos', width: 60 },
     { link: 'united-methodist-women', name: 'United Methodist Women', width: 175 },
     { link: 'vision', name: 'Vision', width: 55 },
