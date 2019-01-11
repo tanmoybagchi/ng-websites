@@ -11,7 +11,7 @@
     </mat-card-header>
     <mat-card-content (click)="onContentClick($event)" fxLayout="column" fxLayoutGap=".5em">
       <section *ngFor="let wine of wineType.wines">
-        <mat-expansion-panel *ngIf="!wine.empty">
+        <mat-expansion-panel *ngIf="!wine.empty" [id]="wine.id" (afterExpand)="afterExpand(wine.id)">
           <mat-expansion-panel-header>
             {{wine.name}}
           </mat-expansion-panel-header>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { EventManagerService, Result } from 'core';
+import { EventManagerService, Result, UniqueIdService, ScrollService } from 'core';
 import { Photo, PhotoListQuery } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
@@ -25,6 +25,8 @@ export class WinesDetailComponent implements OnInit {
     private photoListQuery: PhotoListQuery,
     private router: Router,
     private sanitizer: DomSanitizer,
+    private uniqueIdService: UniqueIdService,
+    private scrollService: ScrollService,
   ) {
     this.model = new Wines();
   }
@@ -58,6 +60,10 @@ export class WinesDetailComponent implements OnInit {
     window.history.back();
   }
 
+  afterExpand($event) {
+    this.scrollService.smoothScroll(document.getElementById($event));
+  }
+
   private setModel(value: Wines) {
     this.model = value;
 
@@ -71,6 +77,7 @@ export class WinesDetailComponent implements OnInit {
       wt.wines
         .filter(w => String.hasData(w.description))
         .forEach(w => {
+          (w as any).id = this.uniqueIdService.getUniqueId();
           (w as any).sanitizedDescription = this.sanitizer.bypassSecurityTrustHtml(w.description);
         });
     });
