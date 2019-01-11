@@ -16,8 +16,8 @@
             {{wine.name}}
           </mat-expansion-panel-header>
 
-          <img style="display: block;margin: 0 auto;" *ngIf="wine.photo?.location" [src]="wine.photo.location" [height]="wine.photo.height"
-            [width]="wine.photo.width">
+          <img style="display: block;margin: 1em auto 0;" *ngIf="wine.photo?.location" [src]="wine.photo.location"
+            [height]="wine.photo.height" [width]="wine.photo.width">
           <div style="margin-top: 1em" [innerHTML]="wine.sanitizedDescription"></div>
         </mat-expansion-panel>
 

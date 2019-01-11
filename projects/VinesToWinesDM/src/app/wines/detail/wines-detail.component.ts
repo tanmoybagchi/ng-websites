@@ -81,7 +81,7 @@ export class WinesDetailComponent implements OnInit {
       wt.wines.filter(w => w.photoId > 0).forEach(w => {
         const photo = photos.find(p => p.id === w.photoId);
         if (photo) {
-          (w as any).photo = this.sanitizer.bypassSecurityTrustStyle(`url(${photo.bigThumbnail.location})`);
+          (w as any).photo = photo.smallThumbnail;
         }
       });
     });
