@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from '@app/security/admin.guard';
 import { PageEditComponent, PageListComponent, PhotoListComponent } from 'material-cms-admin';
+import { AdminAboutUsEditComponent } from './about-us/admin-about-us-edit.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
 import { AdminWinesEditComponent } from './wines/admin-wines-edit.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
         path: '',
         canActivateChild: [AdminGuard],
         children: [
+          { path: 'about-us/:id', component: AdminAboutUsEditComponent },
           { path: 'dashboard', component: AdminDashboardComponent },
           { path: 'events', component: AdminEventsComponent },
           { path: 'photos', component: PhotoListComponent },

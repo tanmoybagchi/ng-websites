@@ -1,6 +1,15 @@
 <mat-toolbar color="primary" fxLayout="column" fxLayout.gt-xs="row">
-  <mat-toolbar-row style="outline: none; cursor: pointer;" fxFlex="100%" fxFlex.gt-xs="11.5em" ngClass.lt-sm="mat-elevation-z6"
-    routerLink="/">
+  <!--
+    Ideally, this would be fxFlex="100%" fxFlex.gt-xs="11.5em" ngClass.lt-sm="mat-elevation-z6",
+    But flex-layout, as of 7.0.0-beta.23 has a bug where the gt-xs in fxFlex.gt-xs and
+    lt-sm in ngClass.lt-sm doesn't fire when going to xs. So this workaround.
+  -->
+  <mat-toolbar-row class="mat-elevation-z6" style="outline: none; cursor: pointer;" routerLink="/" *ngIf="xs">
+    <img src="assets/Logo.png" style="height: 95%; margin-right: .5em">
+    Vines to Wines DM
+  </mat-toolbar-row>
+
+  <mat-toolbar-row style="outline: none; cursor: pointer;" fxFlex="11.5em" routerLink="/" *ngIf="!xs">
     <img src="assets/Logo.png" style="height: 95%; margin-right: .5em">
     Vines to Wines DM
   </mat-toolbar-row>

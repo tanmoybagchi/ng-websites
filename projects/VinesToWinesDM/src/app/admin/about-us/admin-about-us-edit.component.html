@@ -1,0 +1,23 @@
+<page-title name="About Us Edit"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<mat-card>
+  <mat-card-content>
+    <input-date [model]="model.effectiveFrom" (modelChange)="onEffectiveFromChange($event)" label="Effective from"
+      placeholder="mm/dd/yyyy" [disabled]="readOnly" [errMsg]="errors?.effectiveFrom"></input-date>
+
+    <input-text [model]="model.content.summary" (modelChange)="onItemChange(model.content, 'summary', $event)" label="Homepage Summary"
+      [disabled]="readOnly" [errMsg]="errors?.content?.summary"></input-text>
+
+    <cms-editor [content]="model.content.detail" (changed)="onItemChange(model.content, 'detail', $event)" [disabled]="readOnly"></cms-editor>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <cms-page-command-buttons [model]="model" [preApproveCheck]="createCanApprove()" (approve)="onApprove($event)"
+      (change)="onChange($event)" (delete)="onDelete($event)" (recall)="onRecall($event)" (recover)="onRecover($event)"
+      (error)="onError($event)"></cms-page-command-buttons>
+    <br>
+    <cms-page-status [model]="model"></cms-page-status>
+  </mat-card-actions>
+</mat-card>

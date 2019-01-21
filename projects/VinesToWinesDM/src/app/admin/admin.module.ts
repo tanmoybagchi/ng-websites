@@ -11,6 +11,7 @@ import { MhInputDateModule } from 'mh-input-date';
 import { MhInputFileModule } from 'mh-input-file';
 import { MhInputTextModule } from 'mh-input-text';
 import { MhPageTitleModule } from 'mh-page-title';
+import { AdminAboutUsEditComponent } from './about-us/admin-about-us-edit.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminEventsComponent } from './events/admin-events.component';
@@ -49,6 +50,7 @@ import { AdminWinesEditComponent } from './wines/admin-wines-edit.component';
     MatExpansionModule,
   ],
   declarations: [
+    AdminAboutUsEditComponent,
     AdminDashboardComponent,
     AdminEventsComponent,
     AdminWinesEditComponent,

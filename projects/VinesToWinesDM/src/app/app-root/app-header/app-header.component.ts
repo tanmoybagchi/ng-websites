@@ -23,6 +23,8 @@ export class AppHeaderComponent implements OnInit {
   private maxWidth: number;
   private readonly overflowWidth = 40;
 
+  xs = window.screen.width < 600;
+
   constructor() { }
 
   ngOnInit() {
@@ -35,6 +37,8 @@ export class AppHeaderComponent implements OnInit {
 
   @HostListener('window:resize')
   setMenu() {
+    this.xs = window.screen.width < 600;
+
     const containerWidth = this._menuBarEl.clientWidth - 32;
     if (this.maxWidth < containerWidth) {
       this.menu = this.pages;

@@ -12,7 +12,7 @@ import { HideThrobberEvent, ShowThrobberEvent } from './throbber-events';
 })
 export class ThrobberComponent {
   private requestCount = 0;
-  private delay = 500;
+  private delay = 250;
   private waitingOnServer = false;
 
   show = false;

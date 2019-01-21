@@ -1,7 +1,7 @@
 import { Inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { EventManagerService, LocalStorageService, Result } from 'core';
+import { EventManagerService, Result, SessionStorageService } from 'core';
 import { Page, PageDatabase, SitePages, SITE_PAGES } from 'material-cms-view';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
@@ -59,7 +59,7 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     private listQuery: PageListQuery,
     private route: ActivatedRoute,
     private router: Router,
-    private storage: LocalStorageService,
+    private storage: SessionStorageService,
   ) {
     this.canAddNew = true;
     this.dataSource = new MatTableDataSource<TPageListItem>();
@@ -89,9 +89,6 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     if (this.pageSettings) {
       this._showCurrent = this.pageSettings.current;
       this._showDeleted = this.pageSettings.deleted;
-    } else {
-      this._showCurrent = true;
-      this._showDeleted = false;
     }
 
     this.eventManagerService.raise(ShowThrobberEvent);
