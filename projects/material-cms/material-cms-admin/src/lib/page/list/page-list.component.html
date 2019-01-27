@@ -33,7 +33,7 @@
       <!-- EffectiveFrom Column -->
       <ng-container matColumnDef="effectiveFrom">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Effective From </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.effectiveFrom | date:'shortDate'}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.effectiveFrom | date:'short'}} </mat-cell>
       </ng-container>
 
       <!-- Status Column -->
