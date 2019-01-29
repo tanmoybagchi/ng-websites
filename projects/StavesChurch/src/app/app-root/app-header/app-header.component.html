@@ -1,6 +1,21 @@
 <mat-toolbar color="primary" fxLayout="column" fxLayout.gt-xs="row">
-  <mat-toolbar-row fxFlex="100%" fxFlex.gt-xs="10em" ngClass.lt-sm="mat-elevation-z6">
-    <mat-toolbar-row style="padding: 0; outline: none; cursor: pointer;" routerLink="/">
+  <!--
+    Ideally, this would be fxFlex="100%" fxFlex.gt-xs="11.5em" ngClass.lt-sm="mat-elevation-z6",
+    But flex-layout, as of 7.0.0-beta.23 has a bug where the gt-xs in fxFlex.gt-xs and
+    lt-sm in ngClass.lt-sm doesn't fire when going to xs. So this workaround.
+  -->
+  <mat-toolbar-row class="mat-elevation-z6" style="outline: none; cursor: pointer;" routerLink="/" *ngIf="xs">
+    <mat-toolbar-row style="padding: 0">
+      <div style="position: relative; display: inline-block; line-height: 1em; height: 1em; width: 1em; font-size: 2em">
+        <i class="church church-cross-and-flame-bottom" style="position: absolute; left: 0; width: 100%; text-align: center"></i>
+        <i class="church church-cross-and-flame-top" style="position: absolute; left: 0; width: 100%; text-align: center; color: #e70033"></i>
+      </div>
+      Staves Church
+    </mat-toolbar-row>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row style="outline: none; cursor: pointer;" fxFlex="10em" routerLink="/" *ngIf="!xs">
+    <mat-toolbar-row style="padding: 0">
       <div style="position: relative; display: inline-block; line-height: 1em; height: 1em; width: 1em; font-size: 2em">
         <i class="church church-cross-and-flame-bottom" style="position: absolute; left: 0; width: 100%; text-align: center"></i>
         <i class="church church-cross-and-flame-top" style="position: absolute; left: 0; width: 100%; text-align: center; color: #e70033"></i>

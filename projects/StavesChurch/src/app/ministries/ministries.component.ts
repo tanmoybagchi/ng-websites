@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { EventManagerService, Result } from 'core';
+import { EventManagerService, Result, ScrollService, UniqueIdService } from 'core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
@@ -23,6 +23,8 @@ export class MinistriesComponent implements OnInit {
     private eventManagerService: EventManagerService,
     private router: Router,
     private sanitizer: DomSanitizer,
+    private uniqueIdService: UniqueIdService,
+    private scrollService: ScrollService,
   ) {
     this.model = new Ministries();
     this.showContent = false;
@@ -35,6 +37,7 @@ export class MinistriesComponent implements OnInit {
       tap(qr => this.model = qr),
       tap(qr => this.sanitizedHeader = this.sanitizer.bypassSecurityTrustHtml(this.model.header)),
       tap(qr => this.model.list.forEach(x => {
+        (x as any).id = this.uniqueIdService.getUniqueId();
         (x as any).sanitizedPurpose = this.sanitizer.bypassSecurityTrustHtml(x.purpose);
       })),
       tap(qr => this.showContent = true),
@@ -57,6 +60,10 @@ export class MinistriesComponent implements OnInit {
 
   onOKClick() {
     window.history.back();
+  }
+
+  afterExpand($event) {
+    this.scrollService.smoothScroll(document.getElementById($event));
   }
 
   private onError(result: Result) {

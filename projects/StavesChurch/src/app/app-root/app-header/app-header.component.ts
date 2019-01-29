@@ -23,6 +23,8 @@ export class AppHeaderComponent implements OnInit {
   private maxWidth: number;
   private readonly overflowWidth = 40;
 
+  xs = window.screen.width < 600;
+
   constructor() { }
 
   ngOnInit() {
@@ -35,25 +37,29 @@ export class AppHeaderComponent implements OnInit {
 
   @HostListener('window:resize')
   setMenu() {
-    const containerWidth = this._menuBarEl.clientWidth - 32;
-    if (this.maxWidth < containerWidth) {
-      this.menu = this.pages;
-      this.overflowMenu = null;
-      return;
-    }
+    this.xs = window.screen.width < 600;
 
-    let availWidth = containerWidth - this.overflowWidth;
-    this.menu = [];
-    this.overflowMenu = [];
-
-    this.pages.forEach(p => {
-      if (p.width < availWidth) {
-        availWidth -= p.width;
-        this.menu.push(p);
-      } else {
-        availWidth = 0;
-        this.overflowMenu.push(p);
+    setTimeout(() => {
+      const containerWidth = this._menuBarEl.clientWidth - 32;
+      if (this.maxWidth < containerWidth) {
+        this.menu = this.pages;
+        this.overflowMenu = null;
+        return;
       }
-    });
+
+      let availWidth = containerWidth - this.overflowWidth;
+      this.menu = [];
+      this.overflowMenu = [];
+
+      this.pages.forEach(p => {
+        if (p.width < availWidth) {
+          availWidth -= p.width;
+          this.menu.push(p);
+        } else {
+          availWidth = 0;
+          this.overflowMenu.push(p);
+        }
+      });
+    }, 0);
   }
 }
