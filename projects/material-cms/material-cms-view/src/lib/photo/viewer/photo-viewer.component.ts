@@ -16,7 +16,7 @@ export class PhotoViewerComponent implements OnInit {
   errors: any;
   id: number;
   private photos: Photo[];
-  @ViewChild('photo') private photoElRef: ElementRef;
+  @ViewChild('photo', { static: true }) private photoElRef: ElementRef;
 
   constructor(
     private photoListQuery: PhotoListQuery,

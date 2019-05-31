@@ -19,7 +19,7 @@ export class PhotoListComponent implements OnInit {
   @Input() title = 'Choose photo(s)';
   @Output() done = new EventEmitter<number | number[]>();
   @Output() error = new EventEmitter<Result>();
-  @ViewChild('photos') private photosElRef: ElementRef;
+  @ViewChild('photos', { static: false }) private photosElRef: ElementRef;
   private photos: Photo[];
   private readonly gapBetweenPhotos = 6;
   private resizeStream = new Subject<number>();

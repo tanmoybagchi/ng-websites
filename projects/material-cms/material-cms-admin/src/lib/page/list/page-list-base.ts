@@ -45,8 +45,8 @@ export abstract class PageListBase<TPage extends Page, TPageListItem extends Pag
     this.savePageSettings();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   private storageKey: string;
   private pageSettings: { current: boolean, deleted: boolean };

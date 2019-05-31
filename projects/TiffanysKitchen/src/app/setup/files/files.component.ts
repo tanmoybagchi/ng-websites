@@ -13,7 +13,7 @@ export class FilesComponent implements OnInit {
   file: File;
   errors: any;
   model: DriveFile[];
-  @ViewChild('newFile') private newFileElRef: ElementRef;
+  @ViewChild('newFile', { static: true }) private newFileElRef: ElementRef;
 
   constructor(
     private driveFileSearchQuery: DriveFileSearchQuery,

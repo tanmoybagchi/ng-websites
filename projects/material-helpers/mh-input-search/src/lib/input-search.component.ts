@@ -9,8 +9,8 @@ import { UniqueIdService } from 'core';
   templateUrl: './input-search.component.html'
 })
 export class InputSearchComponent {
-  @ViewChild('inp') inp: ElementRef;
-  @ViewChild('frm') frm;
+  @ViewChild('inp', { static: true }) inp: ElementRef;
+  @ViewChild('frm', { static: false }) frm;
   @Input() disabled = false;
   @Input() errMsg: string;
   @Input() hint = '';

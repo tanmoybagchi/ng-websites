@@ -14,7 +14,7 @@ import { PhotoListQuery } from '../photo-list-query.service';
   styleUrls: ['./photo-gallery.component.scss']
 })
 export class PhotoGalleryComponent implements OnInit {
-  @ViewChild('photos') private photosElRef: ElementRef;
+  @ViewChild('photos', { static: true }) private photosElRef: ElementRef;
   errors: any;
   private photos: Photo[];
   private readonly gapBetweenPhotos = 6;

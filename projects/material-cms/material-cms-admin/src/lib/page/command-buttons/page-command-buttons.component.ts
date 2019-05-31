@@ -40,7 +40,7 @@ export class PageCommandButtonsComponent {
 
   private forceRecall = false;
 
-  @ViewChild('recallWarning') recallWarningDialog: any;
+  @ViewChild('recallWarning', { static: true }) recallWarningDialog: any;
 
   @Input() preApproveCheck = () => true;
   @Input() preChangeCheck = () => true;

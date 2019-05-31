@@ -21,7 +21,7 @@ export class EditorComponent implements OnInit {
   private savedContent = '';
 
   private _editor: HTMLElement = null;
-  @ViewChild('editor')
+  @ViewChild('editor', { static: false })
   public set editor(v: ElementRef) {
     if (v === undefined || v === null) {
       this._editor = null;

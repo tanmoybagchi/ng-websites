@@ -18,7 +18,7 @@ export class AnnouncementSummaryComponent implements OnInit {
   model: Announcement[];
   urgent: Announcement;
 
-  @ViewChild('urgentAnnouncement') urgentAnnouncementDialog;
+  @ViewChild('urgentAnnouncement', { static: true }) urgentAnnouncementDialog;
 
   constructor(
     private announcementCurrentQuery: AnnouncementCurrentQuery,

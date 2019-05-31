@@ -11,7 +11,7 @@ export class AppHeaderComponent implements OnInit {
   overflowMenu: { link: string; name: string; width: number; }[];
 
   private _menuBarEl: HTMLElement = null;
-  @ViewChild('menuBar')
+  @ViewChild('menuBar', { static: true })
   public set editor(v: ElementRef) {
     if (v === undefined || v === null) {
       this._menuBarEl = null;
