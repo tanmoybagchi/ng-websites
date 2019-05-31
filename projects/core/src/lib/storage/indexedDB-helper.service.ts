@@ -63,7 +63,7 @@ export class IndexedDBHelper {
     });
   }
 
-  add(db: IDBDatabase, table: string, row: any, key?: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  add(db: IDBDatabase, table: string, row: any, key?: IDBValidKey) {
     return new Observable((observer) => {
       const transaction = db.transaction(table, 'readwrite');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -91,7 +91,7 @@ export class IndexedDBHelper {
     });
   }
 
-  count(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  count(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange) {
     return new Observable<number>((observer) => {
       const transaction = db.transaction(table, 'readwrite');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -105,7 +105,7 @@ export class IndexedDBHelper {
     });
   }
 
-  delete(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  delete(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange) {
     return new Observable((observer) => {
       const transaction = db.transaction(table, 'readwrite');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -119,7 +119,7 @@ export class IndexedDBHelper {
     });
   }
 
-  get(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  get(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange) {
     return new Observable<any>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -133,7 +133,7 @@ export class IndexedDBHelper {
     });
   }
 
-  getAll(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey, count?: number) {
+  getAll(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange, count?: number) {
     return new Observable<any[]>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -147,7 +147,7 @@ export class IndexedDBHelper {
     });
   }
 
-  getAllKeys(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey, count?: number) {
+  getAllKeys(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange, count?: number) {
     return new Observable<any[]>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -161,7 +161,7 @@ export class IndexedDBHelper {
     });
   }
 
-  getKey(db: IDBDatabase, table: string, key: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  getKey(db: IDBDatabase, table: string, key: IDBValidKey | IDBKeyRange) {
     return new Observable<any>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -189,7 +189,7 @@ export class IndexedDBHelper {
     });
   }
 
-  openCursor(db: IDBDatabase, table: string, range?: IDBKeyRange | number | string | Date | IDBArrayKey, direction?: IDBCursorDirection) {
+  openCursor(db: IDBDatabase, table: string, range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection) {
     return new Observable<IDBCursorWithValue>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -204,7 +204,7 @@ export class IndexedDBHelper {
   }
 
   // tslint:disable-next-line:max-line-length
-  openKeyCursor(db: IDBDatabase, table: string, range?: IDBKeyRange | number | string | Date | IDBArrayKey, direction?: IDBCursorDirection) {
+  openKeyCursor(db: IDBDatabase, table: string, range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection) {
     return new Observable<IDBCursor>((observer) => {
       const transaction = db.transaction(table, 'readonly');
       transaction.onabort = (ev) => observer.error(transaction.error);
@@ -218,7 +218,7 @@ export class IndexedDBHelper {
     });
   }
 
-  put(db: IDBDatabase, table: string, row: any, key?: IDBKeyRange | number | string | Date | IDBArrayKey) {
+  put(db: IDBDatabase, table: string, row: any, key?: IDBValidKey) {
     return new Observable<any>((observer) => {
       const transaction = db.transaction(table, 'readwrite');
       transaction.onabort = (ev) => observer.error(transaction.error);
