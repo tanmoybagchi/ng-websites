@@ -1,5 +1,7 @@
 import { Inject, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { EventManagerService, Result, SessionStorageService } from 'core';
 import { Page, PageDatabase, SitePages, SITE_PAGES } from 'material-cms-view';

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Type } from '@angular/core';
-import { MatButtonModule, MatCardModule, MatIconModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MhGeneralErrorModule } from 'mh-general-error';
 import { MhPageTitleModule } from 'mh-page-title';
 import { PageDatabase, PAGE_DATABASE } from './page-database';

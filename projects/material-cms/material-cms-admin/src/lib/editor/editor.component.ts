@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange } from '@angular/material/slider';
 import { UniqueIdService } from 'core';
 import { Photo, PhotoListQuery, PhotoGetQuery } from 'material-cms-view';
 import { from, timer } from 'rxjs';

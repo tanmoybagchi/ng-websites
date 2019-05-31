@@ -1,5 +1,5 @@
 import { Inject, OnInit } from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ErrorFocusService, EventManagerService, Result } from 'core';
 import { Page, SitePages, SITE_PAGES } from 'material-cms-view';
