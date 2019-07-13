@@ -4,32 +4,32 @@
   "newProjectRoot": "projects",
   "projects": {
     "core": {
+      "projectType": "library",
       "root": "projects/core",
       "sourceRoot": "projects/core/src",
-      "projectType": "library",
       "prefix": "lib",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -63,34 +63,34 @@
       }
     },
     "TiffanysKitchen": {
-      "root": "projects/TiffanysKitchen/",
-      "sourceRoot": "projects/TiffanysKitchen/src",
       "projectType": "application",
-      "prefix": "tf",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
+      "root": "projects/TiffanysKitchen/",
+      "sourceRoot": "projects/TiffanysKitchen/src",
+      "prefix": "tf",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -102,7 +102,7 @@
             "tsConfig": "projects/TiffanysKitchen/tsconfig.json",
             "assets": [
               "projects/TiffanysKitchen/src/assets",
-              "projects/TiffanysKitchen/src/manifest.json"
+              "projects/TiffanysKitchen/src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
@@ -131,7 +131,7 @@
                 }
               ]
             },
-           "production": {
+            "production": {
               "fileReplacements": [
                 {
                   "replace": "projects/TiffanysKitchen/src/environments/environment.ts",
@@ -161,7 +161,10 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "TiffanysKitchen:build"
+            "aot": true,
+            "baseHref": "/",
+            "browserTarget": "TiffanysKitchen:build",
+            "progress": false
           },
           "configurations": {
             "production": {
@@ -188,7 +191,7 @@
             "scripts": [],
             "assets": [
               "projects/TiffanysKitchen/src/assets",
-              "projects/TiffanysKitchen/src/manifest.json"
+              "projects/TiffanysKitchen/src/manifest.webmanifest"
             ]
           }
         },
@@ -207,32 +210,32 @@
       }
     },
     "StavesChurch": {
+      "projectType": "application",
       "root": "projects/StavesChurch/",
       "sourceRoot": "projects/StavesChurch/src",
-      "projectType": "application",
       "prefix": "sc",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -275,7 +278,7 @@
                 }
               ]
             },
-           "production": {
+            "production": {
               "fileReplacements": [
                 {
                   "replace": "projects/StavesChurch/src/environments/environment.ts",
@@ -304,7 +307,10 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "StavesChurch:build"
+            "aot": true,
+            "baseHref": "/",
+            "browserTarget": "StavesChurch:build",
+            "progress": false
           },
           "configurations": {
             "production": {
@@ -353,32 +359,32 @@
       }
     },
     "DailySpendLimit": {
+      "projectType": "application",
       "root": "projects/DailySpendLimit/",
       "sourceRoot": "projects/DailySpendLimit/src",
-      "projectType": "application",
       "prefix": "dsl",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -392,7 +398,7 @@
             "tsConfig": "projects/DailySpendLimit/tsconfig.json",
             "assets": [
               "projects/DailySpendLimit/src/assets",
-              "projects/DailySpendLimit/src/manifest.json"
+              "projects/DailySpendLimit/src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
@@ -426,7 +432,8 @@
                   "maximumError": "5mb"
                 }
               ],
-              "serviceWorker": true
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/DailySpendLimit/ngsw-config.json"
             }
           }
         },
@@ -437,7 +444,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "DailySpendLimit:build:production"
+              "aot": true,
+              "baseHref": "/",
+              "browserTarget": "DailySpendLimit:build:production",
+              "progress": false
             }
           }
         },
@@ -461,7 +471,7 @@
             "assets": [
               "projects/DailySpendLimit/src/favicon.ico",
               "projects/DailySpendLimit/src/assets",
-              "projects/DailySpendLimit/src/manifest.json"
+              "projects/DailySpendLimit/src/manifest.webmanifest"
             ]
           }
         },
@@ -480,32 +490,32 @@
       }
     },
     "VinesToWinesDM": {
+      "projectType": "application",
       "root": "projects/VinesToWinesDM/",
       "sourceRoot": "projects/VinesToWinesDM/src",
-      "projectType": "application",
       "prefix": "vwt",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -582,7 +592,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "VinesToWinesDM:build:production"
+              "aot": true,
+              "baseHref": "/",
+              "browserTarget": "VinesToWinesDM:build:production",
+              "progress": false
             }
           }
         },
@@ -627,32 +640,32 @@
       }
     },
     "gapi": {
+      "projectType": "library",
       "root": "projects/gapi",
       "sourceRoot": "projects/gapi/src",
-      "projectType": "library",
       "prefix": "lib",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -686,32 +699,32 @@
       }
     },
     "material-cms-view": {
+      "projectType": "library",
       "root": "projects/material-cms/material-cms-view",
       "sourceRoot": "projects/material-cms/material-cms-view/src",
-      "projectType": "library",
       "prefix": "cms",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -745,32 +758,32 @@
       }
     },
     "material-cms-admin": {
+      "projectType": "library",
       "root": "projects/material-cms/material-cms-admin",
       "sourceRoot": "projects/material-cms/material-cms-admin/src",
-      "projectType": "library",
       "prefix": "cms",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -804,32 +817,32 @@
       }
     },
     "mh-general-error": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-general-error",
       "sourceRoot": "projects/material-helpers/mh-general-error/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -863,32 +876,32 @@
       }
     },
     "mh-google-sign-in": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-google-sign-in",
       "sourceRoot": "projects/material-helpers/mh-google-sign-in/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -922,32 +935,32 @@
       }
     },
     "mh-input-date": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-date",
       "sourceRoot": "projects/material-helpers/mh-input-date/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -981,32 +994,32 @@
       }
     },
     "mh-input-email": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-email",
       "sourceRoot": "projects/material-helpers/mh-input-email/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1040,32 +1053,32 @@
       }
     },
     "mh-input-integer": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-integer",
       "sourceRoot": "projects/material-helpers/mh-input-integer/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1099,32 +1112,32 @@
       }
     },
     "mh-input-search": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-search",
       "sourceRoot": "projects/material-helpers/mh-input-search/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1158,32 +1171,32 @@
       }
     },
     "mh-input-text": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-text",
       "sourceRoot": "projects/material-helpers/mh-input-text/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1217,32 +1230,32 @@
       }
     },
     "mh-input-usd": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-usd",
       "sourceRoot": "projects/material-helpers/mh-input-usd/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1276,32 +1289,32 @@
       }
     },
     "mh-page-title": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-page-title",
       "sourceRoot": "projects/material-helpers/mh-page-title/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1335,32 +1348,32 @@
       }
     },
     "mh-server-error": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-server-error",
       "sourceRoot": "projects/material-helpers/mh-server-error/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1394,32 +1407,32 @@
       }
     },
     "mh-throbber": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-throbber",
       "sourceRoot": "projects/material-helpers/mh-throbber/src",
-      "projectType": "library",
       "prefix": "mh",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1453,10 +1466,34 @@
       }
     },
     "mh-input-select": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-select",
       "sourceRoot": "projects/material-helpers/mh-input-select/src",
-      "projectType": "library",
       "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -1488,32 +1525,32 @@
       }
     },
     "mh-input-file": {
+      "projectType": "library",
       "root": "projects/material-helpers/mh-input-file",
       "sourceRoot": "projects/material-helpers/mh-input-file/src",
-      "projectType": "library",
       "prefix": "lib",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false
+          "style": "scss",
+          "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:guard": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:module": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -1547,10 +1584,34 @@
       }
     },
     "material-cms-providers": {
+      "projectType": "library",
       "root": "projects/material-cms/material-cms-providers",
       "sourceRoot": "projects/material-cms/material-cms-providers/src",
-      "projectType": "library",
       "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

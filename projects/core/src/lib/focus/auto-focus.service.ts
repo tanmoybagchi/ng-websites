@@ -16,7 +16,7 @@ export class AutoFocusService {
 
   private isEmpty(element: Element) {
     if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement || element instanceof HTMLTextAreaElement) {
-      return String.isNullOrWhitespace(element.value);
+      return !element.disabled && String.isNullOrWhitespace(element.value);
     }
 
     return false;

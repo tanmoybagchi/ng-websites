@@ -60,7 +60,7 @@ export class SyncDatabaseCommand {
   private onopenCursor(db: IDBDatabase, cursor: IDBCursorWithValue) {
     if (cursor) {
       cursor.continue();
-      return of(<Ingredient>cursor.value);
+      return of(cursor.value as Ingredient);
     } else {
       return EMPTY;
     }
@@ -103,7 +103,7 @@ export class SyncDatabaseCommand {
       if (page.length > 1) {
         const book = page[0];
         const pageNumber = Number(page.slice(1));
-        if (pageNumber !== NaN) {
+        if (!isNaN(pageNumber)) {
           recipe.page = `${book}${pageNumber.toString().padStart(3, '0')}`;
         }
       } else {

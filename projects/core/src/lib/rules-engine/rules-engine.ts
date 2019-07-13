@@ -24,8 +24,9 @@ export class RulesEngine {
 
     } finally {
       this.entity = null;
-      return this.result;
     }
+
+    return this.result;
   }
 
   private checkProperty(propertyRule: PropertyRule) {
@@ -48,6 +49,10 @@ export class RulesEngine {
       if (!(rule instanceof ObjectRule)) {
         // tslint:disable-next-line:no-unused-expression
         this.isRuleBroken(rule, propValue) && this.result.addError(rule.errorMessage, propertyRule.propertyName);
+        return;
+      }
+
+      if (rule.when && !rule.when.call(null, this.entity)) {
         return;
       }
 

@@ -9,7 +9,7 @@ export class EventManagerService {
 
   constructor() { }
 
-  raise<T extends DomainEvent>(domainEvent: { new(): T } | T) {
+  raise<T extends DomainEvent>(domainEvent: { new(...args: any[]): T } | T) {
     if (domainEvent === null || domainEvent === undefined) {
       throw new Error('domainEvent missing');
     }
@@ -29,7 +29,7 @@ export class EventManagerService {
     this.eventSource.next(eventToRaise);
   }
 
-  handle<T extends DomainEvent>(domainEvent: { new(): T }) {
+  handle<T extends DomainEvent>(domainEvent: { new(...args: any[]): T }) {
     return this.eventSource.pipe(
       filter((value) => value instanceof domainEvent)
     );

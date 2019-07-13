@@ -17,11 +17,18 @@ export class DomainHelper {
         : JSON.parse(source)
       : source;
 
-    this.copyMatchingProperties(target, sourceJSON);
+    const correctedJSON = {};
+    Object.keys(sourceJSON).forEach(k => {
+      const camelCasedMemberName = k[0].toLowerCase() + k.slice(1);
+      correctedJSON[camelCasedMemberName] = sourceJSON[k];
+    });
+
+    this.copyMatchingProperties(target, correctedJSON);
 
     Object.keys(target)
       .filter(key => typeof target[key] === 'object' && target[key] instanceof ValueObject)
-      .forEach(key => this.adapt(target[key], key in sourceJSON ? sourceJSON[key] : this.extractPrefixedObject(sourceJSON, `${key}_`)));
+      // tslint:disable-next-line:max-line-length
+      .forEach(key => this.adapt(target[key], key in correctedJSON ? correctedJSON[key] : this.extractPrefixedObject(correctedJSON, `${key}_`)));
 
     return target as T;
   }
@@ -81,7 +88,7 @@ export class DomainHelper {
     });
   }
 
-  private static extractPrefixedObject(source, keyPrefix: string) {
+  private static extractPrefixedObject(source: { [x: string]: any; }, keyPrefix: string) {
     const target = {};
 
     Object.keys(source)

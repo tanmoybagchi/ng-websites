@@ -16,6 +16,7 @@ export class ConsoleLoggerService extends LoggerService {
   constructor(config: LoggerConfig) {
     super(config);
 
+    // tslint:disable-next-line:no-string-literal
     const msie = window.document['documentMode'];
     this.formatStackTrace = msie || /\bEdge\//.test(window.navigator && window.navigator.userAgent);
   }
@@ -27,6 +28,7 @@ export class ConsoleLoggerService extends LoggerService {
           ? 'Error: ' + arg.message + '\n' + arg.stack
           : arg.stack;
       } else if ('sourceURL' in arg) {
+        // tslint:disable-next-line:no-string-literal
         arg = arg['message'] + '\n' + arg['sourceURL'] + ':' + arg['line'];
       }
     }

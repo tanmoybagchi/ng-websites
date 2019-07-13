@@ -7,7 +7,8 @@
 }
 
 if (!String.isNullOrWhitespace) {
-  String.isNullOrWhitespace = function (arg: string): boolean {
+  // tslint:disable-next-line:only-arrow-functions
+  String.isNullOrWhitespace = function(arg: string): boolean {
     if (arg == null) {
       return true;
     }
@@ -17,13 +18,15 @@ if (!String.isNullOrWhitespace) {
 }
 
 if (!String.hasData) {
-  String.hasData = function (arg: string): boolean {
+  // tslint:disable-next-line:only-arrow-functions
+  String.hasData = function(arg: string): boolean {
     return !String.isNullOrWhitespace(arg);
   };
 }
 
 if (!String.toDate) {
-  String.toDate = function (arg: any): Date {
+  // tslint:disable-next-line:only-arrow-functions
+  String.toDate = function(arg: any): Date {
     if (arg === undefined || arg === null || arg === '') {
       return null;
     }

@@ -1,7 +1,9 @@
+// https://github.com/bmitchenko/lakmus/blob/master/src/utils.ts
 const memberNameExtractor = new RegExp('return (.*);?\\b');
+const memberNameExtractorArrowFunctions = new RegExp('=>(.*)');
 
 export function getMemberNameFromSelector<TResult>(name: (x?: TResult) => any) {
-  const m = memberNameExtractor.exec(name + '');
+  const m = memberNameExtractor.exec(name + '') || memberNameExtractorArrowFunctions.exec(name + '');
   if (m == null) {
     throw new Error('The function does not contain a statement matching \'return variableName;\'');
   }

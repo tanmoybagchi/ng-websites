@@ -25,15 +25,18 @@ export class ScrollService {
     const duration = options.duration || 800;
     const offset = options.offset || 0;
     const easing = options.easing || 'easeInOutCubic';
-    const callbackBefore = options.callbackBefore || function () { };
-    const callbackAfter = options.callbackAfter || function () { };
+    // tslint:disable-next-line:only-arrow-functions
+    const callbackBefore = options.callbackBefore || function() { };
+    // tslint:disable-next-line:only-arrow-functions
+    const callbackAfter = options.callbackAfter || function() { };
     const container = document.getElementById(options.containerId) || null;
     const containerPresent = (container !== undefined && container != null);
 
     /**
-		 * Retrieve current location
-		 */
-    const getScrollLocation = function () {
+     * Retrieve current location
+     */
+    // tslint:disable-next-line:only-arrow-functions
+    const getScrollLocation = function() {
       if (containerPresent) {
         return container.scrollTop;
       } else {
@@ -46,13 +49,11 @@ export class ScrollService {
     };
 
     /**
-		 * Calculate easing pattern.
-		 *
-		 * 20150713 edit - zephinzer
-		 * - changed if-else to switch
-		 * @see http://archive.oreilly.com/pub/a/server-administration/excerpts/even-faster-websites/writing-efficient-javascript.html
-		 */
-    const getEasingPattern = function (animationType: string, time: number) {
+     * Calculate easing pattern.
+     * @see http://archive.oreilly.com/pub/a/server-administration/excerpts/even-faster-websites/writing-efficient-javascript.html
+     */
+    // tslint:disable-next-line:only-arrow-functions
+    const getEasingPattern = function(animationType: string, time: number) {
       switch (animationType) {
         case 'easeInQuad': return time * time; // accelerating from zero velocity
         case 'easeOutQuad': return time * (2 - time); // decelerating to zero velocity
@@ -77,8 +78,8 @@ export class ScrollService {
     /**
 		 * Calculate how far to scroll
 		 */
-    // tslint:disable-next-line:no-shadowed-variable
-    const getEndLocation = function (element: HTMLElement) {
+    // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
+    const getEndLocation = function(element: HTMLElement) {
       let location = 0;
       if (element.offsetParent) {
         do {
@@ -91,7 +92,8 @@ export class ScrollService {
     };
 
     // Initialize the whole thing
-    setTimeout(function () {
+    // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
+    setTimeout(function() {
       let currentLocation = null;
       const startLocation = getScrollLocation();
       const endLocation = getEndLocation(element);
@@ -105,7 +107,8 @@ export class ScrollService {
       /**
 			 * Stop the scrolling animation when the anchor is reached (or at the top/bottom of the page)
 			 */
-      const stopAnimation = function () {
+      // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
+      const stopAnimation = function() {
         currentLocation = getScrollLocation();
         if (containerPresent) {
           scrollHeight = container.scrollHeight;
@@ -134,7 +137,8 @@ export class ScrollService {
       /**
 			 * Scroll the page by an increment, and check if it's time to stop
 			 */
-      const animateScroll = function () {
+      // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
+      const animateScroll = function() {
         timeLapsed += 16;
         percentage = (timeLapsed / duration);
         percentage = (percentage > 1) ? 1 : percentage;
