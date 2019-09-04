@@ -3,10 +3,7 @@
 
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.
-$custom-typography: mat-typography-config(
-  $body-1: mat-typography-level(16px, 24px, 400),
-  $body-2: mat-typography-level(16px, 24px, 500)
-);
+$custom-typography: mat-typography-config( $body-1: mat-typography-level(16px, 24px, 400), $body-2: mat-typography-level(16px, 24px, 500) );
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -17,10 +14,10 @@ $custom-typography: mat-typography-config(
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://www.google.com/design/spec/style/color.html
 $my-app-primary: mat-palette($mat-cyan);
-$my-app-accent:  mat-palette($mat-lime, A200, A100, A400);
+$my-app-accent: mat-palette($mat-lime, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$my-app-warn:    mat-palette($mat-red);
+$my-app-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
@@ -36,6 +33,12 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
   box-sizing: border-box;
 }
 
+body,
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
