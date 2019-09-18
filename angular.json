@@ -100,6 +100,7 @@
             "main": "projects/TiffanysKitchen/src/main.ts",
             "polyfills": "projects/TiffanysKitchen/src/polyfills.ts",
             "tsConfig": "projects/TiffanysKitchen/tsconfig.json",
+            "aot": false,
             "assets": [
               "projects/TiffanysKitchen/src/assets",
               "projects/TiffanysKitchen/src/manifest.webmanifest"
@@ -258,6 +259,7 @@
             "main": "projects/StavesChurch/src/main.ts",
             "polyfills": "projects/StavesChurch/src/polyfills.ts",
             "tsConfig": "projects/StavesChurch/tsconfig.json",
+            "aot": false,
             "assets": [
               "projects/StavesChurch/src/assets"
             ],
@@ -417,6 +419,7 @@
             "main": "projects/DailySpendLimit/src/main.ts",
             "polyfills": "projects/DailySpendLimit/src/polyfills.ts",
             "tsConfig": "projects/DailySpendLimit/tsconfig.json",
+            "aot": false,
             "assets": [
               "projects/DailySpendLimit/src/assets",
               "projects/DailySpendLimit/src/manifest.webmanifest"
@@ -553,6 +556,7 @@
             "main": "projects/VinesToWinesDM/src/main.ts",
             "polyfills": "projects/VinesToWinesDM/src/polyfills.ts",
             "tsConfig": "projects/VinesToWinesDM/tsconfig.json",
+            "aot": false,
             "assets": [
               "projects/VinesToWinesDM/src/assets"
             ],
