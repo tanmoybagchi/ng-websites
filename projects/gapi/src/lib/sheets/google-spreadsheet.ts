@@ -18,6 +18,7 @@ export class GoogleSpreadsheet {
   }
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace GoogleSpreadsheet {
   /** Properties of a spreadsheet. */
   export class SpreadsheetProperties {
@@ -33,7 +34,8 @@ export namespace GoogleSpreadsheet {
      */
     locale = '';
     /** The time zone of the spreadsheet, in CLDR format such as **America/New_York**.
-     * If the time zone isn't recognized, this may be a custom time zone such as **GMT-07:00**. */
+     * If the time zone isn't recognized, this may be a custom time zone such as **GMT-07:00**.
+     */
     timeZone = '';
 
     static Create(title: string) {
@@ -78,13 +80,15 @@ export namespace GoogleSpreadsheet {
      * When updating sheet indices or inserting sheets; movement is considered in before the move indexes.
      * For example; if there were 3 sheets (S1; S2; S3) in order to move S1 ahead of S2 the index would have to be set to 2.
      * A sheet index update request is ignored if the requested index is identical to the sheets current index
-     * or if the requested new index is equal to the current sheet index + 1. */
+     * or if the requested new index is equal to the current sheet index + 1.
+     */
     index: number;
     /** The type of sheet. Defaults to GRID. This field cannot be changed once set. */
     sheetType = SheetType.GRID;
     /** Additional properties of the sheet if this sheet is a grid.
      * (If the sheet is an object sheet; containing a chart or image; then this field will be absent.)
-     * When writing it is an error to set any grid properties on non-grid sheets. */
+     * When writing it is an error to set any grid properties on non-grid sheets.
+     */
     gridProperties: GridProperties;
     hidden = false;
     /** True if the sheet is an RTL sheet instead of an LTR sheet. */
@@ -159,12 +163,14 @@ export namespace GoogleSpreadsheet {
     /** The value the user entered in the cell. e.g, 1234, 'Hello', or =NOW() */
     userEnteredValue: ExtendedValue;
     /** The effective value of the cell. For cells with formulas, this is the calculated value.
-     * For cells with literals, this is the same as the userEnteredValue. This field is read-only. */
+     * For cells with literals, this is the same as the userEnteredValue. This field is read-only.
+     */
     effectiveValue: ExtendedValue;
     /** The formatted value of the cell. This is the value as it's shown to the user. This field is read-only. */
     formattedValue = '';
     /** The format the user entered for the cell.
-     *  When writing, the new format will be merged with the existing format. */
+     *  When writing, the new format will be merged with the existing format.
+     */
     userEnteredFormat: CellFormat;
     /** Any note on the cell. */
     note = '';
@@ -193,10 +199,11 @@ export namespace GoogleSpreadsheet {
      * December 30th 1899. The fractional portion (right of the decimal) counts the time as a fraction of the day. For example,
      * January 1st 1900 at noon would be 2.5, 2 because it's 2 days after December 30st 1899, and .5 because noon is half a day.
      * February 1st 1900 at 3pm would be 33.625. This correctly treats the year 1900 as not a leap year.
-    */
+     */
     numberValue: number;
     /** Represents a string value. Leading single quotes are not included.
-     * For example, if the user typed '123 into the UI, this would be represented as a stringValue of "123". */
+     * For example, if the user typed '123 into the UI, this would be represented as a stringValue of "123".
+     */
     stringValue: string;
     /** Represents a boolean value. */
     boolValue: boolean;
@@ -293,12 +300,14 @@ export namespace GoogleSpreadsheet {
     /** Pattern string used for formatting.
      * If not set, a default pattern based on the user's locale will be used if necessary for the given type.
      * See the [Date and Number Formats guide](https://developers.google.com/sheets/api/guides/formats)
-     * for more information about the supported patterns. */
+     * for more information about the supported patterns.
+     */
     pattern: string;
   }
 
   /** The number format of the cell.
-   * In this documentation the locale is assumed to be en_US, but the actual format depends on the locale of the spreadsheet. */
+   * In this documentation the locale is assumed to be en_US, but the actual format depends on the locale of the spreadsheet.
+   */
   export enum NumberFormatType {
     /** The number format is not specified and is based on the contents of the cell. Do not explicitly use this. */
     NUMBER_FORMAT_TYPE_UNSPECIFIED,
@@ -321,7 +330,8 @@ export namespace GoogleSpreadsheet {
   }
 
   /** A single kind of update to apply to a spreadsheet.
-   * Union field kind can be only one of the following: */
+   * Union field kind can be only one of the following:
+   */
   export class BatchUpdateRequest {
     updateSpreadsheetProperties: UpdateSpreadsheetPropertiesRequest;
     updateSheetProperties: UpdateSheetPropertiesRequest;
@@ -372,7 +382,8 @@ export namespace GoogleSpreadsheet {
     properties: SpreadsheetProperties;
     /** The fields of CellData that should be updated.
      * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
-     * A single "*" can be used as short-hand for listing every field. */
+     * A single "*" can be used as short-hand for listing every field.
+     */
     fields: string;
 
     static Create(properties: SpreadsheetProperties) {
@@ -390,7 +401,8 @@ export namespace GoogleSpreadsheet {
     properties: SheetProperties;
     /** The fields of CellData that should be updated.
      * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
-     * A single "*" can be used as short-hand for listing every field. */
+     * A single "*" can be used as short-hand for listing every field.
+     */
     fields: string;
 
     static Create(properties: SheetProperties) {
@@ -407,7 +419,8 @@ export namespace GoogleSpreadsheet {
     /** The properties the new sheet should have.
      * All properties are optional.
      * The sheetId field is optional; if one is not set, an id will be randomly generated.
-     * (It is an error to specify the ID of a sheet that already exists.) */
+     * (It is an error to specify the ID of a sheet that already exists.)
+     */
     properties: SheetProperties;
 
     static Create(properties: SheetProperties) {
@@ -439,7 +452,8 @@ export namespace GoogleSpreadsheet {
     rows: RowData[];
     /** The fields of CellData that should be updated.
      * At least one field must be specified. The root is the CellData; 'row.values.' should not be specified.
-     * A single "*" can be used as short-hand for listing every field. */
+     * A single "*" can be used as short-hand for listing every field.
+     */
     fields: string;
 
     static Create(sheetId: number, rows: RowData[]) {
@@ -458,10 +472,12 @@ export namespace GoogleSpreadsheet {
     rows: RowData[];
     /** The fields of CellData that should be updated. At least one field must be specified.
      * The root is the CellData; 'row.values.' should not be specified.
-     * A single "*" can be used as short-hand for listing every field. */
+     * A single "*" can be used as short-hand for listing every field.
+     */
     fields: string;
     /** The range to write data to.
-     * If the data in rows does not cover the entire requested range, the fields matching those set in fields will be cleared. */
+     * If the data in rows does not cover the entire requested range, the fields matching those set in fields will be cleared.
+     */
     range: GridRange;
 
     static Create(rows: RowData[]) {
@@ -490,7 +506,8 @@ export namespace GoogleSpreadsheet {
 
   /** A range along a single dimension on a sheet. All indexes are zero-based.
    * Indexes are half open: the start index is inclusive and the end index is exclusive.
-   * Missing indexes indicate the range is unbounded on that side. */
+   * Missing indexes indicate the range is unbounded on that side.
+   */
   export class DimensionRange {
     /** The sheet this span is on. */
     sheetId: number;
@@ -529,7 +546,8 @@ export namespace GoogleSpreadsheet {
     /** The reply of the updates. This maps 1:1 with the updates, although replies to some requests may be empty. */
     replies: BatchUpdateReply[];
     /** The spreadsheet after updates were applied.
-     * This is only set if [BatchUpdateSpreadsheetRequest.include_spreadsheet_in_response] is true. */
+     * This is only set if [BatchUpdateSpreadsheetRequest.include_spreadsheet_in_response] is true.
+     */
     updatedSpreadsheet: GoogleSpreadsheet;
   }
 
@@ -547,7 +565,8 @@ export namespace GoogleSpreadsheet {
 
   /** A range on a sheet. All indexes are zero-based.
    * Indexes are half open, e.g the start index is inclusive and the end index is exclusive -- [startIndex, endIndex).
-   * Missing indexes indicate the range is unbounded on that side.*/
+   * Missing indexes indicate the range is unbounded on that side.
+   */
   export class GridRange {
     /** The sheet this range is on. */
     sheetId: number;

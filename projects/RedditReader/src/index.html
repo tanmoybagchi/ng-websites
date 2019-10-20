@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta charset="utf-8">
+  <title>Reddit Reader</title>
+  <meta name="theme-color" content="#3f51b5">
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="description" content="Reddit Reader"/>
+  <meta name="author" content="Tanmoy Bagchi"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="format-detection" content="telephone=no">
+  <base href="/redditreader/">
+  <!--Frame busting. https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet#Best-for-now_Legacy_Browser_Frame_Breaking_Script-->
+  <style id="antiClickjack">
+    body {
+      display: none !important;
+    }
+  </style>
+  <script type="text/javascript">
+    if (self === top) {
+      var antiClickjack = document.getElementById("antiClickjack");
+      antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <!--End Frame busting.-->
+</head>
+<body class="mat-app-background mat-typography">
+  <noscript>
+    <h1>Reddit Reader</h1>
+    <h4 style="color: red">
+      For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.
+    </h4>
+  </noscript>
+
+  <rr-app-root></rr-app-root>
+</body>
+</html>

@@ -383,9 +383,6 @@
     },
     "DailySpendLimit": {
       "projectType": "application",
-      "root": "projects/DailySpendLimit/",
-      "sourceRoot": "projects/DailySpendLimit/src",
-      "prefix": "dsl",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
@@ -410,6 +407,9 @@
           "skipTests": true
         }
       },
+      "root": "projects/DailySpendLimit/",
+      "sourceRoot": "projects/DailySpendLimit/src",
+      "prefix": "dsl",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -469,14 +469,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "DailySpendLimit:build"
+            "aot": true,
+            "baseHref": "/",
+            "browserTarget": "DailySpendLimit:build",
+            "progress": false
           },
           "configurations": {
             "production": {
-              "aot": true,
-              "baseHref": "/",
-              "browserTarget": "DailySpendLimit:build:production",
-              "progress": false
+              "browserTarget": "DailySpendLimit:build:production"
             }
           }
         },
@@ -628,14 +628,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "VinesToWinesDM:build"
+            "aot": true,
+            "baseHref": "/",
+            "browserTarget": "VinesToWinesDM:build",
+            "progress": false
           },
           "configurations": {
             "production": {
-              "aot": true,
-              "baseHref": "/",
-              "browserTarget": "VinesToWinesDM:build:production",
-              "progress": false
+              "browserTarget": "VinesToWinesDM:build:production"
             }
           }
         },
@@ -1678,6 +1678,153 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        }
+      }
+    },
+    "RedditReader": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
+      "root": "projects/RedditReader",
+      "sourceRoot": "projects/RedditReader/src",
+      "prefix": "rr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/RedditReader",
+            "index": "projects/RedditReader/src/index.html",
+            "main": "projects/RedditReader/src/main.ts",
+            "polyfills": "projects/RedditReader/src/polyfills.ts",
+            "tsConfig": "projects/RedditReader/tsconfig.json",
+            "aot": true,
+            "assets": [
+              "projects/RedditReader/src/favicon.ico",
+              "projects/RedditReader/src/assets"
+            ],
+            "styles": [
+              "./node_modules/typeface-great-vibes/index.css",
+              "./node_modules/roboto-fontface/css/roboto/sass/roboto-fontface.scss",
+              "./node_modules/material-icon-font/iconfont/material-icons.css",
+              "projects/RedditReader/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/RedditReader/src/environments/environment.ts",
+                  "with": "projects/RedditReader/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "aot": true,
+            "baseHref": "/",
+            "browserTarget": "RedditReader:build",
+            "progress": false
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "RedditReader:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "RedditReader:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/RedditReader/src/test.ts",
+            "polyfills": "projects/RedditReader/src/polyfills.ts",
+            "tsConfig": "projects/RedditReader/tsconfig.spec.json",
+            "karmaConfig": "projects/RedditReader/karma.conf.js",
+            "assets": [
+              "projects/RedditReader/src/favicon.ico",
+              "projects/RedditReader/src/assets"
+            ],
+            "styles": [
+              "projects/RedditReader/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/RedditReader/tsconfig.json",
+              "projects/RedditReader/tsconfig.spec.json",
+              "projects/RedditReader/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/RedditReader/e2e/protractor.conf.js",
+            "devServerTarget": "RedditReader:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "RedditReader:serve:production"
+            }
           }
         }
       }
