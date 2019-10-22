@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ListingQuery } from '@app/domain/listing-query.service';
 import { EventManagerService, Result } from 'core/core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
@@ -12,8 +11,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
-export class HomepageComponent implements OnInit {
-  errors: any;
+export class HomepageComponent /* implements OnInit */ {
+  /* errors: any;
   thing: Thing;
 
   constructor(
@@ -25,7 +24,7 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('popular').pipe(
+    this.listingQuery.execute().pipe(
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(thing => this.onListQuery(thing));
@@ -42,5 +41,5 @@ export class HomepageComponent implements OnInit {
   private onError(result: Result) {
     this.errors = result.errors;
     return EMPTY;
-  }
+  } */
 }

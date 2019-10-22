@@ -8,6 +8,7 @@ import { routes } from './app-routes';
 import { DomainModule } from './domain/domain.module';
 import { HomepageModule } from './homepage/homepage.module';
 import { SharedModule } from './shared/shared.module';
+import { ListingModule } from './listing/listing.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SharedModule } from './shared/shared.module';
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     HomepageModule,
     DomainModule,
+    ListingModule,
   ],
   bootstrap: [AppRootComponent]
 })

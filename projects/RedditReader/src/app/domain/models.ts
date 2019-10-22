@@ -1,7 +1,7 @@
 export class Thing {
   id: string;
   name: string;
-  kind: Thing.Kind.Listing;
+  kind: Thing.Kind;
   data: Listing | Link;
 }
 
