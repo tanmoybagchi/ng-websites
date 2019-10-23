@@ -12,12 +12,13 @@ export class ListingQuery {
       (String.hasData(subReddit) ? `r/${subReddit}/` : '') +
       'hot.json';
 
-    const paramsObj = { before, after, modhash };
-
-    const params = new HttpParams({ fromObject: paramsObj }).append('limit', '10');
-
+    let params = new HttpParams().append('limit', '10').append('raw_json', '1');
     // tslint:disable-next-line:no-unused-expression
-    /* String.hasData(before) && (params = params.append('before', before)); */
+    String.hasData(before) && (params = params.append('before', before));
+    // tslint:disable-next-line:no-unused-expression
+    String.hasData(after) && (params = params.append('after', after));
+    // tslint:disable-next-line:no-unused-expression
+    String.hasData(modhash) && (params = params.append('modhash', modhash));
 
     return this.http.get<Thing>(url, { params }).pipe(
       filter(httpResult => httpResult.kind === Thing.Kind.Listing),

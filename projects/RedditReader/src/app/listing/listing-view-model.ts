@@ -8,10 +8,11 @@ export class ListingViewModel {
   isText: boolean;
   isVideo: boolean;
   subreddit: string;
-  text: SafeHtml;
-  thumbnail: SafeUrl;
+  text: string;
+  thumbnail: string;
   title: string;
   url: string;
+  videoSrc: any;
 
   constructor(thing: Thing, sanitizer: DomSanitizer) {
     switch (thing.kind) {
@@ -28,16 +29,21 @@ export class ListingViewModel {
     this.author = link.author;
     this.createdOn = new Date(link.created);
     this.isImage = String.hasData(link.post_hint) && link.post_hint.includes('image');
-    this.isText = String.isNullOrWhitespace(link.post_hint) || String.isNullOrWhitespace(link.selftext);
     this.isVideo = String.hasData(link.post_hint) && link.post_hint.includes('video');
     this.subreddit = link.subreddit;
 
     if (String.hasData(link.selftext_html)) {
-      this.text = sanitizer.bypassSecurityTrustHtml(link.selftext_html);
+      this.isText = true;
+      this.text = link.selftext_html;
     }
 
-    if (String.hasData(link.thumbnail)) {
-      this.thumbnail = sanitizer.bypassSecurityTrustUrl(link.thumbnail);
+    if (this.isImage) {
+      this.thumbnail = link.url;
+    }
+
+    if (this.isVideo) {
+      this.thumbnail = (link as any).preview.images[0].source.url;
+      this.videoSrc = (link as any).media.reddit_video.hls_url;
     }
 
     this.title = link.title;
