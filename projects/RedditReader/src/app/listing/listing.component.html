@@ -7,22 +7,11 @@
         r/<span [innerText]="listing.subreddit"></span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content *ngIf="listing.isText">
-      <p [innerHTML]="listing.text"></p>
-    </mat-card-content>
-    <mat-card-content *ngIf="listing.isImage">
-      <img mat-card-image [src]="listing.thumbnail">
-    </mat-card-content>
-    <mat-card-content *ngIf="listing.isVideo">
-
-      <video
-        poster="https://external-preview.redd.it/LHQ1EmJdcBg2ivpjgikePTV1rj4IH7N89dgN86kkYq4.png?width=320&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=c65358b4bfa76930bc5aeaf3be9f070aa8f2dc62"
-        loop="" preload="auto" autoplay="" controls="">
-        <source src="https://v.redd.it/b59jahq7o5u31/HLSPlaylist.m3u8" type="application/vnd.apple.mpegURL">
-      </video>
-
-      <video autoplay preload="auto" mat-card-image [poster]="listing.thumbnail" controls="">
-        <source [src]="listing.videoSrc" type="application/vnd.apple.mpegURL">
+    <mat-card-content>
+      <img *ngIf="listing.isImage" mat-card-image [src]="listing.thumbnail">
+      <p *ngIf="listing.isText" [innerHTML]="listing.text"></p>
+      <video *ngIf="listing.isVideo" mat-card-image controls="" muted="" [poster]="listing.thumbnail" preload="none">
+        <source *ngFor="let videoSrc of listing.videoSrcs" [src]="videoSrc">
       </video>
     </mat-card-content>
     <mat-card-actions>

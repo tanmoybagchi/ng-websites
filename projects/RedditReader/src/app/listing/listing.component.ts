@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Thing, Listing } from '@app/domain/models';
 import { EventManagerService, Result } from 'core/core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
-import { EMPTY, from, of, Observable } from 'rxjs';
-import { catchError, finalize, tap, map, filter, switchMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { ListingQuery } from './listing-query.service';
 import { ListingViewModel } from './listing-view-model';
 
@@ -23,26 +21,25 @@ export class ListingComponent implements OnInit {
   constructor(
     private eventManagerService: EventManagerService,
     private listingQuery: ListingQuery,
-    private sanitizer: DomSanitizer,
   ) {
   }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('aww').pipe(
+    this.listingQuery.execute('gonewild').pipe(
       tap(listing => this.before = listing.before),
       tap(listing => this.after = listing.after),
       tap(listing => this.modhash = listing.modhash),
-      map(listing => listing.children.map(thing => new ListingViewModel(thing, this.sanitizer))),
+      map(listing => listing.children.map(thing => new ListingViewModel(thing))),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(vm => this.onQuery(vm));
   }
 
   onQuery(vm: ListingViewModel[]) {
-    console.table(vm);
-    this.vm = vm;
+    this.vm = vm.filter(x => !x.stickied);
+    console.table(this.vm.map(x => ({ t: x.title, isT: x.isText, isI: x.isImage, isV: x.isVideo })));
   }
 
   private onError(result: Result) {
