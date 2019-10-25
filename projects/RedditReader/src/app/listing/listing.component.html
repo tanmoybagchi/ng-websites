@@ -1,21 +1,24 @@
 <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
 
-  <mat-card *ngFor="let listing of vm">
+  <mat-card *ngFor="let listing of vm; index as i">
     <mat-card-header>
       <mat-card-title>{{listing.title}}</mat-card-title>
       <mat-card-subtitle>
         r/<span [innerText]="listing.subreddit"></span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
-      <img *ngIf="listing.isImage" mat-card-image [src]="listing.thumbnail">
-      <p *ngIf="listing.isText" [innerHTML]="listing.text"></p>
-      <video *ngIf="listing.isVideo" mat-card-image controls="" muted="" [poster]="listing.thumbnail" preload="none">
-        <source *ngFor="let videoSrc of listing.videoSrcs" [src]="videoSrc">
-      </video>
+    <img *ngIf="listing.hasImage" mat-card-image [src]="listing.thumbnail" loading="lazy">
+    <video *ngIf="listing.hasVideo" mat-card-image controls="" muted="" [poster]="listing.thumbnail" preload="none">
+      <source *ngFor="let videoSrc of listing.videoSrcs" [src]="videoSrc">
+    </video>
+    <mat-card-content *ngIf="listing.hasText">
+      <p #post style="overflow: hidden;" [ngStyle]="{'max-height': listing.stickied?'50vh':'80vh'}"
+        [ngClass]="{'masked': post.scrollHeight > post.clientHeight}" [innerHTML]="listing.text"></p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button>Ok</button>
+      <button mat-icon-button aria-label="Share">
+        <mat-icon>share</mat-icon>
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

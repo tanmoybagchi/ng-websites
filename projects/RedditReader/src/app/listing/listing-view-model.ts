@@ -1,11 +1,13 @@
 import { Link, Thing } from '@app/domain/models';
 
 export class ListingViewModel {
+  static imageFileTypes = ['.apng', '.bmp', '.ico', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
+
   author: string;
   createdOn: Date;
-  isImage: boolean;
-  isText: boolean;
-  isVideo: boolean;
+  hasImage: boolean;
+  hasText: boolean;
+  hasVideo: boolean;
   stickied: boolean;
   subreddit: string;
   text: string;
@@ -34,7 +36,7 @@ export class ListingViewModel {
     this.url = link.url;
 
     if (link.media && link.media.reddit_video) {
-      this.isVideo = true;
+      this.hasVideo = true;
       this.thumbnail = link.preview.images[0].source.url;
 
       this.videoSrcs = [
@@ -47,7 +49,7 @@ export class ListingViewModel {
     }
 
     if (link.preview && link.preview.reddit_video_preview) {
-      this.isVideo = true;
+      this.hasVideo = true;
       this.thumbnail = link.preview.images[0].source.url;
 
       this.videoSrcs = [
@@ -60,7 +62,7 @@ export class ListingViewModel {
     }
 
     if (link.preview && Array.isArray(link.preview.images) && link.preview.images[0].variants && link.preview.images[0].variants.mp4) {
-      this.isVideo = true;
+      this.hasVideo = true;
       this.thumbnail = link.preview.images[0].source.url;
 
       this.videoSrcs = [
@@ -71,18 +73,23 @@ export class ListingViewModel {
     }
 
     if (String.hasData(link.selftext_html)) {
-      this.isText = true;
+      this.hasText = true;
       this.text = link.selftext_html;
     }
 
     if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {
-      this.isImage = true;
+      this.hasImage = true;
       this.thumbnail = link.url;
     }
 
     if (link.preview && Array.isArray(link.preview.images)) {
-      this.isImage = true;
+      this.hasImage = true;
       this.thumbnail = link.preview.images[0].source.url;
+    }
+
+    if (ListingViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
+      this.hasImage = true;
+      this.thumbnail = this.url;
     }
   }
 }

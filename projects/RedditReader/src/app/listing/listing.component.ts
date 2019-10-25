@@ -27,7 +27,7 @@ export class ListingComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('hmmm').pipe(
+    this.listingQuery.execute('startrek').pipe(
       tap(listing => this.before = listing.before),
       tap(listing => this.after = listing.after),
       tap(listing => this.modhash = listing.modhash),
@@ -38,8 +38,8 @@ export class ListingComponent implements OnInit {
   }
 
   onQuery(vm: ListingViewModel[]) {
-    this.vm = vm.filter(x => !x.stickied);
-    console.table(this.vm.map(x => ({ t: x.title, isT: x.isText, isI: x.isImage, isV: x.isVideo })));
+    this.vm = vm;
+    console.table(this.vm.map(x => ({ t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo })));
   }
 
   private onError(result: Result) {
