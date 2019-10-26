@@ -5,6 +5,7 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { ListingQuery } from './listing-query.service';
 import { ListingViewModel } from './listing-view-model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'rr-listing',
@@ -21,17 +22,18 @@ export class ListingComponent implements OnInit {
   constructor(
     private eventManagerService: EventManagerService,
     private listingQuery: ListingQuery,
+    private sanitizer: DomSanitizer
   ) {
   }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('startrek').pipe(
+    this.listingQuery.execute('coding').pipe(
       tap(listing => this.before = listing.before),
       tap(listing => this.after = listing.after),
       tap(listing => this.modhash = listing.modhash),
-      map(listing => listing.children.map(thing => new ListingViewModel(thing))),
+      map(listing => listing.children.map(thing => new ListingViewModel(thing, this.sanitizer))),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     ).subscribe(vm => this.onQuery(vm));
@@ -39,7 +41,7 @@ export class ListingComponent implements OnInit {
 
   onQuery(vm: ListingViewModel[]) {
     this.vm = vm;
-    console.table(this.vm.map(x => ({ t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo })));
+    console.table(this.vm.map(x => ({ t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo, emb: x.hasEmbed })));
   }
 
   private onError(result: Result) {

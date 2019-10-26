@@ -1,3 +1,4 @@
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Link, Thing } from '@app/domain/models';
 
 export class ListingViewModel {
@@ -5,9 +6,11 @@ export class ListingViewModel {
 
   author: string;
   createdOn: Date;
+  hasEmbed: boolean;
   hasImage: boolean;
   hasText: boolean;
   hasVideo: boolean;
+  embed: SafeHtml;
   stickied: boolean;
   subreddit: string;
   text: string;
@@ -16,7 +19,7 @@ export class ListingViewModel {
   url: string;
   videoSrcs: string[];
 
-  constructor(thing: Thing) {
+  constructor(thing: Thing, private sanitizer: DomSanitizer) {
     switch (thing.kind) {
       case Thing.Kind.Link:
         this.link(thing.data as Link);
@@ -44,6 +47,20 @@ export class ListingViewModel {
         link.media.reddit_video.hls_url,
         link.media.reddit_video.fallback_url
       ];
+
+      return;
+    }
+
+    if (link.media_embed && link.media_embed.content) {
+      this.hasEmbed = true;
+
+      const tan = document.createElement('p');
+      tan.innerHTML = link.media_embed.content;
+      const ifr = tan.getElementsByTagName('iframe')[0];
+      ifr.width = '100%';
+      ifr.height = 'auto';
+
+      this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
 
       return;
     }
