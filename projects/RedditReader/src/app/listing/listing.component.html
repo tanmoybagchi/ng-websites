@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
 
-  <mat-card *ngFor="let listing of vm; index as i">
+  <mat-card *ngFor="let listing of vm">
     <mat-card-header>
       <mat-card-title>{{listing.title}}</mat-card-title>
       <mat-card-subtitle>
@@ -11,9 +11,9 @@
     <video *ngIf="listing.hasVideo" mat-card-image controls="" muted="" [poster]="listing.thumbnail" preload="none">
       <source *ngFor="let videoSrc of listing.videoSrcs" [src]="videoSrc">
     </video>
-    <p *ngIf="listing.hasEmbed" [innerHTML]="listing.embed"></p>
+    <div *ngIf="listing.hasEmbed" mat-card-image [innerHTML]="listing.embed"></div>
     <mat-card-content *ngIf="listing.hasText">
-      <p #post style="overflow: hidden; max-height: 60vh;" [ngClass]="{'masked': post.scrollHeight > post.clientHeight}"
+      <p #post style="overflow: hidden; max-height: 60vh;" [class.masked]="post.scrollHeight > post.clientHeight"
         [innerHTML]="listing.text"></p>
     </mat-card-content>
     <mat-card-actions>

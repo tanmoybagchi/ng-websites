@@ -1,35 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { EventManagerService, Result } from 'core/core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { ListingQuery } from './listing-query.service';
 import { ListingViewModel } from './listing-view-model';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'rr-listing',
   templateUrl: './listing.component.html',
-  styleUrls: ['./listing.component.scss']
+  styleUrls: ['./listing.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListingComponent implements OnInit {
   errors: any;
   before: string;
   after: string;
   modhash: string;
-  vm: ListingViewModel[];
+  vm: ListingViewModel[] = [];
 
   constructor(
     private eventManagerService: EventManagerService,
     private listingQuery: ListingQuery,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private changeDetector: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('coding').pipe(
+    this.listingQuery.execute('startrek').pipe(
       tap(listing => this.before = listing.before),
       tap(listing => this.after = listing.after),
       tap(listing => this.modhash = listing.modhash),
@@ -41,6 +43,10 @@ export class ListingComponent implements OnInit {
 
   onQuery(vm: ListingViewModel[]) {
     this.vm = vm;
+    this.changeDetector.markForCheck();
+    setTimeout(() => {
+      this.changeDetector.markForCheck();
+    }, 0);
     console.table(this.vm.map(x => ({ t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo, emb: x.hasEmbed })));
   }
 

@@ -10,7 +10,7 @@ export class ListingViewModel {
   hasImage: boolean;
   hasText: boolean;
   hasVideo: boolean;
-  embed: SafeHtml;
+  embed: any;
   stickied: boolean;
   subreddit: string;
   text: string;
@@ -38,6 +38,25 @@ export class ListingViewModel {
     this.title = link.title;
     this.url = link.url;
 
+    if (link.media_embed && link.media_embed.content) {
+      this.hasEmbed = true;
+
+      const el = document.createElement('p');
+      el.innerHTML = link.media_embed.content;
+      const ifr = el.getElementsByTagName('iframe')[0];
+
+      if (ifr) {
+        ifr.width = '100%';
+        ifr.height = 'auto';
+
+        this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
+        return;
+      }
+
+      this.embed = el.innerHTML;
+      return;
+    }
+
     if (link.media && link.media.reddit_video) {
       this.hasVideo = true;
       this.thumbnail = link.preview.images[0].source.url;
@@ -47,20 +66,6 @@ export class ListingViewModel {
         link.media.reddit_video.hls_url,
         link.media.reddit_video.fallback_url
       ];
-
-      return;
-    }
-
-    if (link.media_embed && link.media_embed.content) {
-      this.hasEmbed = true;
-
-      const tan = document.createElement('p');
-      tan.innerHTML = link.media_embed.content;
-      const ifr = tan.getElementsByTagName('iframe')[0];
-      ifr.width = '100%';
-      ifr.height = 'auto';
-
-      this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
 
       return;
     }
