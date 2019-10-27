@@ -19,7 +19,7 @@ import { ListingModule } from './listing/listing.module';
     SharedModule,
     AppRootModule,
     CoreModule.forRoot({ keyPrefix: 'RedditReader' }, { logLevel: LogLevel.Warn }),
-    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled' }),
     HomepageModule,
     DomainModule,
     ListingModule,

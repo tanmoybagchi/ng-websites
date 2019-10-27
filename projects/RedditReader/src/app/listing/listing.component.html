@@ -1,21 +1,38 @@
-<div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
+<!-- <page-title name="Dashboard"></page-title> -->
 
+<general-error [errors]="errors"></general-error>
+
+<div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="hasPosts">
   <mat-card *ngFor="let listing of vm">
     <mat-card-header>
       <mat-card-title>{{listing.title}}</mat-card-title>
       <mat-card-subtitle>
         r/<span [innerText]="listing.subreddit"></span>
+        <span style="margin-left: .5em;">{{listing.createdOn | date:'short'}}</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <img *ngIf="listing.hasImage" mat-card-image [src]="listing.thumbnail" loading="lazy">
+
+    <a *ngIf="listing.hasImage" [href]="listing.url" target="_blank" rel="noopener noreferrer">
+      <img mat-card-image [src]="listing.thumbnail" loading="lazy">
+    </a>
+
     <video *ngIf="listing.hasVideo" mat-card-image controls="" muted="" [poster]="listing.thumbnail" preload="none">
       <source *ngFor="let videoSrc of listing.videoSrcs" [src]="videoSrc">
     </video>
+
     <div *ngIf="listing.hasEmbed" mat-card-image [innerHTML]="listing.embed"></div>
-    <mat-card-content *ngIf="listing.hasText">
+
+    <mat-card-content *ngIf="!listing.stickied && listing.hasText">
       <p #post style="overflow: hidden; max-height: 60vh;" [class.masked]="post.scrollHeight > post.clientHeight"
         [innerHTML]="listing.text"></p>
     </mat-card-content>
+
+    <mat-card-content *ngIf="listing.hasLink">
+      <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+        <a [href]="listing.url" [innerText]="listing.url" target="_blank" rel="noopener noreferrer"></a>
+      </p>
+    </mat-card-content>
+
     <mat-card-actions>
       <button mat-icon-button aria-label="Share">
         <mat-icon>share</mat-icon>
@@ -23,3 +40,9 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+<mat-card *ngIf="!hasPosts">
+  <mat-card-header>
+    <mat-card-title>There are no posts in this subreddit.</mat-card-title>
+  </mat-card-header>
+</mat-card>

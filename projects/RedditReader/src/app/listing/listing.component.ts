@@ -19,6 +19,7 @@ export class ListingComponent implements OnInit {
   after: string;
   modhash: string;
   vm: ListingViewModel[] = [];
+  hasPosts = true;
 
   constructor(
     private eventManagerService: EventManagerService,
@@ -31,7 +32,7 @@ export class ListingComponent implements OnInit {
   ngOnInit() {
     this.eventManagerService.raise(ShowThrobberEvent);
 
-    this.listingQuery.execute('startrek').pipe(
+    this.listingQuery.execute().pipe(
       tap(listing => this.before = listing.before),
       tap(listing => this.after = listing.after),
       tap(listing => this.modhash = listing.modhash),
@@ -43,16 +44,20 @@ export class ListingComponent implements OnInit {
 
   onQuery(vm: ListingViewModel[]) {
     this.vm = vm;
+    this.hasPosts = vm.length > 0;
     this.changeDetector.markForCheck();
+
     setTimeout(() => {
       this.changeDetector.markForCheck();
     }, 0);
-    console.table(this.vm.map(x => ({ t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo, emb: x.hasEmbed })));
+
+    console.table(this.vm.map(x => ({ c: x.createdOn, t: x.title, txt: x.hasText, img: x.hasImage, vdo: x.hasVideo, emb: x.hasEmbed })));
   }
 
   private onError(result: Result) {
     console.log(result);
     this.errors = result.errors;
+    this.changeDetector.markForCheck();
     return EMPTY;
   }
 }

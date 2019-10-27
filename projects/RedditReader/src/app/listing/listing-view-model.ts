@@ -2,15 +2,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Link, Thing } from '@app/domain/models';
 
 export class ListingViewModel {
-  static imageFileTypes = ['.apng', '.bmp', '.ico', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
+  // tslint:disable-next-line:max-line-length
+  static imageFileTypes = ['.apng', '.bmp', '.gif', '.ico', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
 
   author: string;
   createdOn: Date;
+  domain: string;
+  embed: any;
   hasEmbed: boolean;
   hasImage: boolean;
+  hasLink: boolean;
   hasText: boolean;
   hasVideo: boolean;
-  embed: any;
   stickied: boolean;
   subreddit: string;
   text: string;
@@ -31,35 +34,23 @@ export class ListingViewModel {
   }
 
   link(link: any) {
+    console.log(link);
     this.author = link.author;
-    this.createdOn = new Date(link.created);
+
+    const d = new Date(0);
+    d.setUTCSeconds(link.created_utc);
+    this.createdOn = d;
+
+    this.domain = link.domain;
     this.stickied = link.stickied;
     this.subreddit = link.subreddit;
     this.title = link.title;
     this.url = link.url;
 
-    if (link.media_embed && link.media_embed.content) {
-      this.hasEmbed = true;
-
-      const el = document.createElement('p');
-      el.innerHTML = link.media_embed.content;
-      const ifr = el.getElementsByTagName('iframe')[0];
-
-      if (ifr) {
-        ifr.width = '100%';
-        ifr.height = 'auto';
-
-        this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
-        return;
-      }
-
-      this.embed = el.innerHTML;
-      return;
-    }
-
     if (link.media && link.media.reddit_video) {
       this.hasVideo = true;
-      this.thumbnail = link.preview.images[0].source.url;
+      // tslint:disable-next-line:no-unused-expression
+      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
         link.media.reddit_video.dash_url,
@@ -72,7 +63,8 @@ export class ListingViewModel {
 
     if (link.preview && link.preview.reddit_video_preview) {
       this.hasVideo = true;
-      this.thumbnail = link.preview.images[0].source.url;
+      // tslint:disable-next-line:no-unused-expression
+      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
         link.preview.reddit_video_preview.dash_url,
@@ -85,7 +77,8 @@ export class ListingViewModel {
 
     if (link.preview && Array.isArray(link.preview.images) && link.preview.images[0].variants && link.preview.images[0].variants.mp4) {
       this.hasVideo = true;
-      this.thumbnail = link.preview.images[0].source.url;
+      // tslint:disable-next-line:no-unused-expression
+      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
         link.preview.images[0].variants.mp4.source.url
@@ -94,15 +87,35 @@ export class ListingViewModel {
       return;
     }
 
+    if (link.media_embed && link.media_embed.content) {
+      this.hasEmbed = true;
+
+      const el = document.createElement('p');
+      el.innerHTML = link.media_embed.content;
+      const ifr = el.getElementsByTagName('iframe')[0];
+
+      if (ifr) {
+        ifr.width = '100%';
+        ifr.height = 'auto';
+        ifr.setAttribute('loading', 'lazy');
+
+        this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
+        return;
+      }
+
+      this.embed = el.innerHTML;
+      return;
+    }
+
     if (String.hasData(link.selftext_html)) {
       this.hasText = true;
       this.text = link.selftext_html;
     }
 
-    if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {
+    /* if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {
       this.hasImage = true;
       this.thumbnail = link.url;
-    }
+    } */
 
     if (link.preview && Array.isArray(link.preview.images)) {
       this.hasImage = true;
@@ -112,6 +125,10 @@ export class ListingViewModel {
     if (ListingViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
       this.hasImage = true;
       this.thumbnail = this.url;
+    }
+
+    if (!this.hasImage && !this.hasText) {
+      this.hasLink = true;
     }
   }
 }
