@@ -4,7 +4,7 @@ import { Listing, Thing } from '@app/domain/models';
 import { filter, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class ListingQuery {
+export class SubredditQuery {
   constructor(private http: HttpClient) { }
 
   execute(subReddit?: string, before?: string, after?: string, modhash?: string) {

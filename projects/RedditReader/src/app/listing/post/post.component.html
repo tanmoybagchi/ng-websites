@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{vm.title}}</mat-card-title>
+    <mat-card-subtitle>
+      r/<span [innerText]="vm.subreddit"></span>
+      <span style="margin-left: .5em;">{{vm.createdOn | date:'short'}}</span>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <a *ngIf="vm.hasImage" [href]="vm.url" target="_blank" rel="noopener noreferrer">
+    <img mat-card-image [src]="vm.thumbnail" loading="lazy">
+  </a>
+
+  <video *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="none">
+    <source *ngFor="let videoSrc of vm.videoSrcs" [src]="videoSrc">
+  </video>
+
+  <div *ngIf="vm.hasEmbed" mat-card-image [innerHTML]="vm.embed"></div>
+
+  <mat-card-content *ngIf="!vm.stickied && vm.hasText">
+    <p #textvm style="overflow: hidden; max-height: 60vh;" [class.masked]="textvm.scrollHeight > textvm.clientHeight"
+      [innerHTML]="vm.text"></p>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="vm.hasLink">
+    <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+      <a [href]="vm.url" [innerText]="vm.url" target="_blank" rel="noopener noreferrer"></a>
+    </p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-icon-button aria-label="Share">
+      <mat-icon>share</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

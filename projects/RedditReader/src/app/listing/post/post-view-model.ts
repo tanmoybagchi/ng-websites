@@ -1,7 +1,7 @@
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Link, Thing } from '@app/domain/models';
 
-export class ListingViewModel {
+export class PostViewModel {
   // tslint:disable-next-line:max-line-length
   static imageFileTypes = ['.apng', '.bmp', '.gif', '.ico', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
 
@@ -34,7 +34,6 @@ export class ListingViewModel {
   }
 
   link(link: any) {
-    console.log(link);
     this.author = link.author;
 
     const d = new Date(0);
@@ -47,15 +46,18 @@ export class ListingViewModel {
     this.title = link.title;
     this.url = link.url;
 
-    if (link.media && link.media.reddit_video) {
+    const media = link.crosspost_parent_list ? link.crosspost_parent_list[0].media : link.media;
+    const mediaEmbed = link.crosspost_parent_list ? link.crosspost_parent_list[0].media_embed : link.media_embed;
+
+    if (media && media.reddit_video) {
       this.hasVideo = true;
       // tslint:disable-next-line:no-unused-expression
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
-        link.media.reddit_video.dash_url,
-        link.media.reddit_video.hls_url,
-        link.media.reddit_video.fallback_url
+        media.reddit_video.dash_url,
+        media.reddit_video.hls_url,
+        media.reddit_video.fallback_url
       ];
 
       return;
@@ -87,21 +89,17 @@ export class ListingViewModel {
       return;
     }
 
-    if (link.media_embed && link.media_embed.content) {
+    if (mediaEmbed && mediaEmbed.content) {
       this.hasEmbed = true;
 
       const el = document.createElement('p');
-      el.innerHTML = link.media_embed.content;
-      const ifr = el.getElementsByTagName('iframe')[0];
+      el.innerHTML = mediaEmbed.content;
 
-      if (ifr) {
-        ifr.width = '100%';
-        ifr.height = 'auto';
-        ifr.setAttribute('loading', 'lazy');
-
-        this.embed = this.sanitizer.bypassSecurityTrustHtml(ifr.outerHTML);
-        return;
-      }
+      Array.from(el.getElementsByTagName('iframe')).forEach(e => {
+        e.width = '100%';
+        e.height = 'auto';
+        e.setAttribute('loading', 'lazy');
+      });
 
       this.embed = el.innerHTML;
       return;
@@ -109,7 +107,15 @@ export class ListingViewModel {
 
     if (String.hasData(link.selftext_html)) {
       this.hasText = true;
-      this.text = link.selftext_html;
+
+      const el = document.createElement('p');
+      el.innerHTML = link.selftext_html;
+      Array.from(el.getElementsByTagName('a')).forEach(e => {
+        e.setAttribute('target', '_blank');
+        e.setAttribute('rel', 'noopener noreferrer');
+      });
+
+      this.text = el.innerHTML;
     }
 
     /* if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {
@@ -122,7 +128,7 @@ export class ListingViewModel {
       this.thumbnail = link.preview.images[0].source.url;
     }
 
-    if (ListingViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
+    if (PostViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
       this.hasImage = true;
       this.thumbnail = this.url;
     }

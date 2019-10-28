@@ -1,0 +1,13 @@
+<page-title [name]="'r/'+subreddit"></page-title>
+
+<general-error [errors]="errors"></general-error>
+
+<div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="vm.hasPosts">
+  <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
+</div>
+
+<mat-card *ngIf="!vm.hasPosts">
+  <mat-card-header>
+    <mat-card-title>There are no posts in this subreddit</mat-card-title>
+  </mat-card-header>
+</mat-card>

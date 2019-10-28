@@ -1,10 +1,4 @@
 .masked {
-  /* overflow: hidden; */
   -webkit-mask-image: linear-gradient(180deg,#000 60%,transparent);
   mask-image: linear-gradient(180deg,#000 60%,transparent);
-}
-
-iframe {
-  width: 100% !important;
-  height: 100% !important;
 }
