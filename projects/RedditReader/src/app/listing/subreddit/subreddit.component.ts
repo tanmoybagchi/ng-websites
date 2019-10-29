@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { Listing } from '@app/domain/models';
 import { EventManagerService, Result } from 'core/core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
 
@@ -15,8 +14,11 @@ import { SubredditViewModel } from './subreddit-view-model';
 })
 export class SubredditComponent implements OnInit {
   errors: any;
-  vm = new SubredditViewModel();
+  vm$: Observable<SubredditViewModel>;
   @Input() subreddit: string;
+  private before: string;
+  private after: string;
+  private modhash: string;
 
   constructor(
     private eventManagerService: EventManagerService,
@@ -26,19 +28,30 @@ export class SubredditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.eventManagerService.raise(ShowThrobberEvent);
+    this.getPosts(this.subreddit);
+  }
 
-    this.query.execute(this.subreddit).pipe(
+  next() {
+    this.getPosts(this.subreddit, undefined, this.after, this.modhash);
+  }
+
+  prev() {
+    this.getPosts(this.subreddit, this.before, undefined, this.modhash);
+  }
+
+  private getPosts(subReddit?: string, before?: string, after?: string, modhash?: string) {
+    this.vm$ = of(this.eventManagerService.raise(ShowThrobberEvent)).pipe(
+      switchMap(() => this.query.execute(subReddit, before, after, modhash)),
+      tap(listing => {
+        this.before = listing.before;
+        this.after = listing.after;
+        this.modhash = listing.modhash;
+      }),
+      map(listing => new SubredditViewModel(listing)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
-    ).subscribe(listing => this.onQuery(listing));
+    );
   }
-
-  onQuery(listing: Listing) {
-    this.vm = new SubredditViewModel(listing);
-    this.changeDetector.markForCheck();
-  }
-
   private onError(result: Result) {
     console.log(result);
     this.errors = result.errors;

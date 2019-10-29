@@ -2,12 +2,24 @@
 
 <general-error [errors]="errors"></general-error>
 
-<div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="vm.hasPosts">
-  <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
-</div>
+<ng-container *ngIf="vm$ | async as vm">
+  <section *ngIf="vm.hasPosts">
 
-<mat-card *ngIf="!vm.hasPosts">
-  <mat-card-header>
-    <mat-card-title>There are no posts in this subreddit</mat-card-title>
-  </mat-card-header>
-</mat-card>
+    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
+      <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
+
+      <mat-card>
+        <mat-card-actions>
+          <button mat-raised-button (click)="next()">Next</button>
+          <button mat-raised-button (click)="prev()">Prev</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <mat-card *ngIf="!vm.hasPosts">
+    <mat-card-header>
+      <mat-card-title>There are no posts in this subreddit</mat-card-title>
+    </mat-card-header>
+  </mat-card>
+</ng-container>
