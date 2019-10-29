@@ -16,9 +16,6 @@ export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
   @Input() subreddit: string;
-  private before: string;
-  private after: string;
-  private modhash: string;
 
   constructor(
     private eventManagerService: EventManagerService,
@@ -31,27 +28,23 @@ export class SubredditComponent implements OnInit {
     this.getPosts(this.subreddit);
   }
 
-  next() {
-    this.getPosts(this.subreddit, undefined, this.after, this.modhash);
+  next(after: string, modhash: string) {
+    this.getPosts(this.subreddit, undefined, after, modhash);
   }
 
-  prev() {
-    this.getPosts(this.subreddit, this.before, undefined, this.modhash);
+  prev(before: string, modhash: string) {
+    this.getPosts(this.subreddit, before, undefined, modhash);
   }
 
   private getPosts(subReddit?: string, before?: string, after?: string, modhash?: string) {
     this.vm$ = of(this.eventManagerService.raise(ShowThrobberEvent)).pipe(
       switchMap(() => this.query.execute(subReddit, before, after, modhash)),
-      tap(listing => {
-        this.before = listing.before;
-        this.after = listing.after;
-        this.modhash = listing.modhash;
-      }),
       map(listing => new SubredditViewModel(listing)),
       catchError(err => this.onError(err)),
       finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     );
   }
+
   private onError(result: Result) {
     console.log(result);
     this.errors = result.errors;

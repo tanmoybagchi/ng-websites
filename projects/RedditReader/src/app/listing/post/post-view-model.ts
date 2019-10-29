@@ -126,11 +126,15 @@ export class PostViewModel {
     if (link.preview && Array.isArray(link.preview.images)) {
       this.hasImage = true;
       this.thumbnail = link.preview.images[0].source.url;
+
+      return;
     }
 
     if (PostViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
       this.hasImage = true;
       this.thumbnail = this.url;
+
+      return;
     }
 
     if (!this.hasImage && !this.hasText) {

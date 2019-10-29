@@ -14,7 +14,6 @@ export class PostComponent implements OnInit {
   @Input()
   public set post(v: Thing) {
     this.vm = new PostViewModel(v, this.sanitizer);
-    this.changeDetector.markForCheck();
     setTimeout(() => {
       this.changeDetector.markForCheck();
     }, 0);
