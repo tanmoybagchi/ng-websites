@@ -8,6 +8,7 @@
     <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
       <mat-card>
         <mat-card-actions>
+          <a mat-raised-button [routerLink]="['/r', subreddit]" [queryParams]="{after: vm.last}">Next</a>
           <button mat-raised-button (click)="next(vm.last, vm.modhash)">Next</button>
           <button mat-raised-button (click)="prev(vm.first, vm.modhash)">Prev</button>
         </mat-card-actions>

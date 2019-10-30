@@ -5,6 +5,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'rr-subreddit',
@@ -15,16 +16,34 @@ import { SubredditViewModel } from './subreddit-view-model';
 export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
-  @Input() subreddit: string;
+  @Input() subreddit = 'all';
 
   constructor(
     private eventManagerService: EventManagerService,
     private query: SubredditQuery,
+    private route: ActivatedRoute,
+    private router: Router,
     private changeDetector: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
+    this.route.paramMap.subscribe((params) => this.onParams(params));
+  }
+
+  private onParams(params: ParamMap) {
+    if (params.has('subreddit')) {
+      this.subreddit = params.get('subreddit');
+    }
+
+    this.route.queryParamMap.subscribe(queryParams => this.onQueryParams(queryParams));
+  }
+
+  onQueryParams(queryParams: ParamMap) {
+    if (queryParams.has('after')) {
+      const after = queryParams.get('after');
+    }
+
     this.getPosts(this.subreddit);
   }
 
