@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute } from '@angular/router';
 import { EventManagerService, Result } from 'core/core';
 import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
 
@@ -16,7 +16,7 @@ import { SubredditViewModel } from './subreddit-view-model';
 export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
-  subreddit = 'all';
+  subreddit = 'popular';
   private after: string;
   private modhash: string;
 
@@ -29,31 +29,28 @@ export class SubredditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
+    this.vm$ = this.route.paramMap.pipe(
       tap(params => params.has('subreddit') && (this.subreddit = params.get('subreddit'))),
       switchMap(() => this.route.queryParamMap),
-      tap(queryParams => this.after = queryParams.get('after')),
-      tap(queryParams => this.modhash = queryParams.get('modhash')),
-      tap(() => this.getPosts(this.subreddit, this.after, this.modhash)),
-    ).subscribe();
-  }
-
-  private getPosts(subReddit?: string, after?: string, modhash?: string) {
-    this.vm$ = of(this.eventManagerService.raise(ShowThrobberEvent)).pipe(
-      switchMap(() => this.query.execute(subReddit, after, modhash)),
+      tap(queryParams => {
+        this.eventManagerService.raise(ShowThrobberEvent);
+        this.after = queryParams.get('after');
+        this.modhash = queryParams.get('modhash');
+      }),
+      switchMap(() => this.query.execute(this.subreddit, this.after, this.modhash)),
       map(listing => new SubredditViewModel(listing)),
+      tap(() => {
+        window.scrollTo(0, 0);
+        this.eventManagerService.raise(HideThrobberEvent);
+      }),
       catchError(err => this.onError(err)),
-      finalize(() => this.eventManagerService.raise(HideThrobberEvent))
     );
-
-    // Needed when user presses the back button on the browser.
-    this.changeDetector.markForCheck();
   }
 
   private onError(result: Result) {
-    console.log(result);
     this.errors = result.errors;
     this.changeDetector.markForCheck();
+    this.eventManagerService.raise(HideThrobberEvent)
     return EMPTY;
   }
 }

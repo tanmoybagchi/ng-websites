@@ -13,7 +13,6 @@ import { HideThrobberEvent, ShowThrobberEvent } from './throbber-events';
 export class ThrobberComponent {
   private requestCount = 0;
   private delay = 250;
-  private waitingOnServer = false;
 
   show = false;
 
@@ -36,23 +35,15 @@ export class ThrobberComponent {
 
   waitStart() {
     this.requestCount++;
-    this.waitingOnServer = true;
 
     window.setTimeout(() => {
-      if (!this.waitingOnServer) {
-        return;
-      }
-
-      this.show = true;
+      this.show = this.requestCount > 0;
     }, this.delay);
   }
 
   waitEnd() {
     this.requestCount--;
 
-    // tslint:disable-next-line:no-unused-expression
-    this.requestCount === 0 && (this.show = false);
-
-    this.waitingOnServer = false;
+    this.show = this.requestCount > 0;
   }
 }
