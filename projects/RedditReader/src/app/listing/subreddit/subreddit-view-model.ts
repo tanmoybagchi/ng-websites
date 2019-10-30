@@ -6,6 +6,7 @@ export class SubredditViewModel {
   first: string;
   last: string;
   modhash: string;
+  after: string;
 
   constructor(listing?: Listing) {
     if (!listing) {
@@ -16,6 +17,7 @@ export class SubredditViewModel {
     this.hasPosts = listing.children.length > 0;
 
     if (this.hasPosts) {
+      this.after = listing.after;
       this.modhash = listing.modhash;
       this.first = (listing.children[0].data as any).name;
       this.last = (listing.children[listing.children.length - 1].data as any).name;

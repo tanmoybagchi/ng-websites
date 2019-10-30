@@ -7,14 +7,12 @@ import { filter, map } from 'rxjs/operators';
 export class SubredditQuery {
   constructor(private http: HttpClient) { }
 
-  execute(subReddit?: string, before?: string, after?: string, modhash?: string) {
+  execute(subReddit?: string, after?: string, modhash?: string) {
     const url = 'https://www.reddit.com/' +
       (String.hasData(subReddit) ? `r/${subReddit}/` : '') +
       'hot.json';
 
     let params = new HttpParams().append('limit', '10').append('raw_json', '1');
-    // tslint:disable-next-line:no-unused-expression
-    String.hasData(before) && (params = params.append('before', before));
     // tslint:disable-next-line:no-unused-expression
     String.hasData(after) && (params = params.append('after', after));
     // tslint:disable-next-line:no-unused-expression

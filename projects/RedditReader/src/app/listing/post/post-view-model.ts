@@ -101,7 +101,7 @@ export class PostViewModel {
         e.setAttribute('loading', 'lazy');
       });
 
-      this.embed = el.innerHTML;
+      this.embed = this.sanitizer.bypassSecurityTrustHtml(el.innerHTML);
       return;
     }
 

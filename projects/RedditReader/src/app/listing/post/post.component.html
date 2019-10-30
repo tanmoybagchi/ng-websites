@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>{{vm.title}}</mat-card-title>
     <mat-card-subtitle>
-      r/<span [innerText]="vm.subreddit"></span>
+      <a [innerText]="'r/'+vm.subreddit" [routerLink]="['/r', vm.subreddit]"></a>
       <span style="margin-left: .5em;">{{vm.createdOn | date:'short'}}</span>
     </mat-card-subtitle>
   </mat-card-header>
