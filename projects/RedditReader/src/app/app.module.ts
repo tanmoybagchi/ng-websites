@@ -8,6 +8,8 @@ import { routes } from './app-routes';
 import { DomainModule } from './domain/domain.module';
 import { SharedModule } from './shared/shared.module';
 import { ListingModule } from './listing/listing.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ListingModule } from './listing/listing.module';
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled' }),
     DomainModule,
     ListingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   bootstrap: [AppRootComponent]
 })

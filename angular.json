@@ -1723,7 +1723,8 @@
             "aot": true,
             "assets": [
               "projects/RedditReader/src/favicon.ico",
-              "projects/RedditReader/src/assets"
+              "projects/RedditReader/src/assets",
+              "projects/RedditReader/src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/typeface-great-vibes/index.css",
@@ -1761,7 +1762,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/RedditReader/ngsw-config.json"
             }
           }
         },
@@ -1794,7 +1797,8 @@
             "karmaConfig": "projects/RedditReader/karma.conf.js",
             "assets": [
               "projects/RedditReader/src/favicon.ico",
-              "projects/RedditReader/src/assets"
+              "projects/RedditReader/src/assets",
+              "projects/RedditReader/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/RedditReader/src/styles.scss"
