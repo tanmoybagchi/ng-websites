@@ -11,15 +11,17 @@
     <img mat-card-image [src]="vm.thumbnail" loading="lazy">
   </a>
 
-  <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="none" (loadedmetadata)="vdoPost.muted=true">
+  <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="none"
+    (loadedmetadata)="vdoPost.muted=true">
     <source *ngFor="let videoSrc of vm.videoSrcs" [src]="videoSrc">
   </video>
 
   <div *ngIf="vm.hasEmbed" mat-card-image [innerHTML]="vm.embed"></div>
 
   <mat-card-content *ngIf="!vm.stickied && vm.hasText">
-    <p #textPost style="overflow: hidden; max-height: 60vh;" [class.masked]="textPost.scrollHeight > textPost.clientHeight"
-      [innerHTML]="vm.text" (click)="textPost.style.maxHeight = textPost.style.maxHeight == 'none' ? '60vh' : 'none'"></p>
+    <p #textPost style="overflow: hidden; max-height: 60vh;"
+      [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.text"
+      (click)="textPost.style.maxHeight 'none'"></p>
   </mat-card-content>
 
   <mat-card-content *ngIf="vm.hasLink">
