@@ -2,7 +2,7 @@ var replace = require('replace-in-file');
 const options = {
   files: process.argv[2],
   from: /version:.*/gm,
-  to: (match) => `version: '${Date.now()}',`
+  to: (match) => `version: '${new Date().toLocaleString()}',`
 };
 
 try {

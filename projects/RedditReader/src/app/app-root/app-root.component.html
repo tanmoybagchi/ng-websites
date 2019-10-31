@@ -3,7 +3,7 @@
 <section fxLayout="column" style="min-height: 100vh;">
   <mat-toolbar color="primary">
     <span fxFlex="grow">
-      Reddit Reader <span style="font-size: xx-small;">{{ver}}</span>
+      Reddit Reader
     </span>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -18,6 +18,10 @@
         <mat-icon>settings</mat-icon>
         <span>Setup</span>
       </button>
+      <div mat-menu-item style="font-size: xx-small">
+        <mat-icon>info</mat-icon>
+        {{ver}}
+      </div>
     </mat-menu>
   </mat-toolbar>
 
