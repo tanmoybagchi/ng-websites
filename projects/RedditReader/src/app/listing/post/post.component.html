@@ -21,7 +21,7 @@
   <mat-card-content *ngIf="!vm.stickied && vm.hasText">
     <p #textPost style="overflow: hidden; max-height: 60vh;"
       [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.text"
-      (click)="textPost.style.maxHeight 'none'"></p>
+      (click)="textPost.style.maxHeight = 'none'"></p>
   </mat-card-content>
 
   <mat-card-content *ngIf="vm.hasLink">

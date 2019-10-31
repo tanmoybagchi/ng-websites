@@ -1721,6 +1721,8 @@
             "polyfills": "projects/RedditReader/src/polyfills.ts",
             "tsConfig": "projects/RedditReader/tsconfig.json",
             "aot": true,
+            "baseHref": "/RedditReader/",
+            "progress": false,
             "assets": [
               "projects/RedditReader/src/favicon.ico",
               "projects/RedditReader/src/assets",
