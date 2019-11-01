@@ -5,4 +5,5 @@ export const environment = {
   scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive',
   oauth_Redirect_Uri: 'https://tanmoybagchi.github.io/',
   database: 'dailyspendlimit',
+  version: '10/31/2019, 11:38:43 AM',
 };

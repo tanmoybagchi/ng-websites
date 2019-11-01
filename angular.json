@@ -420,6 +420,8 @@
             "polyfills": "projects/DailySpendLimit/src/polyfills.ts",
             "tsConfig": "projects/DailySpendLimit/tsconfig.json",
             "aot": false,
+            "baseHref": "/DailySpendLimit/",
+            "progress": false,
             "assets": [
               "projects/DailySpendLimit/src/assets",
               "projects/DailySpendLimit/src/manifest.webmanifest"

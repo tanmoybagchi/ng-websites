@@ -8,7 +8,7 @@
   </mat-card-header>
 
   <a *ngIf="vm.hasImage" [href]="vm.url" target="_blank" rel="noopener noreferrer">
-    <img mat-card-image [src]="vm.thumbnail" loading="lazy">
+    <img #imgPost mat-card-image [src]="vm.thumbnail" loading="lazy">
   </a>
 
   <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="none"
@@ -31,7 +31,7 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-icon-button aria-label="Share">
+    <button mat-icon-button aria-label="Share" *ngIf="canShare" (click)="share()">
       <mat-icon>share</mat-icon>
     </button>
   </mat-card-actions>
