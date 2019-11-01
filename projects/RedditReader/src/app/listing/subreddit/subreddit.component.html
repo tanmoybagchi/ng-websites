@@ -2,34 +2,31 @@
 
 <general-error [errors]="errors"></general-error>
 
-<mat-card *ngIf="loading">
+<mat-card *ngIf="isLoading">
   <mat-card-header>
     <mat-card-title>Please wait . . .</mat-card-title>
   </mat-card-header>
 </mat-card>
 
 <ng-container *ngIf="(vm$ | async) as vm">
-  <ng-container *ngIf="!loading">
-    <section *ngIf="vm.hasPosts">
+  <ng-container *ngIf="!isLoading">
+    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="vm.hasPosts">
+      <mat-card>
+        <mat-card-actions>
+          <a mat-raised-button [routerLink]="['/r', subreddit]"
+            [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
+        </mat-card-actions>
+      </mat-card>
 
-      <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
-        <mat-card>
-          <mat-card-actions>
-            <a mat-raised-button [routerLink]="['/r', subreddit]"
-              [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
-          </mat-card-actions>
-        </mat-card>
+      <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
 
-        <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
-
-        <mat-card>
-          <mat-card-actions>
-            <a mat-raised-button [routerLink]="['/r', subreddit]"
-              [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </section>
+      <mat-card>
+        <mat-card-actions>
+          <a mat-raised-button [routerLink]="['/r', subreddit]"
+            [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
 
     <mat-card *ngIf="!vm.hasPosts">
       <mat-card-header>

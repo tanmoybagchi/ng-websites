@@ -16,7 +16,7 @@ export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
   subreddit = 'popular';
-  loading = true;
+  isLoading = true;
 
   constructor(
     private query: SubredditQuery,
@@ -28,18 +28,19 @@ export class SubredditComponent implements OnInit {
   ngOnInit() {
     this.vm$ = this.route.paramMap.pipe(
       tap(params => params.has('subreddit') && (this.subreddit = params.get('subreddit'))),
-      switchMap(() => this.route.queryParamMap.pipe(map(queryParams => ({ a: queryParams.get('after'), m: queryParams.get('modhash') })))),
-      tap(() => { this.loading = true; this.changeDetector.markForCheck(); }),
+      switchMap(() => this.route.queryParamMap),
+      map(queryParams => ({ a: queryParams.get('after'), m: queryParams.get('modhash') })),
+      tap(() => { this.isLoading = true; this.changeDetector.markForCheck(); }),
       switchMap(p => this.query.execute(this.subreddit, p.a, p.m)),
       map(listing => new SubredditViewModel(listing)),
-      tap(() => { window.scrollTo(0, 0); this.loading = false; this.changeDetector.markForCheck(); }),
+      tap(() => { window.scrollTo(0, 0); this.isLoading = false; }),
       catchError(err => this.onError(err)),
     );
   }
 
   private onError(result: Result) {
     this.errors = result.errors;
-    this.loading = false;
+    this.isLoading = false;
     this.changeDetector.markForCheck();
     return EMPTY;
   }
