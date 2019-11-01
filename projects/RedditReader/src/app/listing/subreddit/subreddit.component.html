@@ -2,29 +2,39 @@
 
 <general-error [errors]="errors"></general-error>
 
-<ng-container *ngIf="vm$ | async as vm">
-  <section *ngIf="vm.hasPosts">
+<mat-card *ngIf="loading">
+  <mat-card-header>
+    <mat-card-title>Please wait . . .</mat-card-title>
+  </mat-card-header>
+</mat-card>
 
-    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
-      <mat-card>
-        <mat-card-actions>
-          <a mat-raised-button [routerLink]="['/r', subreddit]" [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
-        </mat-card-actions>
-      </mat-card>
+<ng-container *ngIf="(vm$ | async) as vm">
+  <ng-container *ngIf="!loading">
+    <section *ngIf="vm.hasPosts">
 
-      <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
+      <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
+        <mat-card>
+          <mat-card-actions>
+            <a mat-raised-button [routerLink]="['/r', subreddit]"
+              [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
+          </mat-card-actions>
+        </mat-card>
 
-      <mat-card>
-        <mat-card-actions>
-          <a mat-raised-button [routerLink]="['/r', subreddit]" [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-  </section>
+        <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
 
-  <mat-card *ngIf="!vm.hasPosts">
-    <mat-card-header>
-      <mat-card-title>There are no posts in this subreddit</mat-card-title>
-    </mat-card-header>
-  </mat-card>
+        <mat-card>
+          <mat-card-actions>
+            <a mat-raised-button [routerLink]="['/r', subreddit]"
+              [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </section>
+
+    <mat-card *ngIf="!vm.hasPosts">
+      <mat-card-header>
+        <mat-card-title>There are no posts in this subreddit</mat-card-title>
+      </mat-card-header>
+    </mat-card>
+  </ng-container>
 </ng-container>

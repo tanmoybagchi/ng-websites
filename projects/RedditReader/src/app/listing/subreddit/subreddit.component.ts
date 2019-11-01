@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventManagerService, Result } from 'core/core';
-import { HideThrobberEvent, ShowThrobberEvent } from 'mh-throbber';
+import { Result } from 'core/core';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
@@ -17,11 +16,9 @@ export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
   subreddit = 'popular';
-  private after: string;
-  private modhash: string;
+  loading = true;
 
   constructor(
-    private eventManagerService: EventManagerService,
     private query: SubredditQuery,
     private route: ActivatedRoute,
     private changeDetector: ChangeDetectorRef
@@ -31,26 +28,19 @@ export class SubredditComponent implements OnInit {
   ngOnInit() {
     this.vm$ = this.route.paramMap.pipe(
       tap(params => params.has('subreddit') && (this.subreddit = params.get('subreddit'))),
-      switchMap(() => this.route.queryParamMap),
-      tap(queryParams => {
-        this.eventManagerService.raise(ShowThrobberEvent);
-        this.after = queryParams.get('after');
-        this.modhash = queryParams.get('modhash');
-      }),
-      switchMap(() => this.query.execute(this.subreddit, this.after, this.modhash)),
+      switchMap(() => this.route.queryParamMap.pipe(map(queryParams => ({ a: queryParams.get('after'), m: queryParams.get('modhash') })))),
+      tap(() => { this.loading = true; this.changeDetector.markForCheck(); }),
+      switchMap(p => this.query.execute(this.subreddit, p.a, p.m)),
       map(listing => new SubredditViewModel(listing)),
-      tap(() => {
-        window.scrollTo(0, 0);
-        this.eventManagerService.raise(HideThrobberEvent);
-      }),
+      tap(() => { window.scrollTo(0, 0); this.loading = false; this.changeDetector.markForCheck(); }),
       catchError(err => this.onError(err)),
     );
   }
 
   private onError(result: Result) {
     this.errors = result.errors;
+    this.loading = false;
     this.changeDetector.markForCheck();
-    this.eventManagerService.raise(HideThrobberEvent)
     return EMPTY;
   }
 }
