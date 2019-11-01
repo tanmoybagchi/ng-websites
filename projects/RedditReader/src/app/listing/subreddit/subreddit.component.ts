@@ -33,7 +33,7 @@ export class SubredditComponent implements OnInit {
       tap(() => { this.isLoading = true; this.changeDetector.markForCheck(); }),
       switchMap(p => this.query.execute(this.subreddit, p.a, p.m)),
       map(listing => new SubredditViewModel(listing)),
-      tap(() => { window.scrollTo(0, 0); this.isLoading = false; }),
+      tap(() => this.isLoading = false),
       catchError(err => this.onError(err)),
     );
   }
