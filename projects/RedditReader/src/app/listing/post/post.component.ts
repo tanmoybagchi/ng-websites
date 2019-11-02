@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 import { DomSanitizer } from '@angular/platform-browser';
 import { Thing } from '@app/domain/models';
 import { environment } from '@env/environment';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, range } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
 
@@ -12,7 +12,7 @@ import { PostViewModel } from './post-view-model';
   styleUrls: ['./post.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PostComponent implements OnInit {
+export class PostComponent {
   vm: PostViewModel;
   canShare: boolean;
   nav: any;
@@ -39,15 +39,24 @@ export class PostComponent implements OnInit {
     this.canShare = !environment.production || this.nav.share || this.nav.canShare;
   }
 
-  ngOnInit() {
-  }
-
   share() {
     if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
-      this.isSharing = true;
-      this.changeDetector.detectChanges();
-
       const img: HTMLImageElement = this.imgPostElRef.nativeElement;
+
+      window.fetch(`https://cors-anywhere.herokuapp.com/${img.src}`)
+        .then(x => x.blob())
+        .then(x => new File([x], this.vm.title, { type: x.type }))
+        .then(x => {
+          const tan = new DataTransfer();
+          tan.items.add(x);
+          return tan.files;
+        })
+        .then(x => ({ files: x }))
+        .then(x => this.nav.canShare && this.nav.canShare(x) && this.nav.share(x).catch(error => window.alert(error)))
+        ;
+
+      /* this.isSharing = true;
+      this.changeDetector.detectChanges();
 
       this.toBlob(img.src, this.vm.title).pipe(
         tap(imgFile => {
@@ -60,7 +69,7 @@ export class PostComponent implements OnInit {
           this.changeDetector.detectChanges();
         }),
         finalize(() => this.isSharing = false)
-      ).subscribe();
+      ).subscribe(); */
     }
 
     if (this.nav.share && this.vm.hasText && !this.vm.hasImage && !this.vm.hasLink) {
