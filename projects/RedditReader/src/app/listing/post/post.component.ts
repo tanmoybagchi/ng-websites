@@ -40,19 +40,17 @@ export class PostComponent implements OnInit {
   }
 
   share() {
-    /* let img: HTMLImageElement;
-
-    console.log({ i: this.vm.hasImage, v: this.vm.hasVideo, t: this.vm.hasText, l: this.vm.hasLink, e: this.vm.hasEmbed });
+    let img: HTMLImageElement;
 
     if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
       img = this.imgPostElRef.nativeElement;
-      console.log(img.src);
 
       this.toBlob(img.src, this.vm.title)
         .subscribe(imgFile => {
-          if (this.nav.canShare && this.nav.canShare({ files: [imgFile] })) {
+          const f = [imgFile];
+          if (this.nav.canShare && this.nav.canShare({ files: f })) {
             this.nav.share({
-              files: [imgFile],
+              files: f,
               title: this.vm.title,
               text: this.vm.title,
             });
@@ -60,9 +58,9 @@ export class PostComponent implements OnInit {
             return;
           }
         });
-    } */
+    }
 
-    if (this.nav.share) {
+    /* if (this.nav.share) {
       this.nav.share({
         title: this.vm.title,
         text: this.vm.title,
@@ -86,7 +84,7 @@ export class PostComponent implements OnInit {
   toBlob(src: string, name: string) {
     const img = new Image();
 
-    const compress$ = fromEvent(img, 'load').pipe(
+    const toBlob$ = fromEvent(img, 'load').pipe(
       switchMap(_ => {
         window.URL.revokeObjectURL(img.src);
 
@@ -101,7 +99,8 @@ export class PostComponent implements OnInit {
           canvas.toBlob(x => {
             const result = new File(
               [x],
-              name
+              name,
+              { type: x.type }
             );
 
             observer.next(result);
@@ -111,8 +110,9 @@ export class PostComponent implements OnInit {
       })
     );
 
-    img.src = src;
+    img.crossOrigin = 'anonymous';
+    img.src = `https://cors-anywhere.herokuapp.com/${src}`;
 
-    return compress$;
+    return toBlob$;
   }
 }
