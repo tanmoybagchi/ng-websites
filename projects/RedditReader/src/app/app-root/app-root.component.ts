@@ -6,12 +6,9 @@ import { environment } from '@env/environment';
   templateUrl: './app-root.component.html'
 })
 export class AppRootComponent {
-  buildDate: string;
-  buildTime: string;
+  ver: string;
 
   constructor() {
-    const spl = environment.version.split(',');
-    this.buildDate = spl[0];
-    this.buildTime = spl.length === 2 ? spl[1] : '';
+    this.ver = environment.version;
   }
 }

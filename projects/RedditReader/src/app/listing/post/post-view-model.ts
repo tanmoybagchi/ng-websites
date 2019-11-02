@@ -17,6 +17,7 @@ export class PostViewModel {
   stickied: boolean;
   subreddit: string;
   text: string;
+  plainText: string;
   thumbnail: string;
   title: string;
   url: string;
@@ -116,6 +117,7 @@ export class PostViewModel {
       });
 
       this.text = el.innerHTML;
+      this.plainText = link.selftext;
     }
 
     /* if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {

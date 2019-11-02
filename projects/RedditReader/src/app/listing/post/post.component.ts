@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PostViewModel } from './post-view-model';
 import { Thing } from '@app/domain/models';
+import { environment } from '@env/environment';
 import { fromEvent, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { finalize, switchMap, tap } from 'rxjs/operators';
+import { PostViewModel } from './post-view-model';
 
 @Component({
   selector: 'rr-post',
@@ -15,6 +16,9 @@ export class PostComponent implements OnInit {
   vm: PostViewModel;
   canShare: boolean;
   nav: any;
+  isSharing: boolean;
+  canShareImage = false;
+  files: FileList;
 
   @Input()
   public set post(v: Thing) {
@@ -29,56 +33,60 @@ export class PostComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.nav = navigator as any;
-    // this.canShare = this.nav.share || this.nav.canShare;
-    this.canShare = true;
+    this.canShare = !environment.production || this.nav.share || this.nav.canShare;
   }
 
   ngOnInit() {
   }
 
   share() {
-    let img: HTMLImageElement;
-
     if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
-      img = this.imgPostElRef.nativeElement;
+      this.isSharing = true;
+      this.changeDetector.detectChanges();
 
-      this.toBlob(img.src, this.vm.title)
-        .subscribe(imgFile => {
-          const f = [imgFile];
-          if (this.nav.canShare && this.nav.canShare({ files: f })) {
-            this.nav.share({
-              files: f,
-              title: this.vm.title,
-              text: this.vm.title,
-            });
+      const img: HTMLImageElement = this.imgPostElRef.nativeElement;
 
-            return;
-          }
-        });
+      this.toBlob(img.src, this.vm.title).pipe(
+        tap(imgFile => {
+          const tan = new DataTransfer();
+          tan.items.add(imgFile);
+
+          this.files = tan.files;
+          this.isSharing = false;
+          this.canShareImage = true;
+          this.changeDetector.detectChanges();
+        }),
+        finalize(() => this.isSharing = false)
+      ).subscribe();
     }
 
-    /* if (this.nav.share) {
+    if (this.nav.share && this.vm.hasText && !this.vm.hasImage && !this.vm.hasLink) {
       this.nav.share({
         title: this.vm.title,
-        text: this.vm.title,
-        url: this.vm.url,
+        text: `${this.vm.title}\n${this.vm.plainText}`
       });
     }
 
-    /* if (navigator.canShare && navigator.canShare({ files: filesArray })) {
-      navigator.share({
-        files: filesArray,
-        title: 'Vacation Pictures',
-        text: 'Barb\nHere are the pictures from our vacation.\n\nJoe',
-      })
-        .then(() => console.log('Share was successful.'))
-        .catch((error) => console.log('Sharing failed', error));
-    } else {
-      console.log('Your system doesn\'t support sharing files.');
-    } */
+    if (this.nav.share && !this.vm.hasText && !this.vm.hasImage && this.vm.hasLink) {
+      this.nav.share({
+        title: this.vm.title,
+        url: this.vm.url,
+      });
+    }
+  }
+
+  shareImage() {
+    const shareData = {
+      files: this.files,
+      title: this.vm.title,
+      text: this.vm.title,
+    };
+
+    // tslint:disable-next-line:no-unused-expression
+    this.nav.canShare && this.nav.canShare(shareData) && this.nav.share(shareData).catch(error => window.alert(error));
   }
 
   toBlob(src: string, name: string) {

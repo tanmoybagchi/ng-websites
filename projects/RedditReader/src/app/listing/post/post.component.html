@@ -31,8 +31,10 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-icon-button aria-label="Share" *ngIf="canShare" (click)="share()">
-      <mat-icon>share</mat-icon>
+    <button mat-icon-button aria-label="Share" *ngIf="canShare">
+      <mat-icon *ngIf="!isSharing && !canShareImage" (click)="share()">share</mat-icon>
+      <mat-spinner diameter="35" *ngIf="isSharing"></mat-spinner>
+      <mat-icon *ngIf="canShareImage" (click)="shareImage()">photo_camera</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>
