@@ -18,7 +18,7 @@
 
   <div *ngIf="vm.hasEmbed" mat-card-image [innerHTML]="vm.embed"></div>
 
-  <mat-card-content *ngIf="!vm.stickied && vm.hasText">
+  <mat-card-content *ngIf="vm.hasText">
     <p #textPost style="overflow: hidden; max-height: 60vh;"
       [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.text"
       (click)="textPost.style.maxHeight = 'none'"></p>
@@ -32,9 +32,8 @@
 
   <mat-card-actions>
     <button mat-icon-button aria-label="Share" *ngIf="canShare">
-      <mat-icon *ngIf="!isSharing && !canShareImage" (click)="share()">share</mat-icon>
+      <mat-icon *ngIf="!isSharing" (click)="share()">share</mat-icon>
       <mat-spinner diameter="35" *ngIf="isSharing"></mat-spinner>
-      <mat-icon *ngIf="canShareImage" (click)="shareImage()">photo_camera</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>

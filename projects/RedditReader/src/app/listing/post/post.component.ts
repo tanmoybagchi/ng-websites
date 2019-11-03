@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Thing } from '@app/domain/models';
 import { environment } from '@env/environment';
 import { fromEvent, Observable, range } from 'rxjs';
-import { finalize, switchMap, tap } from 'rxjs/operators';
+import { finalize, switchMap, tap, map } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
 
 @Component({
@@ -17,8 +17,7 @@ export class PostComponent {
   canShare: boolean;
   nav: any;
   isSharing: boolean;
-  canShareImage = false;
-  files: FileList;
+  shareData: { files?: File[]; title?: string; text?: string; url?: string; };
 
   @Input()
   public set post(v: Thing) {
@@ -36,75 +35,65 @@ export class PostComponent {
     private changeDetector: ChangeDetectorRef,
   ) {
     this.nav = navigator as any;
-    this.canShare = !environment.production || this.nav.share || this.nav.canShare;
+    this.canShare = !environment.production || this.nav.share;
   }
 
   share() {
+    if (this.shareData) {
+      this.nav.share(this.shareData);
+      return;
+    }
+
     if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
       const img: HTMLImageElement = this.imgPostElRef.nativeElement;
 
-      window.fetch(`https://cors-anywhere.herokuapp.com/${img.src}`)
-        .then(x => x.blob())
-        .then(x => new File([x], this.vm.title, { type: x.type }))
-        .then(x => {
-          const tan = new DataTransfer();
-          tan.items.add(x);
-          return tan.files;
-        })
-        .then(x => ({ files: x }))
-        .then(x => this.nav.canShare && this.nav.canShare(x) && this.nav.share(x).catch(error => window.alert(error)))
-        ;
-
-      /* this.isSharing = true;
+      this.isSharing = true;
       this.changeDetector.detectChanges();
 
-      this.toBlob(img.src, this.vm.title).pipe(
+      this.imgToFile(img.src, 'share.png').pipe(
         tap(imgFile => {
-          const tan = new DataTransfer();
-          tan.items.add(imgFile);
+          const sD = {
+            files: [imgFile],
+            title: this.vm.title,
+            text: this.vm.title,
+          };
 
-          this.files = tan.files;
+          if (this.nav.canShare && this.nav.canShare(sD)) {
+            this.shareData = sD;
+            this.nav.share(this.shareData);
+          }
+
           this.isSharing = false;
-          this.canShareImage = true;
           this.changeDetector.detectChanges();
         }),
         finalize(() => this.isSharing = false)
-      ).subscribe(); */
+      ).subscribe();
     }
 
     if (this.nav.share && this.vm.hasText && !this.vm.hasImage && !this.vm.hasLink) {
-      this.nav.share({
+      this.shareData = {
         title: this.vm.title,
         text: `${this.vm.title}\n${this.vm.plainText}`
-      });
+      };
+
+      this.nav.share(this.shareData);
     }
 
     if (this.nav.share && !this.vm.hasText && !this.vm.hasImage && this.vm.hasLink) {
-      this.nav.share({
+      this.shareData = {
         title: this.vm.title,
         url: this.vm.url,
-      });
+      };
+
+      this.nav.share(this.shareData);
     }
   }
 
-  shareImage() {
-    const shareData = {
-      files: this.files,
-      title: this.vm.title,
-      text: this.vm.title,
-    };
-
-    // tslint:disable-next-line:no-unused-expression
-    this.nav.canShare && this.nav.canShare(shareData) && this.nav.share(shareData).catch(error => window.alert(error));
-  }
-
-  toBlob(src: string, name: string) {
+  imgToFile(imgSrc: string, fileName: string) {
     const img = new Image();
 
-    const toBlob$ = fromEvent(img, 'load').pipe(
+    const imgToFile$ = fromEvent(img, 'load').pipe(
       switchMap(_ => {
-        window.URL.revokeObjectURL(img.src);
-
         const canvas = document.createElement('canvas');
         canvas.height = img.naturalHeight;
         canvas.width = img.naturalWidth;
@@ -116,7 +105,7 @@ export class PostComponent {
           canvas.toBlob(x => {
             const result = new File(
               [x],
-              name,
+              fileName,
               { type: x.type }
             );
 
@@ -128,8 +117,8 @@ export class PostComponent {
     );
 
     img.crossOrigin = 'anonymous';
-    img.src = `https://cors-anywhere.herokuapp.com/${src}`;
+    img.src = `https://cors-anywhere.herokuapp.com/${imgSrc}`;
 
-    return toBlob$;
+    return imgToFile$;
   }
 }

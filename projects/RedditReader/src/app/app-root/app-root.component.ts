@@ -6,9 +6,20 @@ import { environment } from '@env/environment';
   templateUrl: './app-root.component.html'
 })
 export class AppRootComponent {
-  ver: string;
+  buildDate: string;
+  buildTime: string;
 
   constructor() {
-    this.ver = environment.version;
+    if (environment.production) {
+      const spl = environment.version.split(',');
+      this.buildDate = spl[0];
+      // tslint:disable-next-line:no-unused-expression
+      spl.length > 1 && (this.buildTime = spl[1]);
+      return;
+    }
+
+    const now = new Date();
+    this.buildDate = now.toLocaleDateString();
+    this.buildTime = now.toLocaleTimeString();
   }
 }
