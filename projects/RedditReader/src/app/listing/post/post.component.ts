@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Thing } from '@app/domain/models';
 import { environment } from '@env/environment';
-import { fromEvent, Observable, range } from 'rxjs';
-import { finalize, switchMap, tap, map } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
 
 @Component({
@@ -17,7 +18,10 @@ export class PostComponent {
   canShare: boolean;
   nav: any;
   isSharing: boolean;
+  imagePreparationTookTooLong = false;
   shareData: { files?: File[]; title?: string; text?: string; url?: string; };
+  imagePreparationStartedOn: number;
+  dialogRef: any;
 
   @Input()
   public set post(v: Thing) {
@@ -30,9 +34,13 @@ export class PostComponent {
   @ViewChild('imgPost', { static: false })
   imgPostElRef: ElementRef;
 
+  @ViewChild('preparingImage', { static: false })
+  preparingImageTmplRef: any;
+
   constructor(
-    private sanitizer: DomSanitizer,
     private changeDetector: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private sanitizer: DomSanitizer,
   ) {
     this.nav = navigator as any;
     this.canShare = !environment.production || this.nav.share;
@@ -40,12 +48,21 @@ export class PostComponent {
 
   share() {
     if (this.shareData) {
-      this.nav.share(this.shareData);
+      // tslint:disable-next-line:no-unused-expression
+      this.nav.share && this.nav.share(this.shareData);
       return;
     }
 
     if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
       const img: HTMLImageElement = this.imgPostElRef.nativeElement;
+
+      this.imagePreparationStartedOn = Date.now();
+
+      setTimeout(() => {
+        if (this.isSharing) {
+          this.dialogRef = this.dialog.open(this.preparingImageTmplRef, { closeOnNavigation: true, disableClose: true });
+        }
+      }, 1000);
 
       this.isSharing = true;
       this.changeDetector.detectChanges();
@@ -58,13 +75,22 @@ export class PostComponent {
             text: this.vm.title,
           };
 
-          if (this.nav.canShare && this.nav.canShare(sD)) {
+          if (!environment.production || (this.nav.canShare && this.nav.canShare(sD))) {
             this.shareData = sD;
-            this.nav.share(this.shareData);
+          }
+
+          if (this.imagePreparedInTime()) {
+            // tslint:disable-next-line:no-unused-expression
+            this.nav.share && this.nav.share(this.shareData);
+            // tslint:disable-next-line:no-unused-expression
+            this.dialogRef && this.dialogRef.close();
+          } else {
+            this.imagePreparationTookTooLong = true;
+            this.dialogRef.afterClosed().subscribe(_ => this.share());
           }
 
           this.isSharing = false;
-          this.changeDetector.detectChanges();
+          this.changeDetector.markForCheck();
         }),
         finalize(() => this.isSharing = false)
       ).subscribe();
@@ -120,5 +146,9 @@ export class PostComponent {
     img.src = `https://cors-anywhere.herokuapp.com/${imgSrc}`;
 
     return imgToFile$;
+  }
+
+  imagePreparedInTime() {
+    return Date.now() - this.imagePreparationStartedOn <= 3000;
   }
 }

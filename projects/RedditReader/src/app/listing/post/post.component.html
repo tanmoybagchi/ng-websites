@@ -37,3 +37,11 @@
     </button>
   </mat-card-actions>
 </mat-card>
+
+<ng-template #preparingImage>
+  <h2 mat-dialog-title>Preparing Image</h2>
+  <mat-dialog-content>This is taking a bit longer . . .</mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true" *ngIf="imagePreparationTookTooLong">Share it</button>
+  </mat-dialog-actions>
+</ng-template>
