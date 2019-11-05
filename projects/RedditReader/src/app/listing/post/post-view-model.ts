@@ -22,6 +22,7 @@ export class PostViewModel {
   title: string;
   url: string;
   videoSrcs: string[];
+  srcset: string;
 
   constructor(thing: Thing, private sanitizer: DomSanitizer) {
     switch (thing.kind) {
@@ -126,8 +127,14 @@ export class PostViewModel {
     } */
 
     if (link.preview && Array.isArray(link.preview.images)) {
+      const linkImg = link.preview.images[0];
+
       this.hasImage = true;
-      this.thumbnail = link.preview.images[0].source.url;
+      this.thumbnail = linkImg.source.url;
+
+      if (linkImg.resolutions && Array.isArray(linkImg.resolutions)) {
+        this.srcset = linkImg.resolutions.map(x => `${x.url} ${x.width}w`).join(',');
+      }
 
       return;
     }
@@ -135,7 +142,7 @@ export class PostViewModel {
     if (PostViewModel.imageFileTypes.some(x => this.url.endsWith(x))) {
       this.hasImage = true;
       this.thumbnail = this.url;
-
+      this.srcset = this.url;
       return;
     }
 

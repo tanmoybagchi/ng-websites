@@ -8,7 +8,7 @@
   </mat-card-header>
 
   <a *ngIf="vm.hasImage" [href]="vm.url" target="_blank" rel="noopener noreferrer">
-    <img #imgPost mat-card-image [src]="vm.thumbnail" loading="lazy">
+    <img #imgPost mat-card-image [src]="vm.thumbnail" loading="lazy" sizes="100vw" [srcset]="vm.srcset">
   </a>
 
   <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="none"
