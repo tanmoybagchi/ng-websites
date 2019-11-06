@@ -57,9 +57,9 @@ export class PostViewModel {
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
+        { url: media.reddit_video.fallback_url, type: '' },
         { url: media.reddit_video.dash_url, type: 'application/dash+xml' },
         { url: media.reddit_video.hls_url, type: 'application/x-mpegURL' },
-        { url: media.reddit_video.fallback_url, type: '' },
       ];
 
       return;
@@ -71,9 +71,9 @@ export class PostViewModel {
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
+        { url: link.preview.reddit_video_preview.fallback_url, type: '' },
         { url: link.preview.reddit_video_preview.dash_url, type: 'application/dash+xml' },
         { url: link.preview.reddit_video_preview.hls_url, type: 'application/x-mpegURL' },
-        { url: link.preview.reddit_video_preview.fallback_url, type: '' },
       ];
 
       return;
