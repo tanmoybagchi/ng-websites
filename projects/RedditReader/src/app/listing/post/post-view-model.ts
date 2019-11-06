@@ -21,7 +21,7 @@ export class PostViewModel {
   thumbnail: string;
   title: string;
   url: string;
-  videoSrcs: string[];
+  videoSrcs: { url: string, type: string }[];
   srcset: string;
 
   constructor(thing: Thing, private sanitizer: DomSanitizer) {
@@ -57,9 +57,9 @@ export class PostViewModel {
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
-        media.reddit_video.dash_url,
-        media.reddit_video.hls_url,
-        media.reddit_video.fallback_url
+        { url: media.reddit_video.dash_url, type: 'application/dash+xml' },
+        { url: media.reddit_video.hls_url, type: 'application/x-mpegURL' },
+        { url: media.reddit_video.fallback_url, type: '' }
       ];
 
       return;
@@ -71,9 +71,9 @@ export class PostViewModel {
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
-        link.preview.reddit_video_preview.dash_url,
-        link.preview.reddit_video_preview.hls_url,
-        link.preview.reddit_video_preview.fallback_url
+        { url: link.preview.reddit_video_preview.dash_url, type: 'application/dash+xml' },
+        { url: link.preview.reddit_video_preview.hls_url, type: 'application/x-mpegURL' },
+        { url: link.preview.reddit_video_preview.fallback_url, type: '' }
       ];
 
       return;
@@ -85,7 +85,7 @@ export class PostViewModel {
       link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
 
       this.videoSrcs = [
-        link.preview.images[0].variants.mp4.source.url
+        { url: link.preview.images[0].variants.mp4.source.url, type: 'video/mp4' }
       ];
 
       return;

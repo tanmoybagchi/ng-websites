@@ -5,3 +5,6 @@ copy ..\RedditReader\docs\index.html ..\RedditReader\docs\404.html
 git -C ..\RedditReader add -A
 git -C ..\RedditReader commit --quiet --allow-empty-message -m ''
 git -C ..\RedditReader push origin master:master
+git add -A
+git commit --quiet --allow-empty-message -m ''
+git push origin master:master
