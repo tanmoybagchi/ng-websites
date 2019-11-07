@@ -61,8 +61,7 @@ export class PostComponent {
     }
 
     this.shareData = {
-      title: this.vm.title,
-      text: `${this.vm.title}${String.hasData(this.vm.plainText) ? `\n${this.vm.plainText}` : ''}`,
+      text: `${this.vm.title}${String.hasData(this.vm.plainText) ? `\n\n${this.vm.plainText}` : ''}`,
       url: this.vm.url,
     };
 
@@ -88,7 +87,6 @@ export class PostComponent {
       tap(imgFile => {
         const sD = {
           files: [imgFile],
-          title: this.vm.title,
           text: this.vm.title,
         };
 

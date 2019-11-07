@@ -133,10 +133,10 @@ export class PostViewModel {
       this.plainText = link.selftext;
     }
 
-    /* if (String.hasData(link.post_hint) && (link.post_hint.includes('image'))) {
-      this.hasImage = true;
-      this.thumbnail = link.url;
-    } */
+    if (link.thumbnail && link.thumbnail === 'default') {
+      this.hasLink = true;
+      return;
+    }
 
     if (preview && Array.isArray(preview.images)) {
       const linkImg = preview.images[0];
