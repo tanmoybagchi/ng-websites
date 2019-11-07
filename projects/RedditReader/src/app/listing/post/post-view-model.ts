@@ -24,6 +24,12 @@ export class PostViewModel {
   videoSrcs: { url: string, type: string }[];
   srcset: string;
 
+  onlyEmbed = () => this.hasEmbed && !this.hasImage && !this.hasLink && !this.hasText && !this.hasVideo;
+  onlyImage = () => !this.hasEmbed && this.hasImage && !this.hasLink && !this.hasText && !this.hasVideo;
+  onlyLink = () => !this.hasEmbed && !this.hasImage && this.hasLink && !this.hasText && !this.hasVideo;
+  onlyText = () => !this.hasEmbed && !this.hasImage && !this.hasLink && this.hasText && !this.hasVideo;
+  onlyVideo = () => !this.hasEmbed && !this.hasImage && !this.hasLink && !this.hasText && this.hasVideo;
+
   constructor(thing: Thing, private sanitizer: DomSanitizer) {
     switch (thing.kind) {
       case Thing.Kind.Link:
@@ -48,13 +54,20 @@ export class PostViewModel {
     this.title = link.title;
     this.url = link.url;
 
-    const media = link.crosspost_parent_list ? link.crosspost_parent_list[0].media : link.media;
-    const mediaEmbed = link.crosspost_parent_list ? link.crosspost_parent_list[0].media_embed : link.media_embed;
+    let media = link.media;
+    let mediaEmbed = link.media_embed;
+    let preview = link.preview;
+
+    if (link.crosspost_parent_list) {
+      media = link.crosspost_parent_list[0].media;
+      mediaEmbed = link.crosspost_parent_list[0].media_embed;
+      preview = link.crosspost_parent_list[0].preview;
+    }
 
     if (media && media.reddit_video) {
       this.hasVideo = true;
       // tslint:disable-next-line:no-unused-expression
-      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
+      preview && Array.isArray(preview.images) && (this.thumbnail = preview.images[0].source.url);
 
       this.videoSrcs = [
         { url: media.reddit_video.fallback_url, type: '' },
@@ -65,27 +78,26 @@ export class PostViewModel {
       return;
     }
 
-    if (link.preview && link.preview.reddit_video_preview) {
+    if (preview && preview.reddit_video_preview) {
       this.hasVideo = true;
       // tslint:disable-next-line:no-unused-expression
-      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
+      preview && Array.isArray(preview.images) && (this.thumbnail = preview.images[0].source.url);
 
       this.videoSrcs = [
-        { url: link.preview.reddit_video_preview.fallback_url, type: '' },
-        { url: link.preview.reddit_video_preview.dash_url, type: 'application/dash+xml' },
-        { url: link.preview.reddit_video_preview.hls_url, type: 'application/x-mpegURL' },
+        { url: preview.reddit_video_preview.fallback_url, type: '' },
+        { url: preview.reddit_video_preview.dash_url, type: 'application/dash+xml' },
+        { url: preview.reddit_video_preview.hls_url, type: 'application/x-mpegURL' },
       ];
 
       return;
     }
 
-    if (link.preview && Array.isArray(link.preview.images) && link.preview.images[0].variants && link.preview.images[0].variants.mp4) {
+    if (preview && Array.isArray(preview.images) && preview.images[0].variants && preview.images[0].variants.mp4) {
       this.hasVideo = true;
-      // tslint:disable-next-line:no-unused-expression
-      link.preview && Array.isArray(link.preview.images) && (this.thumbnail = link.preview.images[0].source.url);
+      this.thumbnail = preview.images[0].source.url;
 
       this.videoSrcs = [
-        { url: link.preview.images[0].variants.mp4.source.url, type: 'video/mp4' }
+        { url: preview.images[0].variants.mp4.source.url, type: 'video/mp4' }
       ];
 
       return;
@@ -126,8 +138,8 @@ export class PostViewModel {
       this.thumbnail = link.url;
     } */
 
-    if (link.preview && Array.isArray(link.preview.images)) {
-      const linkImg = link.preview.images[0];
+    if (preview && Array.isArray(preview.images)) {
+      const linkImg = preview.images[0];
 
       this.hasImage = true;
       this.thumbnail = linkImg.source.url;

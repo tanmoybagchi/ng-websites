@@ -26,6 +26,8 @@ export class PostComponent {
   @Input()
   public set post(v: Thing) {
     this.vm = new PostViewModel(v, this.sanitizer);
+    // tslint:disable-next-line:max-line-length no-unused-expression
+    !environment.production && console.log({ i: this.vm.hasImage, v: this.vm.hasVideo, t: this.vm.hasText, l: this.vm.hasLink, e: this.vm.hasEmbed, u: this.vm.url });
     setTimeout(() => {
       this.changeDetector.markForCheck();
     }, 0);
@@ -53,66 +55,62 @@ export class PostComponent {
       return;
     }
 
-    if (this.imgPostElRef && this.vm.hasImage && !this.vm.hasText && !this.vm.hasLink) {
-      const img: HTMLImageElement = this.imgPostElRef.nativeElement;
+    if (this.vm.onlyImage()) {
+      this.shareImage();
+      return;
+    }
 
-      this.imagePreparationStartedOn = Date.now();
+    this.shareData = {
+      title: this.vm.title,
+      text: `${this.vm.title}${String.hasData(this.vm.plainText) ? `\n${this.vm.plainText}` : ''}`,
+      url: this.vm.url,
+    };
 
-      setTimeout(() => {
-        if (this.isSharing) {
-          this.dialogRef = this.dialog.open(this.preparingImageTmplRef, { closeOnNavigation: true, disableClose: true });
+    // tslint:disable-next-line:no-unused-expression
+    this.nav.share && this.nav.share(this.shareData);
+  }
+
+  shareImage() {
+    const img: HTMLImageElement = this.imgPostElRef.nativeElement;
+
+    this.imagePreparationStartedOn = Date.now();
+
+    setTimeout(() => {
+      if (this.isSharing) {
+        this.dialogRef = this.dialog.open(this.preparingImageTmplRef, { closeOnNavigation: true, disableClose: true });
+      }
+    }, 1000);
+
+    this.isSharing = true;
+    this.changeDetector.detectChanges();
+
+    this.imgToFile(img.src, 'share.png').pipe(
+      tap(imgFile => {
+        const sD = {
+          files: [imgFile],
+          title: this.vm.title,
+          text: this.vm.title,
+        };
+
+        if (!environment.production || (this.nav.canShare && this.nav.canShare(sD))) {
+          this.shareData = sD;
         }
-      }, 1000);
 
-      this.isSharing = true;
-      this.changeDetector.detectChanges();
+        if (this.imagePreparedInTime()) {
+          // tslint:disable-next-line:no-unused-expression
+          this.nav.share && this.nav.share(this.shareData);
+          // tslint:disable-next-line:no-unused-expression
+          this.dialogRef && this.dialogRef.close();
+        } else {
+          this.imagePreparationTookTooLong = true;
+          this.dialogRef.afterClosed().subscribe(_ => this.share());
+        }
 
-      this.imgToFile(img.src, 'share.png').pipe(
-        tap(imgFile => {
-          const sD = {
-            files: [imgFile],
-            title: this.vm.title,
-            text: this.vm.title,
-          };
-
-          if (!environment.production || (this.nav.canShare && this.nav.canShare(sD))) {
-            this.shareData = sD;
-          }
-
-          if (this.imagePreparedInTime()) {
-            // tslint:disable-next-line:no-unused-expression
-            this.nav.share && this.nav.share(this.shareData);
-            // tslint:disable-next-line:no-unused-expression
-            this.dialogRef && this.dialogRef.close();
-          } else {
-            this.imagePreparationTookTooLong = true;
-            this.dialogRef.afterClosed().subscribe(_ => this.share());
-          }
-
-          this.isSharing = false;
-          this.changeDetector.markForCheck();
-        }),
-        finalize(() => this.isSharing = false)
-      ).subscribe();
-    }
-
-    if (this.nav.share && this.vm.hasText && !this.vm.hasImage && !this.vm.hasLink) {
-      this.shareData = {
-        title: this.vm.title,
-        text: `${this.vm.title}\n${this.vm.plainText}`
-      };
-
-      this.nav.share(this.shareData);
-    }
-
-    if (this.nav.share && !this.vm.hasText && !this.vm.hasImage && this.vm.hasLink) {
-      this.shareData = {
-        title: this.vm.title,
-        url: this.vm.url,
-      };
-
-      this.nav.share(this.shareData);
-    }
+        this.isSharing = false;
+        this.changeDetector.markForCheck();
+      }),
+      finalize(() => this.isSharing = false)
+    ).subscribe();
   }
 
   imgToFile(imgSrc: string, fileName: string) {
