@@ -1,4 +1,9 @@
-<page-title [name]="'r/'+subreddit"></page-title>
+<mat-toolbar>
+  r/{{subreddit}}
+  <button mat-icon-button (click)="onNewSubreddit()">
+    <mat-icon>edit</mat-icon>
+  </button>
+</mat-toolbar>
 
 <general-error [errors]="errors"></general-error>
 
@@ -35,3 +40,14 @@
     </mat-card>
   </ng-container>
 </ng-container>
+
+<ng-template #newSubredditDialog>
+  <h2 mat-dialog-title>Change Subreddit</h2>
+  <mat-dialog-content>
+      <input-text label="r/" (modelChange)="newSubreddit = $event" maxlength="256"></input-text>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Change</button>
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+  </mat-dialog-actions>
+</ng-template>

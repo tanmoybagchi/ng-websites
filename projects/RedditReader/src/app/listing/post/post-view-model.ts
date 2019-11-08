@@ -135,7 +135,10 @@ export class PostViewModel {
 
     if (link.thumbnail && link.thumbnail === 'default') {
       this.hasLink = true;
-      return;
+    }
+
+    if (link.post_hint && link.post_hint === 'link' && link.domain !== 'imgur.com') {
+      this.hasLink = true;
     }
 
     if (preview && Array.isArray(preview.images)) {

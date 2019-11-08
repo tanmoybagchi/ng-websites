@@ -50,8 +50,12 @@ export class PostComponent {
 
   share() {
     if (this.shareData) {
-      // tslint:disable-next-line:no-unused-expression
-      this.nav.share && this.nav.share(this.shareData);
+      if (this.nav.share) {
+        this.nav.share(this.shareData);
+      } else if (!environment.production) {
+        console.log(this.shareData);
+      }
+
       return;
     }
 
@@ -62,11 +66,17 @@ export class PostComponent {
 
     this.shareData = {
       text: `${this.vm.title}${String.hasData(this.vm.plainText) ? `\n\n${this.vm.plainText}` : ''}`,
-      url: this.vm.url,
     };
 
-    // tslint:disable-next-line:no-unused-expression
-    this.nav.share && this.nav.share(this.shareData);
+    if (!this.vm.onlyText()) {
+      this.shareData.url = this.vm.url;
+    }
+
+    if (this.nav.share) {
+      this.nav.share(this.shareData);
+    } else if (!environment.production) {
+      console.log(this.shareData);
+    }
   }
 
   shareImage() {
@@ -95,17 +105,23 @@ export class PostComponent {
         }
 
         if (this.imagePreparedInTime()) {
-          // tslint:disable-next-line:no-unused-expression
-          this.nav.share && this.nav.share(this.shareData);
-          // tslint:disable-next-line:no-unused-expression
-          this.dialogRef && this.dialogRef.close();
+          if (this.dialogRef) {
+            this.dialogRef.close();
+            this.changeDetector.detectChanges();
+          }
+
+          if (this.nav.share) {
+            this.nav.share(this.shareData);
+          } else if (!environment.production) {
+            console.log(this.shareData);
+          }
         } else {
           this.imagePreparationTookTooLong = true;
           this.dialogRef.afterClosed().subscribe(_ => this.share());
         }
 
         this.isSharing = false;
-        this.changeDetector.markForCheck();
+        this.changeDetector.detectChanges();
       }),
       finalize(() => this.isSharing = false)
     ).subscribe();
