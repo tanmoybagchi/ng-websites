@@ -68,6 +68,10 @@ export class SubredditComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
+  onNewSubredditInput(val: string) {
+    console.log(val);
+  }
+
   private onQueryError(result: Result) {
     // tslint:disable-next-line:no-unused-expression
     !environment.production && console.log(result);
