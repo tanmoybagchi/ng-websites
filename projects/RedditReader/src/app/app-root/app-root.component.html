@@ -1,21 +1,21 @@
 <section fxLayout="column" style="min-height: 100vh;">
   <mat-toolbar color="primary">
     <span fxFlex="grow">
-      Reddit Reader
+      <a style="text-decoration: unset; color: unset;" [routerLink]="['/']">Reddit Reader</a>
     </span>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="">
+      <button mat-menu-item [routerLink]="['/']">
         <mat-icon>home</mat-icon>
         <span>Home</span>
       </button>
-      <button mat-menu-item routerLink="setup">
+      <!-- <button mat-menu-item routerLink="setup">
         <mat-icon>settings</mat-icon>
         <span>Setup</span>
-      </button>
+      </button> -->
       <div mat-menu-item style="line-height: 28px;">
         {{buildDate}}
         <br>

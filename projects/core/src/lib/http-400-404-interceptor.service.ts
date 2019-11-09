@@ -23,7 +23,9 @@ export class Http400404Interceptor implements HttpInterceptor {
         }
 
         if (err.status === 404) {
-          return throwError(Result.CreateErrorResult('NotFound'));
+          const result = Result.CreateErrorResult('NotFound');
+          result.returnValue = err.error;
+          return throwError(result);
         }
 
         const res = new Result();

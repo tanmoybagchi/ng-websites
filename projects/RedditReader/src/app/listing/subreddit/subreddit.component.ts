@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Result } from 'core/core';
-import { EMPTY, Observable } from 'rxjs';
+import { environment } from '@env/environment';
+import { Result } from 'core';
+import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
@@ -34,15 +35,22 @@ export class SubredditComponent implements OnInit {
 
   ngOnInit() {
     this.vm$ = this.route.paramMap.pipe(
-      // tslint:disable-next-line:max-line-length
-      tap(params => params.has('subreddit') && (this.subreddit = params.get('subreddit')) && (this.isLoading = true) && this.changeDetector.detectChanges()),
+      tap(params => {
+        this.errors = undefined;
+
+        if (params.has('subreddit')) {
+          this.subreddit = params.get('subreddit');
+        }
+
+        this.isLoading = true;
+        this.changeDetector.detectChanges();
+      }),
       switchMap(() => this.route.queryParamMap),
       map(queryParams => ({ a: queryParams.get('after'), m: queryParams.get('modhash') })),
       tap(() => { this.isLoading = true; this.changeDetector.markForCheck(); }),
-      switchMap(p => this.query.execute(this.subreddit, p.a, p.m)),
+      switchMap(p => this.query.execute(this.subreddit, p.a, p.m).pipe(catchError(err => this.onQueryError(err)))),
       map(listing => new SubredditViewModel(listing)),
       tap(() => this.isLoading = false),
-      catchError(err => this.onError(err)),
     );
   }
 
@@ -60,10 +68,22 @@ export class SubredditComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
-  private onError(result: Result) {
-    this.errors = result.errors;
-    this.isLoading = false;
-    this.changeDetector.markForCheck();
-    return EMPTY;
+  private onQueryError(result: Result) {
+    // tslint:disable-next-line:no-unused-expression
+    !environment.production && console.log(result);
+
+    if (!(result instanceof Result)) {
+      this.errors = Result.CreateErrorResult('Unknown error').errors;
+      return of(null);
+    }
+
+    if (!result.returnValue) {
+      this.errors = result.errors;
+      return of(null);
+    }
+
+    const redditError: any = result.returnValue;
+    this.errors = Result.CreateErrorResult(`${redditError.message}: ${redditError.reason}`).errors;
+    return of(null);
   }
 }

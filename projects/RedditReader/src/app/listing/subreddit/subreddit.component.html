@@ -1,5 +1,6 @@
 <mat-toolbar>
-  r/{{subreddit}}
+  <a style="text-decoration: unset; color: unset;" [routerLink]="['/r', subreddit]">r/{{subreddit}}</a>
+
   <button mat-icon-button (click)="onNewSubreddit()">
     <mat-icon>edit</mat-icon>
   </button>
@@ -33,7 +34,7 @@
       </mat-card>
     </div>
 
-    <mat-card *ngIf="!vm.hasPosts">
+    <mat-card *ngIf="!errors && !vm.hasPosts">
       <mat-card-header>
         <mat-card-title>There are no posts in this subreddit</mat-card-title>
       </mat-card-header>

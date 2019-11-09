@@ -2,7 +2,7 @@ import { Thing, Listing } from '@app/domain/models';
 
 export class SubredditViewModel {
   children = [];
-  hasPosts = true;
+  hasPosts = false;
   first: string;
   last: string;
   modhash: string;
