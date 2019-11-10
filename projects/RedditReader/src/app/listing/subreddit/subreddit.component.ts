@@ -58,7 +58,7 @@ export class SubredditComponent implements OnInit {
     );
 
     this.auto$ = this.newSubredditInputStream.pipe(
-      debounceTime(500),
+      debounceTime(250),
       distinctUntilChanged(),
       switchMap(query => this.searchRedditNamesQuery.execute(query)),
       map(result => result.names)
@@ -66,7 +66,7 @@ export class SubredditComponent implements OnInit {
   }
 
   onNewSubreddit() {
-    this.dialogRef = this.dialog.open(this.newSubredditDialog, { width: '80vw', position: { top: '10%' } });
+    this.dialogRef = this.dialog.open(this.newSubredditDialog, { width: '80vw', position: { top: '10px' } });
 
     this.dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
