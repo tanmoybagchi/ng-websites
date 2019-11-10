@@ -17,12 +17,12 @@
 <ng-container *ngIf="(vm$ | async) as vm">
   <ng-container *ngIf="!isLoading">
     <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="vm.hasPosts">
-      <mat-card>
+      <!-- <mat-card>
         <mat-card-actions>
           <a mat-raised-button [routerLink]="['/r', subreddit]"
             [queryParams]="{after: vm.after, modhash: vm.modhash}">Next</a>
         </mat-card-actions>
-      </mat-card>
+      </mat-card> -->
 
       <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
 

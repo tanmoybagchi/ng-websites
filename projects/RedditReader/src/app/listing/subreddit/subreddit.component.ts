@@ -66,7 +66,7 @@ export class SubredditComponent implements OnInit {
   }
 
   onNewSubreddit() {
-    this.dialogRef = this.dialog.open(this.newSubredditDialog, { width: '80vw' });
+    this.dialogRef = this.dialog.open(this.newSubredditDialog, { width: '80vw', position: { top: '10%' } });
 
     this.dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
@@ -80,7 +80,6 @@ export class SubredditComponent implements OnInit {
   }
 
   onNewSubredditInput(val: string) {
-    console.log(val);
     this.newSubredditInputStream.next(val);
   }
 
