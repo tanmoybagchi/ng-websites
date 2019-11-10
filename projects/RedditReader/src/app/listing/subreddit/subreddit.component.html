@@ -47,9 +47,8 @@
   <mat-dialog-content>
     <mat-form-field appearance="standard" style="width: 100%">
       <mat-label>r/</mat-label>
-      <!-- <input type="text" maxlength="256" matInput #newSubredditInp [(ngModel)]="newSubreddit"
-        (input)="onNewSubredditInput(newSubredditInp.value)" (change)="onSubmit()"> -->
-      <input type="text" maxlength="256" matInput #newSubredditInp [(ngModel)]="newSubreddit" (change)="onSubmit()">
+      <input type="text" maxlength="256" matInput #newSubredditInp [(ngModel)]="newSubreddit"
+        (input)="onNewSubredditInput(newSubredditInp.value)" (change)="onSubmit()" [matAutocomplete]="auto">
       <mat-hint align="end">{{newSubredditInp.value.length}} / 256</mat-hint>
     </mat-form-field>
   </mat-dialog-content>
@@ -58,3 +57,9 @@
     <button mat-button [mat-dialog-close]="false">Cancel</button>
   </mat-dialog-actions>
 </ng-template>
+
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let item of (auto$ | async)" [value]="item">
+    {{ item }}
+  </mat-option>
+</mat-autocomplete>

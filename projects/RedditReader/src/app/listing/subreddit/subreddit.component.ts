@@ -3,10 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { Result } from 'core';
-import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, map, switchMap, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
+import { SearchRedditNamesQuery } from './search-reddit-names-query.service';
 
 @Component({
   selector: 'rr-subreddit',
@@ -23,13 +24,16 @@ export class SubredditComponent implements OnInit {
   newSubreddit = '';
   @ViewChild('newSubredditDialog', { static: true }) newSubredditDialog: any;
   dialogRef: any;
+  newSubredditInputStream = new Subject<string>();
+  auto$: Observable<string[]>;
 
   constructor(
-    private query: SubredditQuery,
-    private route: ActivatedRoute,
-    private router: Router,
     private changeDetector: ChangeDetectorRef,
     private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router,
+    private searchRedditNamesQuery: SearchRedditNamesQuery,
+    private subredditQuery: SubredditQuery,
   ) {
   }
 
@@ -48,9 +52,16 @@ export class SubredditComponent implements OnInit {
       switchMap(() => this.route.queryParamMap),
       map(queryParams => ({ a: queryParams.get('after'), m: queryParams.get('modhash') })),
       tap(() => { this.isLoading = true; this.changeDetector.markForCheck(); }),
-      switchMap(p => this.query.execute(this.subreddit, p.a, p.m).pipe(catchError(err => this.onQueryError(err)))),
+      switchMap(p => this.subredditQuery.execute(this.subreddit, p.a, p.m).pipe(catchError(err => this.onQueryError(err)))),
       map(listing => new SubredditViewModel(listing)),
       tap(() => this.isLoading = false),
+    );
+
+    this.auto$ = this.newSubredditInputStream.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(query => this.searchRedditNamesQuery.execute(query)),
+      map(result => result.names)
     );
   }
 
@@ -70,6 +81,7 @@ export class SubredditComponent implements OnInit {
 
   onNewSubredditInput(val: string) {
     console.log(val);
+    this.newSubredditInputStream.next(val);
   }
 
   private onQueryError(result: Result) {
