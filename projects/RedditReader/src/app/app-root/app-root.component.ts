@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '@env/environment';
 
 @Component({
   selector: 'rr-app-root',
   templateUrl: './app-root.component.html'
 })
-export class AppRootComponent {
+export class AppRootComponent implements OnInit {
   buildDate: string;
   buildTime: string;
 
@@ -21,5 +21,10 @@ export class AppRootComponent {
     const now = new Date();
     this.buildDate = now.toLocaleDateString();
     this.buildTime = now.toLocaleTimeString();
+  }
+
+  ngOnInit() {
+    // Install built-in polyfills to patch browser incompatibilities.
+    (window as any).shaka.polyfill.installAll();
   }
 }

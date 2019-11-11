@@ -22,6 +22,7 @@ export class PostComponent {
   shareData: { files?: File[]; title?: string; text?: string; url?: string; };
   imagePreparationStartedOn: number;
   dialogRef: any;
+  player: any;
 
   @Input()
   public set post(v: Thing) {
@@ -35,6 +36,18 @@ export class PostComponent {
 
   @ViewChild('imgPost', { static: false })
   imgPostElRef: ElementRef;
+
+  private vdoPost: HTMLVideoElement;
+  @ViewChild('vdoPost', { static: false })
+  public set value(v: ElementRef) {
+    if (v && v.nativeElement) {
+      this.vdoPost = v.nativeElement;
+      this.player = new (window as any).shaka.Player(this.vdoPost);
+      this.player.addEventListener('error', e => console.error(e));
+      const manifestUri = `https://cors-anywhere.herokuapp.com/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
+      this.player.load(manifestUri).then(() => console.log('The video has now been loaded!')).catch(e => console.error(e));
+    }
+  }
 
   @ViewChild('preparingImage', { static: false })
   preparingImageTmplRef: any;

@@ -13,7 +13,7 @@
 
   <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="auto"
     (loadedmetadata)="vdoPost.muted=true">
-    <source *ngFor="let videoSrc of vm.videoSrcs" [src]="videoSrc.url" [type]="videoSrc.type">
+    <!-- <source *ngFor="let videoSrc of vm.videoSrcs" [src]="videoSrc.url" [type]="videoSrc.type"> -->
   </video>
 
   <div *ngIf="vm.hasEmbed" mat-card-image [innerHTML]="vm.embed"></div>
