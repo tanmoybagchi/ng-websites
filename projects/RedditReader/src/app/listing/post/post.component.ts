@@ -37,7 +37,7 @@ export class PostComponent {
   @ViewChild('imgPost', { static: false })
   imgPostElRef: ElementRef;
 
-  private vdoPost: HTMLVideoElement;
+  /* private vdoPost: HTMLVideoElement;
   @ViewChild('vdoPost', { static: false })
   public set value(v: ElementRef) {
     if (v && v.nativeElement) {
@@ -47,7 +47,7 @@ export class PostComponent {
       const manifestUri = `https://cors-anywhere.herokuapp.com/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
       this.player.load(manifestUri).then(() => console.log('The video has now been loaded!')).catch(e => console.error(e));
     }
-  }
+  } */
 
   @ViewChild('preparingImage', { static: false })
   preparingImageTmplRef: any;

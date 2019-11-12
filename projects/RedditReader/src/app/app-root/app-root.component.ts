@@ -25,6 +25,6 @@ export class AppRootComponent implements OnInit {
 
   ngOnInit() {
     // Install built-in polyfills to patch browser incompatibilities.
-    (window as any).shaka.polyfill.installAll();
+    // (window as any).shaka.polyfill.installAll();
   }
 }
