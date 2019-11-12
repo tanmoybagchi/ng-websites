@@ -44,7 +44,8 @@ export class PostComponent {
       this.vdoPost = v.nativeElement;
       this.player = new (window as any).shaka.Player(this.vdoPost);
       this.player.addEventListener('error', e => console.error(e));
-      const manifestUri = `https://cors-anywhere.herokuapp.com/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
+      // tslint:disable-next-line:max-line-length
+      const manifestUri = `https://cors.indytan.workers.dev/?${encodeURIComponent(this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url)}`;
       this.player.load(manifestUri).then(() => console.log('The video has now been loaded!')).catch(e => console.error(e));
     }
   } */
@@ -168,7 +169,7 @@ export class PostComponent {
     );
 
     img.crossOrigin = 'anonymous';
-    img.src = `https://cors-anywhere.herokuapp.com/${imgSrc}`;
+    img.src = `https://cors.indytan.workers.dev/?${encodeURIComponent(imgSrc)}`;
 
     return imgToFile$;
   }
