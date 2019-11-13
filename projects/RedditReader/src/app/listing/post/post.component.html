@@ -11,8 +11,7 @@
     <img #imgPost mat-card-image [src]="vm.thumbnail" loading="lazy" sizes="100vw" [srcset]="vm.srcset">
   </a>
 
-  <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="auto"
-    (loadedmetadata)="vdoPost.muted=true">
+  <video #vdoPost *ngIf="vm.hasVideo" mat-card-image controls="" muted="" [poster]="vm.thumbnail" preload="auto">
     <source *ngFor="let videoSrc of vm.videoSrcs" [src]="videoSrc.url" [type]="videoSrc.type">
   </video>
 
