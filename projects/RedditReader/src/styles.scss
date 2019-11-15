@@ -4,8 +4,8 @@
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.
 $custom-typography: mat-typography-config(
-  $body-1: mat-typography-level(22px, 1.3em, 400),
-  $body-2: mat-typography-level(22px, 1.3em, 500)
+  $body-1: mat-typography-level(1rem, 1.3em, 400),
+  $body-2: mat-typography-level(1rem, 1.3em, 500)
 );
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -34,6 +34,27 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+
+  @media screen and (max-width: 599px) {
+    font-size: 20px;
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 959px) {
+    font-size: 18px;
+  }
+
+  @media screen and (min-width: 960px) and (max-width: 1279px) {
+  }
+
+  @media screen and (min-width: 1280px) and (max-width: 1919px) {
+  }
+
+  @media screen and (min-width: 1920px) and (max-width: 5000px) {
+  }
 }
 
 body {
