@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@env/environment';
+import * as shaka from 'shaka-player';
 
 @Component({
   selector: 'rr-app-root',
@@ -25,6 +26,6 @@ export class AppRootComponent implements OnInit {
 
   ngOnInit() {
     // Install built-in polyfills to patch browser incompatibilities.
-    // (window as any).shaka.polyfill.installAll();
+    shaka.polyfill.installAll();
   }
 }

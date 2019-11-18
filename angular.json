@@ -1736,7 +1736,9 @@
               "./node_modules/material-icon-font/iconfont/material-icons.css",
               "projects/RedditReader/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/shaka-player/dist/shaka-player.compiled.js"
+            ]
           },
           "configurations": {
             "production": {

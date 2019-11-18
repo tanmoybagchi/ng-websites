@@ -6,6 +6,7 @@ import { environment } from '@env/environment';
 import { fromEvent, Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
+import * as shaka from 'shaka-player';
 
 @Component({
   selector: 'rr-post',
@@ -22,13 +23,13 @@ export class PostComponent {
   shareData: { files?: File[]; title?: string; text?: string; url?: string; };
   imagePreparationStartedOn: number;
   dialogRef: any;
+
   player: any;
+  playBound: any;
 
   @Input()
   public set post(v: Thing) {
     this.vm = new PostViewModel(v, this.sanitizer);
-    // tslint:disable-next-line:max-line-length no-unused-expression
-    !environment.production && console.log({ i: this.vm.hasImage, v: this.vm.hasVideo, t: this.vm.hasText, l: this.vm.hasLink, e: this.vm.hasEmbed, u: this.vm.url });
     setTimeout(() => {
       this.changeDetector.markForCheck();
     }, 0);
@@ -37,21 +38,22 @@ export class PostComponent {
   @ViewChild('imgPost', { static: false })
   imgPostElRef: ElementRef;
 
-  /* private vdoPost: HTMLVideoElement;
+  @ViewChild('preparingImage', { static: false })
+  preparingImageTmplRef: any;
+
+  private vdoPost: HTMLVideoElement;
   @ViewChild('vdoPost', { static: false })
   public set value(v: ElementRef) {
     if (v && v.nativeElement) {
-      this.vdoPost = v.nativeElement;
-      this.player = new (window as any).shaka.Player(this.vdoPost);
-      this.player.addEventListener('error', e => console.error(e));
-      // tslint:disable-next-line:max-line-length
-      const manifestUri = `https://cors.indytan.workers.dev/?${encodeURIComponent(this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url)}`;
-      this.player.load(manifestUri).then(() => console.log('The video has now been loaded!')).catch(e => console.error(e));
-    }
-  } */
+      if (!this.vm.videoSrcs.some(s => s.type === 'application/dash+xml')) {
+        return;
+      }
 
-  @ViewChild('preparingImage', { static: false })
-  preparingImageTmplRef: any;
+      this.vdoPost = v.nativeElement;
+      this.playBound = this.play.bind(this);
+      this.vdoPost.addEventListener('play', this.playBound);
+    }
+  }
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -60,6 +62,24 @@ export class PostComponent {
   ) {
     this.nav = navigator as any;
     this.canShare = !environment.production || this.nav.share;
+  }
+
+  play($event: Event) {
+    this.vdoPost.removeEventListener('play', this.playBound);
+
+    this.vdoPost.pause();
+
+    // tslint:disable-next-line:max-line-length
+    const manifestUri = `https://cors.indytan.workers.dev/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
+    // tslint:disable-next-line:max-line-length
+    // const manifestUri = `https://cors-anywhere.herokuapp.com/${encodeURIComponent(this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url)}`;
+
+    this.player = new shaka.Player(this.vdoPost);
+
+    this.player.load(manifestUri).then(() => {
+      this.vdoPost.muted = true;
+      this.vdoPost.play();
+    });
   }
 
   share() {
@@ -169,7 +189,7 @@ export class PostComponent {
     );
 
     img.crossOrigin = 'anonymous';
-    img.src = `https://cors.indytan.workers.dev/?${encodeURIComponent(imgSrc)}`;
+    img.src = `https://cors.indytan.workers.dev/${imgSrc}`;
 
     return imgToFile$;
   }
