@@ -70,8 +70,6 @@ export class PostComponent {
 
     // tslint:disable-next-line:max-line-length
     const manifestUri = `https://cors.indytan.workers.dev/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
-    // tslint:disable-next-line:max-line-length
-    // const manifestUri = `https://cors-anywhere.herokuapp.com/${encodeURIComponent(this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url)}`;
 
     this.player = new shaka.Player(this.vdoPost);
 
