@@ -34,6 +34,9 @@
       <mat-icon *ngIf="!isSharing" (click)="share()">share</mat-icon>
       <mat-spinner diameter="35" *ngIf="isSharing"></mat-spinner>
     </button>
+    <button mat-icon-button aria-label="Commet Count" disableRipple="true">
+      <mat-icon [matBadge]="vm.numComments" matBadgeColor="accent">comment</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
 

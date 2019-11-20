@@ -14,15 +14,16 @@ export class PostViewModel {
   hasLink: boolean;
   hasText: boolean;
   hasVideo: boolean;
+  numComments: string;
+  plainText: string;
+  srcset: string;
   stickied: boolean;
   subreddit: string;
   text: string;
-  plainText: string;
   thumbnail: string;
   title: string;
   url: string;
   videoSrcs: { url: string, type: string }[];
-  srcset: string;
 
   onlyEmbed = () => this.hasEmbed && !this.hasImage && !this.hasLink && !this.hasText && !this.hasVideo;
   onlyImage = () => !this.hasEmbed && this.hasImage && !this.hasLink && !this.hasText && !this.hasVideo;
@@ -43,6 +44,8 @@ export class PostViewModel {
 
   link(link: any) {
     this.author = link.author;
+
+    this.setCommentCount(link.num_comments);
 
     const d = new Date(0);
     d.setUTCSeconds(link.created_utc);
@@ -164,5 +167,31 @@ export class PostViewModel {
     if (!this.hasImage && !this.hasText) {
       this.hasLink = true;
     }
+  }
+
+  setCommentCount(numComments: number) {
+    if (isNaN(Number(`${numComments}`)) || numComments === 0) {
+      this.numComments = '0';
+      return;
+    }
+
+    const log10 = Math.log10(numComments);
+
+    if (log10 < 3) {
+      this.numComments = `${numComments}`;
+      return;
+    }
+
+    if (log10 < 6) {
+      this.numComments = `${Math.floor(numComments / 1000)}K`;
+      return;
+    }
+
+    if (log10 < 9) {
+      this.numComments = `${Math.floor(numComments / 1000000)}M`;
+      return;
+    }
+
+    this.numComments = 'lots';
   }
 }
