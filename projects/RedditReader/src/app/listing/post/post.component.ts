@@ -6,7 +6,7 @@ import { environment } from '@env/environment';
 import { fromEvent, Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
-import * as shaka from 'shaka-player';
+// import * as shaka from 'shaka-player';
 
 @Component({
   selector: 'rr-post',
@@ -41,7 +41,7 @@ export class PostComponent {
   @ViewChild('preparingImage', { static: false })
   preparingImageTmplRef: any;
 
-  private vdoPost: HTMLVideoElement;
+  /* private vdoPost: HTMLVideoElement;
   @ViewChild('vdoPost', { static: false })
   public set value(v: ElementRef) {
     if (v && v.nativeElement) {
@@ -53,7 +53,7 @@ export class PostComponent {
       this.playBound = this.play.bind(this);
       this.vdoPost.addEventListener('play', this.playBound);
     }
-  }
+  } */
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -64,7 +64,7 @@ export class PostComponent {
     this.canShare = !environment.production || this.nav.share;
   }
 
-  play($event: Event) {
+  /* play($event: Event) {
     this.vdoPost.removeEventListener('play', this.playBound);
 
     this.vdoPost.pause();
@@ -80,7 +80,7 @@ export class PostComponent {
       this.vdoPost.muted = true;
       this.vdoPost.play();
     });
-  }
+  } */
 
   share() {
     if (this.shareData) {

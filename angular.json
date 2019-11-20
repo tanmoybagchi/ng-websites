@@ -1737,7 +1737,6 @@
               "projects/RedditReader/src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/shaka-player/dist/shaka-player.compiled.js"
             ]
           },
           "configurations": {
