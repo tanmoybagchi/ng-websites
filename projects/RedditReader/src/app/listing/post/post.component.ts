@@ -6,7 +6,6 @@ import { environment } from '@env/environment';
 import { fromEvent, Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
-// import * as shaka from 'shaka-player';
 
 @Component({
   selector: 'rr-post',
