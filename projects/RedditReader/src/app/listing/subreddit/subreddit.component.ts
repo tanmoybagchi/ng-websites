@@ -46,6 +46,7 @@ export class SubredditComponent implements OnInit {
           this.subreddit = params.get('subreddit');
         }
 
+        window.scrollTo(0, 0);
         this.isLoading = true;
         this.changeDetector.detectChanges();
       }),

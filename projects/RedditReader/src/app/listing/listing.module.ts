@@ -4,6 +4,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { listingRoutes } from './listing-routes';
 import { PostComponent } from './post/post.component';
 import { SubredditComponent } from './subreddit/subreddit.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   imports: [
@@ -12,10 +13,12 @@ import { SubredditComponent } from './subreddit/subreddit.component';
   ],
   declarations: [
     PostComponent,
-    SubredditComponent
+    SubredditComponent,
+    CommentComponent,
   ],
   exports: [
-    SubredditComponent
+    SubredditComponent,
+    CommentComponent,
   ]
 })
 export class ListingModule { }

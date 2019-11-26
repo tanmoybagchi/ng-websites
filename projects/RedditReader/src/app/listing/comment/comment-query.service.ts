@@ -4,7 +4,7 @@ import { Listing, Thing } from '@app/domain/models';
 import { filter, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class SubredditCommentQuery {
+export class CommentQuery {
   constructor(private http: HttpClient) { }
 
   execute(article: string) {
