@@ -15,6 +15,8 @@ export class CommentQuery {
       .append('depth', '3')
       .append('raw_json', '1');
 
-    return this.http.get<Thing[]>(url, { params });
+    return this.http.get<Thing[]>(url, { params }).pipe(
+      map(x => ({ post: x[0].data, comments: x[1].data }))
+    );
   }
 }
