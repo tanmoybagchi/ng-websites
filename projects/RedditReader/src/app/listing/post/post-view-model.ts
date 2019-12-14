@@ -5,6 +5,7 @@ export class PostViewModel {
   // tslint:disable-next-line:max-line-length
   static imageFileTypes = ['.apng', '.bmp', '.gif', '.ico', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
 
+  id: string;
   author: string;
   createdOn: Date;
   domain: string;
@@ -34,7 +35,7 @@ export class PostViewModel {
   constructor(thing: Thing, private sanitizer: DomSanitizer) {
     switch (thing.kind) {
       case Thing.Kind.Link:
-        this.link(thing.data as Link);
+        this.link(thing.data);
         break;
 
       default:
@@ -43,6 +44,7 @@ export class PostViewModel {
   }
 
   link(link: any) {
+    this.id = link.id;
     this.author = link.author;
 
     this.setCommentCount(link.num_comments);

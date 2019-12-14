@@ -2,7 +2,7 @@ export class Thing {
   id: string;
   name: string;
   kind: Thing.Kind;
-  data: Listing | Link;
+  data: Listing;
 }
 
 // tslint:disable-next-line:no-namespace

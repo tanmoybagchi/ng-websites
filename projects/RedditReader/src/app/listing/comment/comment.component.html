@@ -1,0 +1,7 @@
+<mat-card>
+  <mat-card-content>
+    <p #textPost style="overflow: hidden; max-height: 60vh;"
+      [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.body"
+      (click)="textPost.style.maxHeight = 'none'"></p>
+  </mat-card-content>
+</mat-card>

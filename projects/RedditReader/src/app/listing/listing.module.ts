@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '@app/shared/shared.module';
+import { CommentsComponent } from './comments/comments.component';
 import { listingRoutes } from './listing-routes';
 import { PostComponent } from './post/post.component';
 import { SubredditComponent } from './subreddit/subreddit.component';
@@ -14,11 +15,13 @@ import { CommentComponent } from './comment/comment.component';
   declarations: [
     PostComponent,
     SubredditComponent,
-    CommentComponent,
+    CommentsComponent,
+    CommentComponent
   ],
   exports: [
     SubredditComponent,
-    CommentComponent,
+    CommentsComponent,
+    CommentComponent
   ]
 })
 export class ListingModule { }

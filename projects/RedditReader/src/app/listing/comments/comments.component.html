@@ -1,0 +1,20 @@
+<general-error [errors]="errors"></general-error>
+
+<mat-card *ngIf="isLoading">
+  <mat-card-header>
+    <mat-card-title>Please wait . . .</mat-card-title>
+  </mat-card-header>
+</mat-card>
+
+<ng-container *ngIf="(vm$ | async) as vm">
+  <ng-container *ngIf="!isLoading">
+    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem">
+
+      <rr-post [post]="vm.post"></rr-post>
+
+      <ng-container *ngFor="let listing of vm.comments">
+        <rr-comment [comment]="listing" *ngIf="listing.kind === 't1'"></rr-comment>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
