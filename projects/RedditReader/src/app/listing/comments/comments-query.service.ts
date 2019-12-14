@@ -7,13 +7,20 @@ import { filter, map } from 'rxjs/operators';
 export class CommentsQuery {
   constructor(private http: HttpClient) { }
 
-  execute(article: string) {
+  execute(article: string, comment?: string) {
     const url = `https://www.reddit.com/comments/${article}.json`;
 
-    const params = new HttpParams()
+    let params = new HttpParams()
       .append('limit', '20')
-      .append('depth', '1')
       .append('raw_json', '1');
+
+    if (String.isNullOrWhitespace(comment)) {
+      params = params.append('depth', '1');
+    } else {
+      params = params
+        .append('threaded', 'false')
+        .append('comment', comment);
+    }
 
     return this.http.get<Thing[]>(url, { params }).pipe(
       map(x => ({ post: x[0].data.children[0], comments: x[1].data.children }))

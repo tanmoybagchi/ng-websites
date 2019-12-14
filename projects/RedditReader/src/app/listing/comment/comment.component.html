@@ -1,7 +1,20 @@
 <mat-card>
-  <mat-card-content>
-    <p #textPost style="overflow: hidden; max-height: 60vh;"
-      [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.body"
-      (click)="textPost.style.maxHeight = 'none'"></p>
-  </mat-card-content>
+  <p #textPost style="overflow: hidden; max-height: 60vh;"
+    [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="vm.body"
+    (click)="textPost.style.maxHeight = 'none'"></p>
+
+  <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1rem" *ngIf="vm.replies?.length > 0">
+    <mat-card *ngFor="let listing of vm.replies">
+      <p #textPost style="overflow: hidden; max-height: 60vh;"
+        [class.masked]="textPost.scrollHeight > textPost.clientHeight" [innerHTML]="listing.body"
+        (click)="textPost.style.maxHeight = 'none'"></p>
+    </mat-card>
+  </div>
+
+  <mat-card-actions *ngIf="vm.hasReplies && !vm.replies">
+    <button mat-icon-button aria-label="More">
+      <mat-icon *ngIf="!gettingReplies" (click)="moreComments()">expand_more</mat-icon>
+      <mat-spinner diameter="35" *ngIf="gettingReplies"></mat-spinner>
+    </button>
+  </mat-card-actions>
 </mat-card>

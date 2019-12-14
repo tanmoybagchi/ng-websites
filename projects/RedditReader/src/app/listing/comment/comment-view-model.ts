@@ -3,11 +3,13 @@ import { Link, Thing } from '@app/domain/models';
 
 export class CommentViewModel {
   id: string;
+  article: string;
   author: string;
   createdOn: Date;
   stickied: boolean;
   body: string;
   hasReplies: boolean;
+  replies: CommentViewModel[]
 
   constructor(thing: Thing, private sanitizer: DomSanitizer) {
     switch (thing.kind) {
@@ -22,6 +24,7 @@ export class CommentViewModel {
 
   comment(link: any) {
     this.id = link.id;
+    this.article = link.link_id.replace('t3_','');
     this.author = link.author;
 
     const d = new Date(0);
