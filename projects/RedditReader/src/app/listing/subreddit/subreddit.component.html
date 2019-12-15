@@ -24,7 +24,7 @@
         </mat-card-actions>
       </mat-card> -->
 
-      <rr-post *ngFor="let listing of vm.children" [post]="listing"></rr-post>
+      <rr-post *ngFor="let listing of vm.children" [post]="listing" [id]="listing.data.id"></rr-post>
 
       <mat-card>
         <mat-card-actions>

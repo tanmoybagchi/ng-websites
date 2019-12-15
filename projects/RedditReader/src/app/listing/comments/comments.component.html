@@ -12,8 +12,8 @@
 
       <rr-post [post]="vm.post"></rr-post>
 
-      <ng-container *ngFor="let listing of vm.comments">
-        <rr-comment [comment]="listing" *ngIf="listing.kind === 't1'"></rr-comment>
+      <ng-container *ngFor="let listing of vm.comments; index as i">
+        <rr-comment [comment]="listing" *ngIf="listing.kind === 't1'" [id]="'comment_'+i"></rr-comment>
       </ng-container>
     </div>
   </ng-container>

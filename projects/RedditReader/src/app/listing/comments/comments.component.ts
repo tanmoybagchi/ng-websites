@@ -43,7 +43,15 @@ export class CommentsComponent implements OnInit {
         this.changeDetector.detectChanges();
       }),
       switchMap(p => this.commentsQuery.execute(this.article).pipe(catchError(err => this.onQueryError(err)))),
-      tap(() => this.isLoading = false),
+      tap(() => {
+        this.isLoading = false;
+        setTimeout(() => {
+          const el = document.getElementById('comment_0');
+          if (el) {
+            el.scrollIntoView();
+          }
+        }, 0);
+      }),
     );
   }
 
