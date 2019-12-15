@@ -172,6 +172,6 @@ export class PostComponent {
 
   showComments() {
     this.sessionStorageService.set('scrollY', window.scrollY);
-    this.router.navigate([this.vm.id], { relativeTo: this.route });
+    this.router.navigate(['r/', this.vm.subreddit, this.vm.id]);
   }
 }
