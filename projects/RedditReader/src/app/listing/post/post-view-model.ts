@@ -75,9 +75,9 @@ export class PostViewModel {
       preview && Array.isArray(preview.images) && (this.thumbnail = preview.images[0].source.url);
 
       this.videoSrcs = [
-        { url: media.reddit_video.fallback_url, type: '' },
         { url: media.reddit_video.dash_url, type: 'application/dash+xml' },
         { url: media.reddit_video.hls_url, type: 'application/x-mpegURL' },
+        { url: media.reddit_video.fallback_url, type: '' },
       ];
 
       return;
