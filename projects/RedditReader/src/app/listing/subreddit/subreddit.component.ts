@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { Result, SessionStorageService } from 'core';
-import { Observable, of, Subject, Subscription } from 'rxjs';
-import { catchError, map, switchMap, tap, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { SearchRedditNamesQuery } from './search-reddit-names-query.service';
 import { SubredditQuery } from './subreddit-query.service';
 import { SubredditViewModel } from './subreddit-view-model';
-import { SearchRedditNamesQuery } from './search-reddit-names-query.service';
 
 @Component({
   selector: 'rr-subreddit',
@@ -15,7 +15,7 @@ import { SearchRedditNamesQuery } from './search-reddit-names-query.service';
   styleUrls: ['./subreddit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubredditComponent implements OnInit, OnDestroy {
+export class SubredditComponent implements OnInit {
   errors: any;
   vm$: Observable<SubredditViewModel>;
   subreddit = 'popular';
@@ -26,7 +26,6 @@ export class SubredditComponent implements OnInit, OnDestroy {
   dialogRef: any;
   newSubredditInputStream = new Subject<string>();
   auto$: Observable<string[]>;
-  router$: Subscription;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -36,12 +35,7 @@ export class SubredditComponent implements OnInit, OnDestroy {
     private searchRedditNamesQuery: SearchRedditNamesQuery,
     private subredditQuery: SubredditQuery,
     private sessionStorageService: SessionStorageService,
-  ) {
-    this.router$ = router.events.pipe(
-      filter(e => e instanceof NavigationStart && e.url !== '/' && !e.url.includes('after')),
-      tap(e => this.sessionStorageService.set('scrollY', window.scrollY))
-    ).subscribe();
-  }
+  ) {  }
 
   ngOnInit() {
     this.vm$ = this.route.paramMap.pipe(
@@ -66,7 +60,6 @@ export class SubredditComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           const scrollY = this.sessionStorageService.get('scrollY');
           if (scrollY != undefined && scrollY != null) {
-            console.log('rs');
             window.scrollTo(0, scrollY);
             this.sessionStorageService.remove('scrollY');
           }
@@ -98,12 +91,6 @@ export class SubredditComponent implements OnInit, OnDestroy {
 
   onNewSubredditInput(val: string) {
     this.newSubredditInputStream.next(val);
-  }
-
-  ngOnDestroy() {
-    if (this.router$) {
-      this.router$.unsubscribe();
-    }
   }
 
   private onQueryError(result: Result) {

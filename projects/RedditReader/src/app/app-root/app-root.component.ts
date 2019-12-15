@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@env/environment';
-import * as shaka from 'shaka-player';
 
 @Component({
   selector: 'rr-app-root',
   templateUrl: './app-root.component.html'
 })
-export class AppRootComponent implements OnInit {
+export class AppRootComponent {
   buildDate: string;
   buildTime: string;
 
@@ -22,10 +21,5 @@ export class AppRootComponent implements OnInit {
     const now = new Date();
     this.buildDate = now.toLocaleDateString();
     this.buildTime = now.toLocaleTimeString();
-  }
-
-  ngOnInit() {
-    // Install built-in polyfills to patch browser incompatibilities.
-    shaka.polyfill.installAll();
   }
 }

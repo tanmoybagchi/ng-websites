@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Thing } from '@app/domain/models';
 import { environment } from '@env/environment';
+import { SessionStorageService } from 'core/core';
 import { fromEvent, Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { PostViewModel } from './post-view-model';
@@ -40,44 +42,17 @@ export class PostComponent {
   @ViewChild('preparingImage', { static: false })
   preparingImageTmplRef: any;
 
-  /* private vdoPost: HTMLVideoElement;
-  @ViewChild('vdoPost', { static: false })
-  public set value(v: ElementRef) {
-    if (v && v.nativeElement) {
-      if (!this.vm.videoSrcs.some(s => s.type === 'application/dash+xml')) {
-        return;
-      }
-
-      this.vdoPost = v.nativeElement;
-      this.playBound = this.play.bind(this);
-      this.vdoPost.addEventListener('play', this.playBound);
-    }
-  } */
-
   constructor(
     private changeDetector: ChangeDetectorRef,
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+    private sessionStorageService: SessionStorageService,
   ) {
     this.nav = navigator as any;
     this.canShare = !environment.production || this.nav.share;
   }
-
-  /* play($event: Event) {
-    this.vdoPost.removeEventListener('play', this.playBound);
-
-    this.vdoPost.pause();
-
-    // tslint:disable-next-line:max-line-length
-    const manifestUri = `https://cors.indytan.workers.dev/${this.vm.videoSrcs.filter(s => s.type === 'application/dash+xml')[0].url}`;
-
-    this.player = new shaka.Player(this.vdoPost);
-
-    this.player.load(manifestUri).then(() => {
-      this.vdoPost.muted = true;
-      this.vdoPost.play();
-    });
-  } */
 
   share() {
     if (this.shareData) {
@@ -110,7 +85,7 @@ export class PostComponent {
     }
   }
 
-  shareImage() {
+  private shareImage() {
     const img: HTMLImageElement = this.imgPostElRef.nativeElement;
 
     this.imagePreparationStartedOn = Date.now();
@@ -158,7 +133,7 @@ export class PostComponent {
     ).subscribe();
   }
 
-  imgToFile(imgSrc: string, fileName: string) {
+  private imgToFile(imgSrc: string, fileName: string) {
     const img = new Image();
 
     const imgToFile$ = fromEvent(img, 'load').pipe(
@@ -191,7 +166,12 @@ export class PostComponent {
     return imgToFile$;
   }
 
-  imagePreparedInTime() {
+  private imagePreparedInTime() {
     return Date.now() - this.imagePreparationStartedOn <= 3000;
+  }
+
+  showComments() {
+    this.sessionStorageService.set('scrollY', window.scrollY);
+    this.router.navigate([this.vm.id], { relativeTo: this.route });
   }
 }
