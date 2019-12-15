@@ -38,7 +38,7 @@ export class SubredditComponent implements OnInit, OnDestroy {
     private sessionStorageService: SessionStorageService,
   ) {
     this.router$ = router.events.pipe(
-      filter(e => e instanceof NavigationStart),
+      filter(e => e instanceof NavigationStart && e.url !== '/' && !e.url.includes('after')),
       tap(e => this.sessionStorageService.set('scrollY', window.scrollY))
     ).subscribe();
   }
@@ -66,6 +66,7 @@ export class SubredditComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           const scrollY = this.sessionStorageService.get('scrollY');
           if (scrollY != undefined && scrollY != null) {
+            console.log('rs');
             window.scrollTo(0, scrollY);
             this.sessionStorageService.remove('scrollY');
           }

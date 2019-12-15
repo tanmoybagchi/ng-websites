@@ -48,7 +48,7 @@ export class CommentsComponent implements OnInit {
         setTimeout(() => {
           const el = document.getElementById('comment_0');
           if (el) {
-            el.scrollIntoView();
+            el.scrollIntoView({ behavior: 'smooth' });
           }
         }, 0);
       }),
