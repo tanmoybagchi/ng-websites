@@ -34,9 +34,10 @@
       <mat-icon *ngIf="!isSharing" (click)="share()">share</mat-icon>
       <mat-spinner diameter="35" *ngIf="isSharing"></mat-spinner>
     </button>
-    <button mat-icon-button aria-label="Commet Count" disableRipple="true" [routerLink]="['/r', vm.subreddit, vm.id]">
+    <a mat-icon-button aria-label="Commet Count" disableRipple="true" [routerLink]="['/r', vm.subreddit, vm.id]"
+      target="_blank" rel="noopener noreferrer">
       <mat-icon [matBadge]="vm.numComments" matBadgeColor="accent">comment</mat-icon>
-    </button>
+    </a>
   </mat-card-actions>
 </mat-card>
 
